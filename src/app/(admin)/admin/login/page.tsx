@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import LoginInput from '@/components/common/LoginInput'
+import { LoginInput } from '@/components/common'
 
 export default function Page() {
   return (
