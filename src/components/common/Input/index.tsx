@@ -20,6 +20,6 @@ const Input = forwardRef<HTMLInputElement, UseInputProps>((props, ref) => {
   )
 })
 
-Input.displayName = 'Crayon-Input'
+Input.displayName = 'KIC-Input'
 
 export default Input
