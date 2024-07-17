@@ -15,12 +15,12 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang='ko'>
+    <html lang="ko">
       <body className={Pretendard.className}>
         <NextUIProvider>{children}</NextUIProvider>
       </body>
