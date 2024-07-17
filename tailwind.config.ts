@@ -1,15 +1,6 @@
-<<<<<<< HEAD
-import type {Config} from "tailwindcss";
-import {nextui} from "@nextui-org/react";
-
-const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
-=======
 import type { Config } from 'tailwindcss'
+import { nextui } from "@nextui-org/react";
+
 
 const px0To10 = {
   ...Array.from(Array(11)).reduce(
@@ -30,27 +21,18 @@ const px0To500 = {
   ),
 }
 
+
+
+
 const config: Config = {
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
->>>>>>> 22df70a (chore: eslint, package 설정)
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     colors: { transparent: 'transparent' },
     extend: {
-<<<<<<< HEAD
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))"
-      }
-    }
-  },
-  plugins: [nextui()]
-};
-export default config;
-=======
       width: px0To500,
       height: px0To500,
       borderWidth: px0To10,
@@ -62,8 +44,7 @@ export default config;
       borderRadius: { ...px0To100, button: 6 },
     },
   },
-  plugins: [],
+  plugins: [nextui()],
 }
 
 export default config
->>>>>>> 22df70a (chore: eslint, package 설정)
