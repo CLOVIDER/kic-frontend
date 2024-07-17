@@ -20,9 +20,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang='ko'>
       <body className={Pretendard.className}>
-        <NextUIProvider>{children}</NextUIProvider></body>
+        <NextUIProvider>{children}</NextUIProvider>
+      </body>
     </html>
   )
 }
