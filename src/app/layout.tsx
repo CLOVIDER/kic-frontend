@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { NextUIProvider } from '@nextui-org/react'
 import '../styles/globals.css'
 
 const Pretendard = localFont({
@@ -19,8 +20,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={Pretendard.className}>{children}</body>
+    <html lang="ko">
+      <body className={Pretendard.className}>
+        <NextUIProvider>{children}</NextUIProvider>
+      </body>
     </html>
   )
 }

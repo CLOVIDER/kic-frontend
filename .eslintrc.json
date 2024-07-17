@@ -23,6 +23,6 @@
   ],
   "rules": {
     "import/prefer-default-export": "off",
-    "react/jsx-props-no-spreading": "offw"
+    "react/jsx-props-no-spreading": "off"
   }
 }
