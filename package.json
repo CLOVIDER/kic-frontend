@@ -10,12 +10,13 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.2",
+    "clsx": "^2.1.1",
     "framer-motion": "^11.2.13",
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^2.4.0"
+    "tailwind-merge": "^2.4.0",
+    "vaul": "^0.9.1"
   },
   "devDependencies": {
     "@types/node": "^20",
