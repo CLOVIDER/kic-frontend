@@ -1,6 +1,8 @@
 'use client'
 
-import { Button, Input, PasswordHidden } from '@/components'
+import Button from '../Button'
+import Input from '../Input'
+import { PasswordHidden } from '../Icons'
 import useLoginInput from './hooks/useLoginInput'
 
 export default function LoginInput() {
