@@ -27,7 +27,11 @@ const config: Config = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    colors: { transparent: 'transparent' },
+    colors: {
+      transparent: 'transparent',
+      white: '#ffffff',
+      customFont: '#333333',
+    },
     extend: {
       width: px0To500,
       height: px0To500,
