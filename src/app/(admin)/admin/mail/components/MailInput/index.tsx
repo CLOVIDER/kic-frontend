@@ -8,7 +8,7 @@ export default function MailInput() {
   const { handleChange, handleKeyDown, inputRefs } = useMail()
 
   return (
-    <section className="">
+    <section>
       <form className="flex flex-col w-326 gap-42">
         <h1 className="text-31 font-bold text-center">메일을 확인해주세요!</h1>
 
