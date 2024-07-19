@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { cn, NextUIProvider } from '@nextui-org/react'
+import { Header } from '@/components/common'
 import '../styles/globals.css'
-import Header from '@/components/Header'
 
 const Pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
