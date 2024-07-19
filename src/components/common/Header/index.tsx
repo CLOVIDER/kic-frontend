@@ -1,8 +1,8 @@
 'use client'
 
-import { Sidebar } from './Sidebar'
-import { HamburgerMenu } from '../common/Icons'
+import { HamburgerMenu } from '../Icons'
 import Logo from './Logo'
+import { Sidebar } from './Sidebar'
 
 export default function Header() {
   return (
