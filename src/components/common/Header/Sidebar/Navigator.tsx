@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/util'
-import { Boxes, Home, Lightning, Person, Talk } from '@/components/common'
+import { Boxes, Home, Lightning, Person, Talk } from '@/components/common/Icons'
 
 export default function Navigator() {
   const pathname = usePathname()

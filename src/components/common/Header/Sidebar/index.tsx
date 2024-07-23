@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, ReactNode } from 'react'
-import { Setting } from '@/components/common'
+import { Setting } from '@/components/common/Icons/'
 import Link from 'next/link'
 import { Drawer, DrawerContent, DrawerTrigger } from './Drawer'
 import Navigator from './Navigator'

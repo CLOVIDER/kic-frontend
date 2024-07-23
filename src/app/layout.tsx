@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import { NextUIProvider } from '@nextui-org/react'
+import { cn, NextUIProvider } from '@nextui-org/react'
+import { Header } from '@/components/common'
 import '../styles/globals.css'
-import Header from '@/components/Header'
 
 const Pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
@@ -22,8 +22,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={Pretendard.className}>
-        <NextUIProvider>
+      <body className={cn('overflow-hidden', Pretendard.className)}>
+        <NextUIProvider className="h-[calc(100%-54px)]">
           <Header />
           {children}
         </NextUIProvider>
