@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   Component,
@@ -10,88 +10,95 @@ import {
   useImperativeHandle,
   useRef,
   useState,
-} from 'react';
-import { StrictPropsWithChildren } from '@/types';
-import { isDifferentArray } from '@/util';
-import { ErrorboundaryProvider } from './ErrorBoundaryContext';
+} from 'react'
+import { StrictPropsWithChildren } from '@/type'
+import { isDifferentArray } from '@/util'
+import { ErrorboundaryProvider } from './ErrorBoundaryContext'
 
 type RenderFallbackProps<ErrorType extends Error = Error> = {
-  error: ErrorType;
-  reset?: () => void;
-};
+  error: ErrorType
+  reset?: () => void
+}
 
-type RenderFallbackType = <ErrorType extends Error>(props: RenderFallbackProps<ErrorType>) => ReactNode;
+type RenderFallbackType = <ErrorType extends Error>(
+  props: RenderFallbackProps<ErrorType>,
+) => ReactNode
 
-type FallbackType = ReactNode;
+type FallbackType = ReactNode
 
 type ErrorBoundaryProps<ErrorType extends Error = Error> = {
-  onReset?(): void;
-  renderFallback: RenderFallbackType | FallbackType;
-  onError?(error: ErrorType, info: ErrorInfo): void;
-  resetKeys?: unknown[];
-};
+  onReset?(): void
+  renderFallback: RenderFallbackType | FallbackType
+  onError?(error: ErrorType, info: ErrorInfo): void
+  resetKeys?: unknown[]
+}
 
 interface State<ErrorType extends Error = Error> {
-  error: ErrorType | null;
+  error: ErrorType | null
 }
 
 const initialState: State = {
   error: null,
-};
+}
 
-export class ErrorBoundary extends Component<PropsWithRef<StrictPropsWithChildren<ErrorBoundaryProps>>, State> {
-  hasError = false;
+export class ErrorBoundary extends Component<
+  PropsWithRef<StrictPropsWithChildren<ErrorBoundaryProps>>,
+  State
+> {
+  hasError = false
 
-  constructor(props: PropsWithRef<StrictPropsWithChildren<ErrorBoundaryProps>>) {
-    super(props);
-    this.state = initialState;
+  constructor(
+    props: PropsWithRef<StrictPropsWithChildren<ErrorBoundaryProps>>,
+  ) {
+    super(props)
+    this.state = initialState
   }
 
   static getDerivedStateFromError(error: Error) {
-    return { error };
+    return { error }
   }
 
   componentDidUpdate(prevProps: ErrorBoundaryProps) {
-    const { error } = this.state;
-    const { resetKeys } = this.props;
+    const { error } = this.state
+    const { resetKeys } = this.props
 
     if (error === null) {
-      return;
+      return
     }
     if (!this.hasError) {
-      this.hasError = true;
-      return;
+      this.hasError = true
+      return
     }
 
     if (isDifferentArray(prevProps.resetKeys, resetKeys)) {
-      this.resetErrorBoundary();
+      this.resetErrorBoundary()
     }
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    const { onError } = this.props;
+    const { onError } = this.props
 
-    onError?.(error, info);
+    onError?.(error, info)
   }
 
   resetErrorBoundary = () => {
-    const { onReset } = this.props;
+    const { onReset } = this.props
 
-    onReset?.();
-    this.resetState();
-  };
+    onReset?.()
+    this.resetState()
+  }
 
   resetState() {
-    this.hasError = false;
-    this.setState(initialState);
+    this.hasError = false
+    this.setState(initialState)
   }
 
   genereateRenderedChildren() {
-    const { error } = this.state;
-    const { children, renderFallback } = this.props;
+    const { error } = this.state
+    const { children, renderFallback } = this.props
 
     if (error === null) {
-      return children;
+      return children
     }
 
     return typeof renderFallback === 'function'
@@ -99,42 +106,47 @@ export class ErrorBoundary extends Component<PropsWithRef<StrictPropsWithChildre
           error: error as Error,
           reset: this.resetErrorBoundary,
         })
-      : renderFallback;
+      : renderFallback
   }
 
   render() {
-    const { error } = this.state;
+    const { error } = this.state
 
-    const renderedChildren = this.genereateRenderedChildren();
+    const renderedChildren = this.genereateRenderedChildren()
     const ErrorboundaryProviderProps = {
       error,
       resetErrorBoundary: this.resetErrorBoundary,
-    };
+    }
 
-    return <ErrorboundaryProvider {...ErrorboundaryProviderProps}>{renderedChildren}</ErrorboundaryProvider>;
+    return (
+      <ErrorboundaryProvider {...ErrorboundaryProviderProps}>
+        {renderedChildren}
+      </ErrorboundaryProvider>
+    )
   }
 }
 
-export const GlobalErrorBoundary = forwardRef<{ reset(): void }, ComponentPropsWithoutRef<typeof ErrorBoundary>>(
-  (props, resetRef) => {
-    const ref = useRef<ErrorBoundary>(null);
+export const GlobalErrorBoundary = forwardRef<
+  { reset(): void },
+  ComponentPropsWithoutRef<typeof ErrorBoundary>
+>((props, resetRef) => {
+  const ref = useRef<ErrorBoundary>(null)
 
-    useImperativeHandle(resetRef, () => ({
-      reset: () => ref.current?.resetErrorBoundary(),
-    }));
+  useImperativeHandle(resetRef, () => ({
+    reset: () => ref.current?.resetErrorBoundary(),
+  }))
 
-    return <ErrorBoundary {...props} ref={ref} />;
-  },
-);
+  return <ErrorBoundary {...props} ref={ref} />
+})
 
-GlobalErrorBoundary.displayName = 'crayon-GlobalErrorBoundary';
+GlobalErrorBoundary.displayName = 'crayon-GlobalErrorBoundary'
 
 export const useErrorBoundary = <ErrorType extends Error = Error>() => {
-  const [error, setError] = useState<ErrorType | null>(null);
+  const [error, setError] = useState<ErrorType | null>(null)
 
   if (error != null) {
-    throw error as Error;
+    throw error as Error
   }
 
-  return setError;
-};
+  return setError
+}
