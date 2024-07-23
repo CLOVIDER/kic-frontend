@@ -2,9 +2,11 @@
 
 import { useFunnel } from '@/components/common'
 import LotteryEntry from './components/LotteryEntry'
+import ResultEntry from './components/ResultEntry'
 
 export default function Page() {
   const Funnel = useFunnel(['entry', 'result'] as const, {
+    stepQueryKey: 'winning',
     initialStep: 'entry',
   })
 
@@ -14,7 +16,9 @@ export default function Page() {
         <LotteryEntry />
       </Funnel.Step>
 
-      <Funnel.Step name="result">result</Funnel.Step>
+      <Funnel.Step name="result">
+        <ResultEntry />
+      </Funnel.Step>
     </Funnel>
   )
 }

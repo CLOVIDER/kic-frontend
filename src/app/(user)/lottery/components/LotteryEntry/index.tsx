@@ -1,8 +1,8 @@
 import Image from 'next/image'
-import LotteryPending from '../LotteryPending'
-import LotteryProcessing from '../LotteryProcessing'
-import LotteryResult from '../LotteryResult'
-import LotteryEnd from '../LotteryEnd'
+import LotteryProcessing from './LotteryProcessing'
+// import LotteryPending from './LotteryPending'
+// import LotteryResult from './LotteryResult'
+// import LotteryEnd from './LotteryEnd'
 
 const currentProcesses = ['pending', 'processing', 'result', 'end'] as const
 
@@ -20,10 +20,11 @@ export default function LotteryEntry() {
       />
 
       {/* TODO: setStep 구현 */}
-      {currentProess === 'pending' && <LotteryPending />}
+      {/* TODO: 추후 리팩토링 */}
+      {/* {currentProess === 'pending' && <LotteryPending />} */}
       {currentProess === 'processing' && <LotteryProcessing />}
-      {currentProess === 'result' && <LotteryResult />}
-      {currentProess === 'end' && <LotteryEnd />}
+      {/* {currentProess === 'result' && <LotteryResult />} */}
+      {/* {currentProess === 'end' && <LotteryEnd />} */}
     </section>
   )
 }
