@@ -1,6 +1,7 @@
 'use client'
 
 import { StrictPropsWithChildren } from '@/type'
+import { Suspense } from 'react'
 
 export default function Layout({ children }: StrictPropsWithChildren) {
   return (
@@ -20,7 +21,7 @@ export default function Layout({ children }: StrictPropsWithChildren) {
           <div className="absolute bottom-0 w-226 h-226 rounded-full bg-[#FFAB2D] blur-[158.5px]" />
         </div>
       </div>
-      {children}
+      <Suspense>{children}</Suspense>
     </section>
   )
 }

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
-import { CallIcon, ClockIcon, HomeIcon } from '@/components'
+import { CallIcon, ClockIcon, HomeIcon } from '@/components/common'
 import { dummyCards } from '../../constants'
 
 export default function KindergartenList() {
