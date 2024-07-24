@@ -12,7 +12,7 @@ html {
   @apply h-full;
 }
 body {
-  @apply h-full text-customFont;
+  @apply h-full text-customFont overflow-hidden;
   font-family:
     'Pretendard Variable',
     Pretendard,

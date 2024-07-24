@@ -12,7 +12,7 @@ const Pretendard = localFont({
 
 export const metadata: Metadata = {
   title: 'Kids In Company - 사내 어린이집 추첨 서비스',
-  description: 'gcu-kea-team4 사내어린이집 추첨 서비스',
+  description: 'gcu-kea-team4 사내 어린이집 추첨 서비스',
 }
 
 export default function RootLayout({
