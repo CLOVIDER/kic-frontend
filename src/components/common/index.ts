@@ -1,4 +1,5 @@
 export * from './Icons'
+export * from './Funnel'
 export { default as Input } from './Input'
 export { default as Button } from './Button'
 export { default as LoginInput } from './LoginInput'
