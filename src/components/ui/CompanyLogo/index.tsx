@@ -1,5 +1,3 @@
-'use client'
-
 import LetterSpacingAdjuster from './LetterSpacingAdjuster'
 
 export default function CompanyLogo() {
