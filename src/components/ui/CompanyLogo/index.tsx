@@ -18,14 +18,17 @@ export default function CompanyLogo() {
       <div className="relative">
         <div className="w-180 h-100 absolute left-40 top-0 bg-[#fbe268] rounded-full blur-[100px]" />
         <div className="w-238 h-150 absolute left-241 top-0 bg-[#fff3d6] rounded-full blur-[100px]" />
-        <div className="ml-120 mt-100">
+        <div className="ml-120 mt-100 relative z-10">
           <div
             id={companyNameId}
             className="text-[#6C5757] font-mono text-[40px] font-semibold tracking-widest drop-shadow-md"
           >
             {companyName}. KIC
           </div>
-          <p id={descriptionId} className="px-5 text-[18px] text-[#6C5757]">
+          <p
+            id={descriptionId}
+            className="px-5 text-[18px] text-[#6C5757] opacity-0 transition-opacity duration-700"
+          >
             {descriptionText}
           </p>
         </div>
