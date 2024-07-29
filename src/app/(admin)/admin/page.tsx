@@ -17,8 +17,8 @@ export default function Page() {
       <div className="absolute top-10 left-140 w-full mb-100">
         <CompanyLogo />
       </div>
-      <div className="flex flex-row gap-100 px-110 mt-100 relative">
-        <div className="flex flex-col gap-40">
+      <div className="flex flex-row gap-100 px-110 mt-150 relative">
+        <div className="flex flex-col gap-30">
           <StatusBox className="relative w-[590px] h-300">
             <div className="flex flex-row bg-white w-450 px-50 pt-15 pb-30 rounded-32 shadow-md gap-50">
               <NumberDisplay title="총 신청자" number={670} />
@@ -36,12 +36,12 @@ export default function Page() {
             alt="landing"
             width={400}
             height={367}
-            className="absolute bottom-130 left-475"
+            className="absolute bottom-117 left-475"
             priority
           />
           <LandingLower />
         </div>
-        <div className="flex flex-col gap-20">
+        <div className="flex flex-col gap-30">
           <div className="relative">
             <CompetitionRate className="w-370" />
             <div className="flex items-center justify-center w-23 h-23 right-13 top-15 absolute bg-[#ffa5a5] rounded-50">
