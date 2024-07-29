@@ -13,53 +13,64 @@ export default function Navigator() {
     return [
       {
         label: '어린이집 정보',
-        isActive: pathname === '/',
+        isActive: pathname === '/info',
         href: '/',
-        icon: <Home fill={pathname === '/' ? '#FFFFFF' : '#717579'} />,
+        icon: <Home fill={pathname === '/info' ? '#FFFFFF' : '#717579'} />,
       },
       {
         label: '신청하기',
-        isActive: pathname === '/',
+        isActive: pathname === '/form',
         href: '/',
-        icon: <Lightning fill={pathname === '/' ? '#FFFFFF' : '#717579'} />,
+        icon: <Lightning fill={pathname === '/form' ? '#FFFFFF' : '#717579'} />,
       },
       {
         label: '신청내역',
-        isActive: pathname === '/',
+        isActive: pathname === '/history',
         href: '/',
-        icon: <Person fill={pathname === '/' ? '#FFFFFF' : '#717579'} />,
+        icon: <Person fill={pathname === '/history' ? '#FFFFFF' : '#717579'} />,
       },
       {
         label: '공지사항',
-        isActive: pathname === '/',
+        isActive: pathname === '/board',
         href: '/',
-        icon: <Boxes fill={pathname === '/' ? '#FFFFFF' : '#717579'} />,
+        icon: <Boxes fill={pathname === '/board' ? '#FFFFFF' : '#717579'} />,
       },
       {
         label: '1:1 문의',
-        isActive: pathname === '/',
+        isActive: pathname === '/q',
         href: '/',
-        icon: <Talk fill={pathname === '/' ? '#FFFFFF' : '#717579'} />,
+        icon: <Talk fill={pathname === 'q' ? '#FFFFFF' : '#717579'} />,
       },
     ]
   }, [pathname])
   return (
-    <section className="flex flex-col p-4">
-      {routes.map(({ label, href, isActive, icon }) => {
-        return (
-          <Link
-            key={label}
-            href={href}
-            className={cn(
-              'flex flex-row text-18 text-[#717579] px-25 py-14 ml-25 mr-50 gap-30 rounded-60 mb-20 hover:bg-[#FFF4CC]',
-              isActive && 'bg-[#FFEDAE] font-semibold text-[#333333]',
-            )}
-          >
-            {icon}
-            {label}
-          </Link>
-        )
-      })}
+    <section>
+      <div className="flex flex-col p-4 mr-10">
+        {routes.map(({ label, href, isActive, icon }) => {
+          return (
+            <Link
+              key={label}
+              href={href}
+              className={cn(
+                'flex flex-row text-18 text-[#717579] px-25 py-14 ml-25 mr-50 gap-30 rounded-60 mb-20 hover:bg-[#FFF4CC]',
+                isActive && 'bg-[#FFEDAE] font-semibold text-[#333333]',
+              )}
+            >
+              {icon}
+              {label}
+            </Link>
+          )
+        })}
+      </div>
+      <div className="mt-180">
+        <Link
+          key="pwd"
+          href="/"
+          className="text-14 text-[#717579] underline ml-200"
+        >
+          비밀번호 변경
+        </Link>
+      </div>
     </section>
   )
 }
