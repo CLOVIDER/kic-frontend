@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import NoticeLayout from './notice-layout'
@@ -13,13 +13,18 @@ export default function NoticeList() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
-  const [title, setTitle] = useState('')
-  const [notices] = useState(dummyNotices)
-  const totalPages = Math.ceil(notices.length / ITEMS_PER_PAGE)
-
-  const paginatedNotices = notices.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
+  const notices = useMemo(() => dummyNotices, [])
+  const totalPages = useMemo(
+    () => Math.ceil(notices.length / ITEMS_PER_PAGE),
+    [notices.length],
+  )
+  const paginatedNotices = useMemo(
+    () =>
+      notices.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE,
+      ),
+    [notices, currentPage],
   )
 
   const handlePageChange = (page: number) => {
@@ -37,7 +42,7 @@ export default function NoticeList() {
           </div>
           <div className="mt-11 w-[695px] h-[155px]">
             {paginatedNotices.map((notice) => (
-              <React.Fragment key={notice.id}>
+              <div key={notice.id}>
                 <div className="flex mt-20">
                   <div className="mt-8 w-[535px] h-[136px]">
                     <div className="w-[100px] h-[20px] text-14">
@@ -56,8 +61,8 @@ export default function NoticeList() {
                   <div>
                     <Image
                       className="ml-11"
-                      src="/images/temp.png"
-                      alt=""
+                      src={notice.imageSrc}
+                      alt={notice.title}
                       width={150}
                       height={150}
                       priority
@@ -65,7 +70,7 @@ export default function NoticeList() {
                   </div>
                 </div>
                 <div className="mt-11 w-[695px] border-[#D5D1D1] border-[0.5px]" />
-              </React.Fragment>
+              </div>
             ))}
           </div>
         </div>
