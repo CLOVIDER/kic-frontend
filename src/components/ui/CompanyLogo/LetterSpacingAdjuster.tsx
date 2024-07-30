@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, ReactNode } from 'react'
 
 interface LetterSpacingAdjusterProps {
@@ -34,6 +36,7 @@ export default function LetterSpacingAdjuster({
         const letterSpacing = (companyNameWidth - descriptionWidth) / 11
 
         descriptionElement.style.letterSpacing = `${letterSpacing}px`
+        descriptionElement.style.opacity = '0.8'
       }
     }
 
