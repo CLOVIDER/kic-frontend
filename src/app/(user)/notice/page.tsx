@@ -3,9 +3,9 @@
 import React, { useState, useMemo } from 'react'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
-import NoticeLayout from './notice-layout'
+import NoticeLayout from './layout'
 import { notices as dummyNotices } from './data/Notice'
-import Pagination from './Pagination'
+import Pagination from '../../../components/common/Pagination'
 
 const ITEMS_PER_PAGE = 3
 
@@ -32,7 +32,6 @@ export default function NoticeList() {
   }
 
   return (
-    <NoticeLayout>
       <div className="absolute w-[1280px] h-[720px] bg-white flex-col flex justify-between">
         <div className="w-[695px] h-[575px] mt-62 ml-292 rounded-xl overflow-hidden">
           <div className="flex w-[742px] h-[39px]">
@@ -87,6 +86,5 @@ export default function NoticeList() {
           +
         </button>
       </div>
-    </NoticeLayout>
   )
 }

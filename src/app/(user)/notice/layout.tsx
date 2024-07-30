@@ -1,4 +1,10 @@
+import { Metadata } from 'next'
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: '공지사항',
+  description: '공지사항',
+}
 
 export default function NoticeLayout({
   children,
