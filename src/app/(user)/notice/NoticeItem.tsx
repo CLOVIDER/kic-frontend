@@ -19,14 +19,14 @@ export default function NoticeItem({
   return (
     <>
       <div className="flex">
-        <div className="w-[535px] h-[136px]">
-          <div className="mt-8 w-[90px] h-[20px] text-14">{kindergarten}</div>
-          <div className="mt-5 w-[535px] h-[29px] text-20">{title}</div>
+        <div className="w-[535px] h-136">
+          <div className="mt-8 w-90 h-20 text-14">{kindergarten}</div>
+          <div className="mt-5 w-[535px] h-29 text-20">{title}</div>
           <div className="text-10 text-[#bdbdbd]">{date}</div>
-          <div className="mt-10 w-[534px] h-[56px] text-10">{content}</div>
+          <div className="mt-10 w-534 h-56 text-10">{content}</div>
         </div>
         <Image
-          className="rounded-5 w-[150px] h-[150px]"
+          className="rounded-5 w-150 h-150"
           src={imageSrc}
           alt=""
           width={150}

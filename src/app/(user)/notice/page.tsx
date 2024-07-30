@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import { Suspense, useMemo, Fragment } from 'react'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import NoticeLayout from './layout'
@@ -31,57 +31,57 @@ export default function NoticeList() {
     router.push(`/notice/?page=${page}`)
   }
 
-  const handleNoticeClick = (id : number) => {
+  const handleNoticeClick = (id: number) => {
     router.push(`/notice/${id}`)
   }
 
   return (
-      <div className="absolute w-[1280px] h-[720px] bg-white flex-col flex justify-between">
-        <div className="w-[695px] h-[575px] mt-62 ml-292 rounded-xl overflow-hidden">
-          <div className="flex w-[742px] h-[39px]">
-            <div className="w-[118px] h-[39px] text-32 font-inter font-bold">
-              공지사항
+    <Suspense fallback={<div>Loading...</div>}>
+      <Fragment>
+        <div className="absolute w-[1280px] h-[720px] bg-white flex-col flex justify-between">
+          <div className="w-[695px] h-[575px] mt-62 ml-292 rounded-xl overflow-hidden">
+            <div className="flex w-[742px] h-39">
+              <div className="w-118 h-39 text-32 font-inter font-bold">
+                공지사항
+              </div>
+            </div>
+            <div className="mt-11 w-[695px] h-155">
+              {paginatedNotices.map((notice) => (
+                <div
+                  key={notice.id}
+                  onClick={() => handleNoticeClick(notice.id)}
+                  className="cursor-pointer"
+                >
+                  <div className="flex mt-20">
+                    <div className="mt-8 w-[535px] h-136">
+                      <div className="w-100 h-20 text-14">{notice.kindergarten}</div>
+                      <div className="mt-5 w-[535px] h-29 text-20">{notice.title}</div>
+                      <div className="mt-2 w-52 h-14 text-10 text-[#BDBDBD]">{notice.date}</div>
+                      <div className="mt-10 w-[534px] h-56 text-10">{notice.content}</div>
+                    </div>
+                    <div>
+                      <Image
+                        className="ml-11"
+                        src={notice.imageSrc}
+                        alt={notice.title}
+                        width={150}
+                        height={150}
+                        priority
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-11 w-[695px] border-[#D5D1D1] border-[0.5px]" />
+                </div>
+              ))}
             </div>
           </div>
-          <div className="mt-11 w-[695px] h-[155px]">
-            {paginatedNotices.map((notice) => (
-              <div key={notice.id} onClick={() => handleNoticeClick(notice.id)} className="cursor-pointer">
-                <div className="flex mt-20">
-                  <div className="mt-8 w-[535px] h-[136px]">
-                    <div className="w-[100px] h-[20px] text-14">
-                      {notice.kindergarten}
-                    </div>
-                    <div className="mt-5 w-[535px] h-[29px] text-20">
-                      {notice.title}
-                    </div>
-                    <div className="mt-2 w-[52px] h-[14px] text-10 text-[#BDBDBD]">
-                      {notice.date}
-                    </div>
-                    <div className="mt-10 w-[534px] h-[56px] text-10">
-                      {notice.content}
-                    </div>
-                  </div>
-                  <div>
-                    <Image
-                      className="ml-11"
-                      src={notice.imageSrc}
-                      alt={notice.title}
-                      width={150}
-                      height={150}
-                      priority
-                    />
-                  </div>
-                </div>
-                <div className="mt-11 w-[695px] border-[#D5D1D1] border-[0.5px]" />
-              </div>
-            ))}
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      </div>
+      </Fragment>
+    </Suspense>
   )
 }

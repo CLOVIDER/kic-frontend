@@ -2,6 +2,7 @@
   "name": "kids-in-company",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -16,6 +17,7 @@
     "@tanstack/react-query": "^5.51.11",
     "chart.js": "^4.4.3",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "cjs": "^0.0.11",
     "clsx": "^2.1.1",
     "framer-motion": "^11.2.13",
     "next": "14.2.4",

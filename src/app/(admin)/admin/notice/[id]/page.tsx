@@ -52,7 +52,7 @@ export default function NoticeDetail() {
     <div>
       <Toaster position="top-center" reverseOrder={false} />
       <div className="mt-83 w-[700px] h-[638px]">
-        <div className="flex h-[24px]">
+        <div className="flex h-24">
           <Image
             src={notice.authorImgSrc}
             className="w-24 h-24 rounded-[50%]"
@@ -60,10 +60,10 @@ export default function NoticeDetail() {
             width={24}
             height={24}
           />
-          <div className="w-[600px] h-[24px] text-14 font-inter ml-10">
+          <div className="w-[600px] h-24 text-14 font-inter ml-10">
             {notice.author}
           </div>
-          <button className="w-[24px] h-[24px]" onClick={() => handleNavigation('prev')}>
+          <button className="w-24 h-24" onClick={() => handleNavigation('prev')}>
             <Image
               className="mr-5"
               src="/images/left.svg"
@@ -72,7 +72,7 @@ export default function NoticeDetail() {
               alt=""
             />
           </button>
-          <button className="w-[24px] h-[24px]" onClick={() => handleNavigation('list')}>
+          <button className="w-24 h-24" onClick={() => handleNavigation('list')}>
             <Image
               className="mr-5"
               src="/images/list.svg"
@@ -81,7 +81,7 @@ export default function NoticeDetail() {
               alt=""
             />
           </button>
-          <button className="w-[24px] h-[24px]" onClick={() => handleNavigation('next')}>
+          <button className="w-24 h-24" onClick={() => handleNavigation('next')}>
             <Image
               className="mr-5"
               src="/images/right.svg"
@@ -91,10 +91,10 @@ export default function NoticeDetail() {
             />
           </button>
         </div>
-        <div className="mt-16 h-[20px] text-14 text-[#ec8f03]">
+        <div className="mt-16 h-20 text-14 text-[#ec8f03]">
           {formatDate(notice.date)}
         </div>
-        <div className="mt-16 max-h-[39px] text-32 text-[#000000] text-opacity-60 overflow-hidden">
+        <div className="mt-16 max-h-39 text-32 text-[#000000] text-opacity-60 overflow-hidden">
           {notice.title}
         </div>
         <div className="mt-16">
