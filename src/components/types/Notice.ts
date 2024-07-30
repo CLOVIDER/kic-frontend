@@ -5,4 +5,7 @@ export interface Notice {
   date: string
   content: string
   imageSrc: string
+  contentImgSrc: string
+  author: string
+  authorImgSrc: string
 }

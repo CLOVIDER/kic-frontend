@@ -31,6 +31,10 @@ export default function NoticeList() {
     router.push(`/notice/?page=${page}`)
   }
 
+  const handleNoticeClick = (id : number) => {
+    router.push(`/notice/${id}`)
+  }
+
   return (
       <div className="absolute w-[1280px] h-[720px] bg-white flex-col flex justify-between">
         <div className="w-[695px] h-[575px] mt-62 ml-292 rounded-xl overflow-hidden">
@@ -41,7 +45,7 @@ export default function NoticeList() {
           </div>
           <div className="mt-11 w-[695px] h-[155px]">
             {paginatedNotices.map((notice) => (
-              <div key={notice.id}>
+              <div key={notice.id} onClick={() => handleNoticeClick(notice.id)} className="cursor-pointer">
                 <div className="flex mt-20">
                   <div className="mt-8 w-[535px] h-[136px]">
                     <div className="w-[100px] h-[20px] text-14">
