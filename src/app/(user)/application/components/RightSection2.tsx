@@ -1,10 +1,14 @@
 import React, { useRef, useState } from 'react'
 import Image from 'next/image'
-// import S3Upload from '@/components/S3Upload';
 
 type RightSection2Props = {
   onPrevious: () => void
   onSubmit: (uploadedFiles: string[], selectedItems: boolean[]) => void
+}
+
+type UploadedFile = {
+  file: File
+  name: string
 }
 
 export default function RightSection2({
@@ -20,13 +24,12 @@ export default function RightSection2({
     { name: '형제/자매 채용 여부', isRequired: false },
   ]
 
-  const [uploadedFiles, setUploadedFiles] = useState<(string | null)[]>(
+  const [uploadedFiles, setUploadedFiles] = useState<(UploadedFile | null)[]>(
     new Array(items.length).fill(null),
-  ) // string | null 배열로 초기화
+  )
   const [selectedItems, setSelectedItems] = useState(
     new Array(items.length).fill(false),
   )
-  const [currentFile, setCurrentFile] = useState<File | null>(null)
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>(
     new Array(items.length).fill(null),
   )
@@ -47,33 +50,36 @@ export default function RightSection2({
   ) => {
     const file = event.target.files?.[0] || null
     if (file) {
-      setCurrentFile(file)
-      const fileUrl = URL.createObjectURL(file)
       setUploadedFiles((prevFiles) => {
         const newFiles = [...prevFiles]
-        newFiles[index] = fileUrl // URL을 상태로 설정
+        newFiles[index] = { file, name: file.name }
         return newFiles
       })
     }
   }
 
   const handleDeleteFile = (index: number) => {
-    const newUploadedFiles = [...uploadedFiles]
-    newUploadedFiles[index] = null
-    setUploadedFiles(newUploadedFiles)
+    setUploadedFiles((prevFiles) => {
+      const newFiles = [...prevFiles]
+      newFiles[index] = null
+      return newFiles
+    })
   }
 
   const handleSubmit = () => {
     onSubmit(
-      uploadedFiles.filter((url) => url !== null) as string[],
+      uploadedFiles.filter((file) => file !== null).map((file) => file!.name),
       selectedItems,
     )
   }
 
-  // 업로드 완료 함수
-  function handleUploadComplete(url: string): void {
-    console.log('File uploaded to:', url)
-  }
+  // const formatFileSize = (bytes: number) => {
+  //   if (bytes === 0) return '0 Bytes'
+  //   const k = 1024
+  //   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+  //   const i = Math.floor(Math.log(bytes) / Math.log(k))
+  //   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+  // }
 
   return (
     <div className="w-453 h-507 mt-109 mr-103">
@@ -90,33 +96,30 @@ export default function RightSection2({
       </div>
       <div className="ml-7 mt-65 w-[444px]">
         {items.map((item, index) => (
-          <div
-            key={index}
-            className="w-full mb-10 flex items-center justify-between"
-          >
-            <div className="flex items-center">
-              <button
-                onClick={() => handleCheckboxChange(index)}
-                className="w-24 h-24 border rounded-lg border-solid border-[#CCCCCC] flex items-center justify-center cursor-pointer mr-16"
-                type="button"
-              >
-                {selectedItems[index] && (
-                  <Image
-                    src="/images/check.svg"
-                    alt="Checkmark"
-                    width={24}
-                    height={24}
-                  />
-                )}
-              </button>
-              <span className="text-lg">
-                {item.name}
-                {item.isRequired && (
-                  <span className="text-[#ea7465] ml-1">*</span>
-                )}
-              </span>
-            </div>
-            <div className="flex items-center">
+          <div key={index} className="w-full mb-10">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <button
+                  onClick={() => handleCheckboxChange(index)}
+                  className="w-24 h-24 border rounded-lg border-solid border-[#CCCCCC] flex items-center justify-center cursor-pointer mr-16"
+                  type="button"
+                >
+                  {selectedItems[index] && (
+                    <Image
+                      src="/images/check.svg"
+                      alt="Checkmark"
+                      width={24}
+                      height={24}
+                    />
+                  )}
+                </button>
+                <span className="text-lg">
+                  {item.name}
+                  {item.isRequired && (
+                    <span className="text-[#ea7465] ml-1">*</span>
+                  )}
+                </span>
+              </div>
               <button
                 type="button"
                 onClick={() => handleFileUpload(index)}
@@ -132,19 +135,19 @@ export default function RightSection2({
                 onChange={(e) => handleFileChange(index, e)}
                 style={{ display: 'none' }}
               />
-              {uploadedFiles[index] && (
-                <div className="ml-2 flex items-center">
-                  <span className="text-sm mr-2">{uploadedFiles[index]}</span>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteFile(index)}
-                    className="text-[#ef4444]"
-                  >
-                    X
-                  </button>
-                </div>
-              )}
             </div>
+            {uploadedFiles[index] && (
+              <div className="ml-40 mt-2 flex items-center justify-between">
+                <span className="text-sm">{uploadedFiles[index]?.name}</span>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteFile(index)}
+                  className="text-[#ef4444] text-sm"
+                >
+                  X
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>
