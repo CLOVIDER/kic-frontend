@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import { cn, NextUIProvider } from '@nextui-org/react'
 import { Header } from '@/components/common'
 import '../styles/globals.css'
+import '../styles/button.css'
 
 const Pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
