@@ -1,8 +1,14 @@
 import { ProgressBar } from '@/components/common'
+import { cn } from '@/util'
 
-export default function CompetitionRate() {
+export default function CompetitionRate({ className }: { className?: string }) {
   return (
-    <div className="relative bg-white w-450 px-30 pt-15 pb-30 rounded-32 shadow-md">
+    <div
+      className={cn(
+        'bg-white w-450 px-30 pt-15 pb-30 rounded-32 shadow-md',
+        className,
+      )}
+    >
       <div className="text-red-500 font-bold mb-4 flex items-center text-[#EA7465]">
         <span className="mr-4">▼ </span> 실시간 경쟁률
       </div>

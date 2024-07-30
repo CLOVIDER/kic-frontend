@@ -14,9 +14,10 @@ export default function CompanyLogo() {
       companyNameId={companyNameId}
     >
       <div className="relative">
-        <div className="w-180 h-100 absolute left-40 top-0 bg-[#fbe268] rounded-full blur-[100px]" />
-        <div className="w-238 h-150 absolute left-241 top-0 bg-[#fff3d6] rounded-full blur-[100px]" />
-        <div className="ml-120 mt-100 relative z-10">
+        <div className="w-300 h-80 absolute left-0 top-10 bg-[#f7e486] opacity-50 rounded-full blur-[60px]" />
+        <div className="w-238 h-150 absolute left-200 top-0 bg-[#fff3d6] rounded-full blur-[100px]" />
+        <div className="ml-120 mt-100">
+
           <div
             id={companyNameId}
             className="text-[#6C5757] font-mono text-[40px] font-semibold tracking-widest drop-shadow-md"
