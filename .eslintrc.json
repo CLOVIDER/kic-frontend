@@ -30,5 +30,8 @@
         "endOfLine" : "auto",
       }
     ]
+    "react/require-default-props": "off",
+    "react/no-unused-prop-types": "off",
+    "no-restricted-syntax": "off"
   }
 }

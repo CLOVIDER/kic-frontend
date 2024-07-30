@@ -1,5 +1,3 @@
-'use client'
-
 import { StrictPropsWithChildren } from '@/type'
 import { Suspense } from 'react'
 
