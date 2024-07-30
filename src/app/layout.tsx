@@ -4,6 +4,9 @@ import { cn, NextUIProvider } from '@nextui-org/react'
 import { Header } from '@/components/common'
 import '../styles/globals.css'
 import '../styles/button.css'
+import { Suspense } from 'react'
+import { GlobalErrorBoundary } from '@/react-utils/ErrorBoundary'
+import QueryProvider from './lib/QueryProvider'
 
 const Pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
@@ -24,10 +27,17 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={cn('overflow-hidden', Pretendard.className)}>
-        <NextUIProvider className="h-[calc(100%-54px)]">
-          <Header />
-          {children}
-        </NextUIProvider>
+        <GlobalErrorBoundary renderFallback={<>로딩이 발생했어요 !</>}>
+          {/* /* TODO: fallback 컴포넌트 구현 */}
+          <Suspense fallback={<>loading..</>}>
+            <QueryProvider>
+              <NextUIProvider className="h-[calc(100%-54px)]">
+                <Header />
+                {children}
+              </NextUIProvider>
+            </QueryProvider>
+          </Suspense>
+        </GlobalErrorBoundary>
       </body>
     </html>
   )
