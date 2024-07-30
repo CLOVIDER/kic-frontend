@@ -1,9 +1,8 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
-import NoticeLayout from './layout'
 import { notices as dummyNotices } from '@/components/data/Notice'
 import Pagination from '@/components/common/Pagination'
 
@@ -28,7 +27,7 @@ export default function NoticeList() {
   )
 
   const handlePageChange = (page: number) => {
-    router.push(`/notice/?page=${page}`)
+    router.push(`/admin/notice/?page=${page}`)
   }
 
   return (
@@ -78,6 +77,13 @@ export default function NoticeList() {
           totalPages={totalPages}
           onPageChange={handlePageChange}
         />
+        <button
+          className="absolute w-[51px] h-[47px] text-28 font-bold bg-[#FFE4A3] text-[#ffffff] rounded flex items-center justify-center z-50"
+          style={{ top: '647px', left: '1199px' }}
+          onClick={() => router.push('/admin/notice/write')}
+        >
+          +
+        </button>
       </div>
   )
 }
