@@ -81,16 +81,9 @@ export default function NoticeList() {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
-      {/* <button
-        className="absolute w-[51px] h-[47px] text-28 font-bold bg-[#FFE4A3] text-[#ffffff] rounded flex items-center justify-center z-50"
-        style={{ top: '647px', left: '1199px' }}
-        onClick={() => router.push('/admin/notice/write')}
-      >
-        +
-      </button> */}
       <button
         className="absolute w-[51px] h-[47px] text-28 font-bold bg-[#FFE4A3] text-[#ffffff] rounded flex items-center justify-center z-50"
-        style={{ top: '650px', left: '1100px' }} // New positioning with absolute coordinates
+        style={{ top: '650px', left: '1100px' }}
         onClick={() => router.push('/admin/notice/write')}
       >
         +

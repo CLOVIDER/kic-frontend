@@ -55,9 +55,9 @@ export default function Page() {
       title,
       content: JSON.stringify(blocks),
     }
-
+    // api
+    /*
     try {
-      // 여기서 실제 저장 API를 호출해야 합니다.
       console.log('Saving data:', data)
       alert('Saved successfully!')
     } catch (error) {
@@ -67,6 +67,7 @@ export default function Page() {
     } finally {
       setIsSaving(false)
     }
+    */
   }
 
   const moveBack = () => {
