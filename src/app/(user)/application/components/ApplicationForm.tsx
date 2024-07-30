@@ -3,9 +3,11 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
+import { useApplication } from '@/hooks/useApplication'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
-import submitApplication from '../api/submitApplication'
+import { submitApplication, ApplicationRequest } from '../api/submitApplication'
 
 type ApplicationFormProps = {
   kindergartenName: string[]
@@ -16,7 +18,7 @@ type ApplicationFormProps = {
 
 interface FormData {
   children: { name: string }[] // 적절한 타입으로 정의
-  selectedOptions: string[];
+  selectedOptions: string[]
 }
 
 export default function ApplicationForm({
@@ -25,6 +27,8 @@ export default function ApplicationForm({
   tokens,
   ifCC,
 }: ApplicationFormProps) {
+  const { submitForm, isLoading } = useApplication();
+  const router = useRouter()
   const [currentSection, setCurrentSection] = useState<number>(1)
   const [formData, setFormData] = useState<FormData>({
     children: [],
@@ -50,38 +54,28 @@ export default function ApplicationForm({
     uploadedFiles: string[],
     selectedItems: boolean[],
   ) => {
-    try {
-      const applicationData = {
-        isSingleParent: selectedItems[2] ? 'Y' : 'N',
-        childrenCnt: formData.children.length,
-        isDisability: selectedItems[3] ? 'Y' : 'N',
-        isDualIncome: selectedItems[1] ? 'Y' : 'N',
-        isEmployeeCouple: ifCC ? 'Y' : 'N',
-        isSibling: selectedItems[5] ? 'Y' : 'N',
-        childName: formData.children.map((child) => child.name).join(', '),
-        isTemp: 'N',
-        imageUrls: uploadedFiles.filter((url) => url !== null),
-      }
-
-      const result = await submitApplication(
-        applicationData,
-        tokens.accessToken,
-      )
-      console.log('Form submitted successfully:', result)
-      toast.success('Form submitted successfully')
-    } catch (error) {
-      console.error('Error submitting form:', error)
-      toast.error('Error submitting form')
+    const applicationData: ApplicationRequest = {
+      isSingleParent: selectedItems[2] ? 'Y' : 'N',
+      childrenCnt: formData.children.length,
+      isDisability: selectedItems[3] ? 'Y' : 'N',
+      isDualIncome: selectedItems[1] ? 'Y' : 'N',
+      isEmployeeCouple: ifCC ? 'Y' : 'N',
+      isSibling: selectedItems[5] ? 'Y' : 'N',
+      childName: formData.children.map((child) => child.name).join(', '),
+      isTemp: 'N',
+      imageUrls: uploadedFiles.filter((url) => url !== null),
     }
+
+    await submitForm(applicationData, tokens.accessToken);
   }
 
   const pageVariants = {
-    initial: (direction: number) => ({
+    initial: () => ({
       opacity: 0,
       x: direction > 0 ? 300 : -300,
     }),
     in: { opacity: 1, x: 0 },
-    out: (direction: number) => ({
+    out: () => ({
       opacity: 0,
       x: direction < 0 ? 300 : -300,
     }),
