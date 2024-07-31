@@ -15,7 +15,7 @@ jobs:
       - name: node 설치중..
         uses: actions/setup-node@v2
         with:
-          node-version: '18.18.2'
+          node-version: '20.16.0'
 
       - name: pnpm 설치중..
         run: npm install -g pnpm
