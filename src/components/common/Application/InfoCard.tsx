@@ -5,7 +5,7 @@ export default function InfoCard() {
   const entryDate = '2020.08.01'
 
   return (
-    <div className="border border-orange rounded-20 p-10 m-20 bg-white text-15 w-420 items-center justify-center">
+    <div className="border border-orange rounded-20 p-10 bg-white text-15 w-420 items-center justify-center">
       <div className="grid grid-cols-4 gap-y-2 gap-x-7">
         <div className="text-right font-bold text-[#F90]">메일</div>
         <div className="text-left">{email}</div>
