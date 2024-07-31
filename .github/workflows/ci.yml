@@ -20,22 +20,38 @@ jobs:
           echo "${{ secrets.ENV }}" >> .env
         shell: bash
 
-      - name: 카카오 컨테이너 레지스트리에 로그인중...
-        run: |
-          docker login kids-in-company.kr-central-2.kcr.dev --username ${{ secrets.KAKAO_ACCESS_ID }} --password ${{ secrets.KAKAO_ACCESS_SECRET }}
+      - name: 도커 레지스트리 로그인중...
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.GLUE_PROJECT }}
+          username: ${{ secrets.ACCESS_ID }}
+          password: ${{ secrets.ACCESS_SECRET }}
 
-      - name: Docker 이미지 빌드중..
+      - name: 카카오 클라우드에 빌드 및 푸시중..
         uses: docker/build-push-action@v4
         with:
           file: Dockerfile
           context: .
-          push: false
-          tags: clovider-fe-app:latest
+          push: true
+          tags: ${{ secrets.GLUE_PROJECT }}/glue-repository/glue-client:${{ github.sha }}
 
-      - name: Docker 이미지 태그 설정중..
+  deploy-to-vm:
+    runs-on: ubuntu-latest
+    needs: build-and-push-image
+    steps:
+      - name: PEM 키 설정중
         run: |
-          docker tag clovider-fe-app:latest kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
+          echo "${{ secrets.KAKAO_SSH_KEY_PEM }}" > kakao_ssh_key.pem
+          chmod 600 kakao_ssh_key.pem
+        shell: bash
 
-      - name: 카카오 컨테이너 레지스트리에 푸시중..
+      - name: Kakao VM에 배포중..
         run: |
-          docker push kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
+          ssh -o StrictHostKeyChecking=no -i kakao_ssh_key.pem ubuntu@210.109.55.28 << 'EOF'
+            docker login kids-in-company.kr-central-2.kcr.dev --username ${{ secrets.KAKAO_ACCESS_ID }} --password ${{ secrets.KAKAO_ACCESS_SECRET }}
+            docker pull ${{ secrets.GLUE_PROJECT }}/glue-repository/glue-client:${{ github.sha }}
+            docker stop clovider-fe-app || true
+            docker rm clovider-fe-app || true
+            docker run -d --name clovider-fe-app -p 80:80 ${{ secrets.GLUE_PROJECT }}/glue-repository/glue-client:${{ github.sha }}
+          EOF
+        shell: bash
