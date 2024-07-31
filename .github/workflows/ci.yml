@@ -21,7 +21,7 @@ jobs:
         run: npm install -g pnpm@latest
 
       - name: 종속성 설치중...
-        run: pnpm install --reporter=ndjson
+        run: pnpm install --reporter=ndjson --loglevel=debug
 
       - name: 빌드 중..
         run: pnpm build
