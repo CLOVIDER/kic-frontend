@@ -53,9 +53,8 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i kakao_ssh_key.pem ubuntu@210.109.55.28 << 'EOF'
             sudo docker login kids-in-company.kr-central-2.kcr.dev --username ${{ secrets.KAKAO_ACCESS_ID }} --password ${{ secrets.KAKAO_ACCESS_SECRET }}
-            sudo docker pull ${{ secrets.GLUE_PROJECT }}/glue-repository/glue-client:${{ github.sha }}
+            sudo docker pull kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
             sudo docker stop clovider-fe-app || true
             sudo docker rm clovider-fe-app || true
-            sudo docker run -d --name clovider-fe-app -p 80:80 ${{ secrets.GLUE_PROJECT }}/glue-repository/glue-client:${{ github.sha }}
-          EOF
+            sudo docker run -d --name clovider-fe-app -p 8080:8080 kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
         shell: bash
