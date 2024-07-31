@@ -52,10 +52,10 @@ jobs:
       - name: Kakao VM에 배포중..
         run: |
           ssh -o StrictHostKeyChecking=no -i kakao_ssh_key.pem ubuntu@210.109.55.28 << 'EOF'
-            docker login kids-in-company.kr-central-2.kcr.dev --username ${{ secrets.KAKAO_ACCESS_ID }} --password ${{ secrets.KAKAO_ACCESS_SECRET }}
-            docker pull ${{ secrets.GLUE_PROJECT }}/glue-repository/glue-client:${{ github.sha }}
-            docker stop clovider-fe-app || true
-            docker rm clovider-fe-app || true
-            docker run -d --name clovider-fe-app -p 80:80 ${{ secrets.GLUE_PROJECT }}/glue-repository/glue-client:${{ github.sha }}
+            sudo docker login kids-in-company.kr-central-2.kcr.dev --username ${{ secrets.KAKAO_ACCESS_ID }} --password ${{ secrets.KAKAO_ACCESS_SECRET }}
+            sudo docker pull ${{ secrets.GLUE_PROJECT }}/glue-repository/glue-client:${{ github.sha }}
+            sudo docker stop clovider-fe-app || true
+            sudo docker rm clovider-fe-app || true
+            sudo docker run -d --name clovider-fe-app -p 80:80 ${{ secrets.GLUE_PROJECT }}/glue-repository/glue-client:${{ github.sha }}
           EOF
         shell: bash
