@@ -56,5 +56,5 @@ jobs:
             sudo docker pull kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
             sudo docker stop clovider-fe-app || true
             sudo docker rm clovider-fe-app || true
-            sudo docker run -d --name clovider-fe-app -p 8080:8080 kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
+            sudo docker run -d --name clovider-fe-app -p 3000:3000 kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
         shell: bash
