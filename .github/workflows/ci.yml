@@ -18,10 +18,10 @@ jobs:
           node-version: '20.16.0'
 
       - name: pnpm 설치중..
-        run: npm install -g pnpm@latest
+        run: npm install -g pnpm
 
       - name: 종속성 설치중...
-        run: pnpm install --reporter=ndjson --loglevel=debug
+        run: pnpm install
 
       - name: 빌드 중..
         run: pnpm build
