@@ -6,8 +6,15 @@ import Input from '../Input'
 import useLoginInput from './hooks/useLoginInput'
 
 export default function LoginInput() {
-  const { email, setEmail, password, setPassword, isPassword, setIsPassword } =
-    useLoginInput()
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    isPassword,
+    setIsPassword,
+    handleLogin,
+  } = useLoginInput()
 
   return (
     <div className="flex flex-col gap-16 items-center">
@@ -32,7 +39,10 @@ export default function LoginInput() {
         }
       />
 
-      <Button className="w-full text-19 font-bold rounded-10 bg-[#FFC945] text-[white] shadow-[0px_12px_21px_4px_rgba(68,97,242,0.15)]">
+      <Button
+        className="w-full text-19 font-bold rounded-10 bg-[#FFC945] text-[white] shadow-[0px_12px_21px_4px_rgba(68,97,242,0.15)]"
+        onClick={handleLogin}
+      >
         로그인
       </Button>
 

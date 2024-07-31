@@ -11,7 +11,7 @@ import Cookies from 'js-cookie'
 import { BaseResponse } from './types'
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
@@ -19,13 +19,13 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const accessToken = Cookies.get(ACCESS_TOKEN)!
+    const accessToken = Cookies.get(ACCESS_TOKEN) as string
 
     if (!accessToken) {
       return config
     }
     // eslint-disable-next-line
-    config.headers.Authorization = `Bearer ${accessToken}`;
+    config.headers.Authorization = `Bearer ${process.env.NEXT_PUBLIC_MASTER_TOKEN}`;
     return config
   },
   (error: AxiosError) => {
