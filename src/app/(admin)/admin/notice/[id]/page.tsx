@@ -4,7 +4,7 @@ import { useRouter, useParams } from 'next/navigation'
 import { notices as dummyNotices } from '@/components/data/Notice'
 import Image from 'next/image'
 import { formatDate } from '@/util/formatDate'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 
 export default function NoticeDetail() {
@@ -13,12 +13,12 @@ export default function NoticeDetail() {
   const noticeId = Number(id)
 
   useEffect(() => {
-    if (isNaN(noticeId)) {
+    if (Number.isNaN(noticeId)) {
       router.push('/admin/notice')
     }
   }, [noticeId, router])
 
-  const noticeIndex = dummyNotices.findIndex(notice => notice.id === noticeId)
+  const noticeIndex = dummyNotices.findIndex((notice) => notice.id === noticeId)
   const toastShown = useRef(false)
 
   if (noticeIndex === -1) {
@@ -37,7 +37,11 @@ export default function NoticeDetail() {
 
     if (newIndex < 0 || newIndex >= dummyNotices.length) {
       if (!toastShown.current) {
-        toast.error(direction === 'prev' ? 'This is the first notice.' : 'This is the last notice.')
+        toast.error(
+          direction === 'prev'
+            ? 'This is the first notice.'
+            : 'This is the last notice.',
+        )
         toastShown.current = true
       }
       return
@@ -63,7 +67,12 @@ export default function NoticeDetail() {
           <div className="w-[600px] h-24 text-14 font-inter ml-10">
             {notice.author}
           </div>
-          <button className="w-24 h-24" onClick={() => handleNavigation('prev')}>
+          <button
+            type="button"
+            className="w-24 h-24"
+            onClick={() => handleNavigation('prev')}
+            aria-label="Previous"
+          >
             <Image
               className="mr-5"
               src="/images/left.svg"
@@ -72,7 +81,12 @@ export default function NoticeDetail() {
               alt=""
             />
           </button>
-          <button className="w-24 h-24" onClick={() => handleNavigation('list')}>
+          <button
+            type="button"
+            className="w-24 h-24"
+            onClick={() => handleNavigation('list')}
+            aria-label="List"
+          >
             <Image
               className="mr-5"
               src="/images/list.svg"
@@ -81,7 +95,12 @@ export default function NoticeDetail() {
               alt=""
             />
           </button>
-          <button className="w-24 h-24" onClick={() => handleNavigation('next')}>
+          <button
+            type="button"
+            className="w-24 h-24"
+            onClick={() => handleNavigation('next')}
+            aria-label="Next"
+          >
             <Image
               className="mr-5"
               src="/images/right.svg"
@@ -105,9 +124,7 @@ export default function NoticeDetail() {
             height={720}
           />
         </div>
-        <div className="mt-16">
-          {notice.content}
-        </div>
+        <div className="mt-16">{notice.content}</div>
       </div>
     </div>
   )

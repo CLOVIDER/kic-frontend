@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -6,11 +6,12 @@ export const metadata: Metadata = {
   description: '공지사항',
 }
 
-type LayoutProps = PropsWithChildren<{}>;
-
+type LayoutProps = PropsWithChildren<object>
 
 export default function NoticeLayout({ children }: LayoutProps) {
   return (
-    <div className="flex justify-center w-full h-full overflow-scroll">{children}</div>
+    <div className="flex justify-center w-full h-full overflow-scroll">
+      {children}
+    </div>
   )
 }

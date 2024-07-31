@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: 'notice list page for administrator',
 }
 
-type LayoutProps = PropsWithChildren<{}>;
+type LayoutProps = PropsWithChildren<unknown>
 
 export default function Layout({ children }: LayoutProps) {
   return (

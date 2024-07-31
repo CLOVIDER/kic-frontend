@@ -1,5 +1,6 @@
 'use client'
-import { Suspense, useMemo } from 'react'
+
+import { KeyboardEvent, Suspense, useMemo } from 'react'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { notices as dummyNotices } from '@/components/data/Notice'
@@ -29,8 +30,17 @@ export default function NoticeList() {
     router.push(`/admin/notice/?page=${page}`)
   }
 
-  const handleNoticeClick = (id : number) => {
+  const handleNoticeClick = (id: number) => {
     router.push(`/admin/notice/${id}`)
+  }
+
+  function handleKeyPress(
+    event: KeyboardEvent<HTMLDivElement>,
+    id: number,
+  ): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      handleNoticeClick(id)
+    }
   }
 
   return (
@@ -44,7 +54,14 @@ export default function NoticeList() {
           </div>
           <div className="mt-11 w-[695px] h-155">
             {paginatedNotices.map((notice) => (
-              <div key={notice.id} onClick={() => handleNoticeClick(notice.id)} className="cursor-pointer">
+              <div
+                key={notice.id}
+                onClick={() => handleNoticeClick(notice.id)}
+                onKeyDown={(event) => handleKeyPress(event, notice.id)}
+                role="button"
+                tabIndex={0}
+                className="cursor-pointer"
+              >
                 <div className="flex mt-20">
                   <div className="mt-8 w-[535px] h-136">
                     <div className="w-100 h-20 text-14">
@@ -82,6 +99,7 @@ export default function NoticeList() {
           onPageChange={handlePageChange}
         />
         <button
+          type="button"
           className="absolute w-51 h-47 text-28 font-bold bg-[#FFE4A3] text-[#ffffff] rounded flex items-center justify-center z-50 top-[650px] left-[1100px]"
           onClick={() => router.push('/admin/notice/write')}
         >

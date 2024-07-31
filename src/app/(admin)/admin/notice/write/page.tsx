@@ -1,61 +1,61 @@
 'use client'
 
-import "@blocknote/core/fonts/inter.css";
-import "@blocknote/mantine/style.css";
-import { useCreateBlockNote } from "@blocknote/react";
-import { BlockNoteView } from "@blocknote/mantine";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import '@blocknote/core/fonts/inter.css'
+import '@blocknote/mantine/style.css'
+import { useCreateBlockNote } from '@blocknote/react'
+import { BlockNoteView } from '@blocknote/mantine'
+import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 
-const editor = typeof window !== 'undefined' ? useCreateBlockNote() : null;
+// const BlockNoteView = dynamic(() => import("@blocknote/mantine").then(mod => mod.BlockNoteView), { ssr: false })
 
 export default function Page() {
-  const [title, setTitle] = useState<string>('');
-  const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
-  const [toggled, setToggled] = useState<boolean>(false);
-  const router = useRouter();
-  const editor = useCreateBlockNote();
+  const [title, setTitle] = useState<string>('')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isSaving, setIsSaving] = useState<boolean>(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [toggled, setToggled] = useState<boolean>(false)
+  const router = useRouter()
+
+  const editor = useCreateBlockNote()
 
   const moveBack = () => {
-    router.push('/admin/notice');
-  };
-
-  const handleToggle = () => {
-    setToggled(!toggled);
-  };
-
-  const handleSave = () => {
-    setIsSaving(true);
-    setSaveError(null);
-    try {
-      // 여기에서 저장 로직을 구현합니다.
-      // editor.topLevelBlocks를 사용하여 에디터의 콘텐츠에 접근할 수 있습니다.
-      // 예: const content = editor.topLevelBlocks;
-      // 백엔드로 데이터를 전송하여 저장할 수 있습니다.
-    } catch (error) {
-      setSaveError('저장 중 오류가 발생했습니다.');
-    } finally {
-      setIsSaving(false);
-    }
-  };
+    router.push('/admin/notice')
+  }
 
   useEffect(() => {
-    const handleDocumentEvents = () => {
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-          moveBack(); // ESC 키를 누르면 뒤로 가기
-        }
-      });
-    };
+    // Set up event listener
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        moveBack()
+      }
+    }
 
-    handleDocumentEvents();
+    document.addEventListener('keydown', handleEscapeKey)
 
     return () => {
-      // Cleanup code here
-      document.removeEventListener('keydown', handleDocumentEvents);
-    };
-  }, []);
+      document.removeEventListener('keydown', handleEscapeKey)
+    }
+  }, [])
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleToggle = () => {
+    setToggled(!toggled)
+  }
+
+  const handleSave = () => {
+    setIsSaving(true)
+    setSaveError(null)
+    try {
+      // Save logic
+      moveBack()
+    } catch (error) {
+      setSaveError('저장 중 오류가 발생했습니다.')
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   return (
     <div className="absolute w-[1280px] h-[720px] bg-white flex justify-between">
@@ -72,16 +72,18 @@ export default function Page() {
           />
         </div>
         <div className="mt-[17px] ml-21 w-[746px] h-435 flex-grow overflow-y-auto border-1 border-solid border-[#00000014] rounded-xl shadow-md">
-          <BlockNoteView editor={editor} theme={'light'} />
+          {editor && <BlockNoteView editor={editor} theme="light" />}
         </div>
         <div className="flex mt-8 ml-[556px] w-211 h-31">
           <button
+            type="button" // Add the type attribute with the value "button"
             className="w-98 h-31 bg-white border border-[#fdba74] font-bold text-[#fb923c] rounded-full text-sm"
             onClick={moveBack}
           >
             작성취소
           </button>
           <button
+            type="button" // Add the type attribute with the value "button"
             className="ml-20 w-98 h-31 shadow-md [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] text-[#ffffff] rounded-full text-sm"
             onClick={handleSave}
           >

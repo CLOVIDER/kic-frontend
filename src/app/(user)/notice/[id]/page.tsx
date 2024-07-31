@@ -9,11 +9,11 @@ export default function NoticeDetail() {
   const { id } = useParams()
   const noticeId = Number(id)
 
-  if (isNaN(noticeId)) {
+  if (Number.isNaN(noticeId)) {
     return <div>Notice not found</div>
   }
 
-  const notice = dummyNotices.find(notice => notice.id === noticeId)
+  const notice = dummyNotices.find((n) => n.id === noticeId)
 
   if (!notice) {
     return <div>Notice not found</div>
@@ -28,7 +28,8 @@ export default function NoticeDetail() {
             className="w-24 h-24 rounded-[50%]"
             alt={notice.author}
             width={24}
-            height={24}/>
+            height={24}
+          />
           <div className="w-[700px] h-24 text-14 font-inter ml-10">
             {notice.author}
           </div>
@@ -44,11 +45,10 @@ export default function NoticeDetail() {
             src={notice.contentImgSrc}
             alt={notice.title}
             width={700}
-            height={720}/>
+            height={720}
+          />
         </div>
-        <div className="mt-16">
-          {notice.content}
-        </div>
+        <div className="mt-16">{notice.content}</div>
       </div>
     </div>
   )
