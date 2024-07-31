@@ -20,21 +20,25 @@ jobs:
           echo "${{ secrets.ENV }}" >> .env
         shell: bash
 
-      - name: 도커 레지스트리 로그인중...
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ secrets.GLUE_PROJECT }}
-          username: ${{ secrets.ACCESS_ID }}
-          password: ${{ secrets.ACCESS_SECRET }}
+      - name: 카카오 컨테이너 레지스트리에 로그인중...
+        run: |
+          docker login kids-in-company.kr-central-2.kcr.dev --username ${{ secrets.KAKAO_ACCESS_ID }} --password ${{ secrets.KAKAO_ACCESS_SECRET }}
 
-      - name: 카카오 클라우드에 빌드 및 푸시중..
+      - name: Docker 이미지 빌드중..
         uses: docker/build-push-action@v4
         with:
           file: Dockerfile
           context: .
-          push: true
-          tags: ${{ secrets.GLUE_PROJECT }}/glue-repository/glue-client:${{ github.sha }}
+          push: false
+          tags: clovider-fe-app:latest
 
+      - name: Docker 이미지 태그 설정중..
+        run: |
+          docker tag clovider-fe-app:latest kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
+
+      - name: 카카오 컨테이너 레지스트리에 푸시중..
+        run: |
+          docker push kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
   deploy-to-vm:
     runs-on: ubuntu-latest
     needs: build-and-push-image
