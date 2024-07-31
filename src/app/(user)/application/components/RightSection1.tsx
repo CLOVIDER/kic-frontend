@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+'use client'
+
+import React, { useState, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import {
   Dropdown,
@@ -7,67 +9,65 @@ import {
   DropdownItem,
   Button,
 } from '@nextui-org/react'
+import { Child, RightSection1Props } from '@/type/application'
 
-type Child = {
-  id: number
-  name: string
-  classes: {
-    [kindergarten: string]: string
-  }
-}
-
-type RightSectionProps = {
-  kindergartenName: string[]
-  dropdownOptions: { key: string; label: string }[]
-  onSubmit: (children: Child[], selectedOptions: string[]) => void
-}
-
-export default function RightSection({
+export default function RightSection1({
   kindergartenName,
   dropdownOptions,
   onSubmit,
-}: RightSectionProps) {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>(
+}: RightSection1Props) {
+  const [selectedOptions] = useState<string[]>(
     kindergartenName.map(() => '분반선택'),
   )
   const [children, setChildren] = useState<Child[]>([
     { id: 1, name: '', classes: {} },
   ])
 
-  const addChild = () => {
-    setChildren([...children, { id: Date.now(), name: '', classes: {} }])
-  }
+  const addChild = useCallback(() => {
+    setChildren((prevChildren) => [
+      ...prevChildren,
+      { id: Date.now(), name: '', classes: {} },
+    ])
+  }, [])
 
-  const removeChild = (id: number) => {
-    setChildren(children.filter((child) => child.id !== id))
-  }
-
-  const updateChildInfo = (
-    id: number,
-    field: string,
-    value: string,
-    kindergarten?: string,
-  ) => {
-    setChildren(
-      children.map((child) => {
-        if (child.id === id) {
-          if (field === 'class' && kindergarten) {
-            return {
-              ...child,
-              classes: { ...child.classes, [kindergarten]: value },
-            }
-          }
-          return { ...child, [field]: value }
-        }
-        return child
-      }),
+  const removeChild = useCallback((id: number) => {
+    setChildren((prevChildren) =>
+      prevChildren.filter((child) => child.id !== id),
     )
-  }
+  }, [])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit(children, selectedOptions)
-  }
+  const updateChildInfo = useCallback(
+    (id: number, field: string, value: string, kindergarten?: string) => {
+      setChildren((prevChildren) =>
+        prevChildren.map((child) => {
+          if (child.id === id) {
+            if (field === 'class' && kindergarten) {
+              return {
+                ...child,
+                classes: { ...child.classes, [kindergarten]: value },
+              }
+            }
+            return { ...child, [field]: value }
+          }
+          return child
+        }),
+      )
+    },
+    [],
+  )
+
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault()
+      onSubmit(children, selectedOptions)
+    },
+    [children, selectedOptions, onSubmit],
+  )
+
+  const memoizedDropdownOptions = useMemo(
+    () => dropdownOptions,
+    [dropdownOptions],
+  )
 
   return (
     <form onSubmit={handleSubmit}>
@@ -79,7 +79,7 @@ export default function RightSection({
         <div className="ml-4 mt-5 text-12 text-[#e86565]">
           + 버튼을 누르면 아이 추가가 가능해요.
         </div>
-        {children.map((child, childIndex) => (
+        {children.map((child) => (
           <div key={child.id} className="mb-6">
             <div className="flex ml-4 mt-36 w-[202px] h-[39px]">
               <input
@@ -94,6 +94,7 @@ export default function RightSection({
                 type="button"
                 className="ml-15"
                 onClick={() => removeChild(child.id)}
+                aria-label="Remove Child"
               >
                 <Image
                   alt=""
@@ -135,7 +136,7 @@ export default function RightSection({
                         aria-label="Dynamic Actions"
                         className="min-w-[138px]"
                         onAction={(key) => {
-                          const selectedOption = dropdownOptions.find(
+                          const selectedOption = memoizedDropdownOptions.find(
                             (option) => option.key === key,
                           )
                           if (selectedOption) {
@@ -148,7 +149,7 @@ export default function RightSection({
                           }
                         }}
                       >
-                        {dropdownOptions.map((option) => (
+                        {memoizedDropdownOptions.map((option) => (
                           <DropdownItem
                             key={option.key}
                             className="text-center justify-center"

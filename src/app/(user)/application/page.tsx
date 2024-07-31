@@ -1,17 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { ToastContainer } from 'react-toastify'
-import { useRouter } from 'next/navigation'
-import ApplicationLayout from './application-layout'
 import LeftSection from './components/LeftSection'
 import ApplicationForm from './components/ApplicationForm'
 import 'react-toastify/dist/ReactToastify.css'
 
 export default function Page() {
-  const router = useRouter()
-  const [tokens] = useState({ refreshToken: '', accessToken: '' })
-
   const name = '김재하'
   const date = '2013.10.12'
   const ifCC = false
@@ -25,17 +20,13 @@ export default function Page() {
   ]
 
   return (
-    <ApplicationLayout>
-      <div className="absolute w-[1280px] h-[720px] bg-white flex justify-between">
-        <LeftSection name={name} date={date} ifCC={ifCC} />
-        <ApplicationForm
-          kindergartenName={kindergartenName}
-          dropdownOptions={dropdownOptions}
-          tokens={tokens}
-          ifCC={ifCC}
-        />
-      </div>
+    <div className="absolute w-[1280px] h-[720px] bg-white flex justify-between">
+      <LeftSection name={name} date={date} ifCC={ifCC} />
+      <ApplicationForm
+        kindergartenName={kindergartenName}
+        dropdownOptions={dropdownOptions}
+      />
       <ToastContainer />
-    </ApplicationLayout>
+    </div>
   )
 }
