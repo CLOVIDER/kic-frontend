@@ -1,10 +1,13 @@
 'use client'
+
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+
+const editor = typeof window !== 'undefined' ? useCreateBlockNote() : null;
 
 export default function Page() {
   const [title, setTitle] = useState<string>('');
@@ -23,19 +26,34 @@ export default function Page() {
   };
 
   const handleSave = () => {
-    // Implement your save logic here
-    // You can access the editor content using editor.topLevelBlocks
+    setIsSaving(true);
+    setSaveError(null);
+    try {
+      // 여기에서 저장 로직을 구현합니다.
+      // editor.topLevelBlocks를 사용하여 에디터의 콘텐츠에 접근할 수 있습니다.
+      // 예: const content = editor.topLevelBlocks;
+      // 백엔드로 데이터를 전송하여 저장할 수 있습니다.
+    } catch (error) {
+      setSaveError('저장 중 오류가 발생했습니다.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   useEffect(() => {
     const handleDocumentEvents = () => {
-      // document object code here
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          moveBack(); // ESC 키를 누르면 뒤로 가기
+        }
+      });
     };
 
     handleDocumentEvents();
 
     return () => {
       // Cleanup code here
+      document.removeEventListener('keydown', handleDocumentEvents);
     };
   }, []);
 
