@@ -2,30 +2,26 @@
 
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
-import { useCreateBlockNote } from '@blocknote/react'
-import { BlockNoteView } from '@blocknote/mantine'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 
-// const BlockNoteView = dynamic(() => import("@blocknote/mantine").then(mod => mod.BlockNoteView), { ssr: false })
+const DynamicBlockNoteEditor = dynamic(
+  () => import('./components/BlockNoteEditor'),
+  { ssr: false },
+)
 
-export default function Page() {
+export default function WritePage() {
   const [title, setTitle] = useState<string>('')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isSaving, setIsSaving] = useState<boolean>(false)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [saveError, setSaveError] = useState<string | null>(null)
-  const [toggled, setToggled] = useState<boolean>(false)
   const router = useRouter()
-
-  const editor = useCreateBlockNote()
 
   const moveBack = () => {
     router.push('/admin/notice')
   }
 
   useEffect(() => {
-    // Set up event listener
     const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         moveBack()
@@ -38,11 +34,6 @@ export default function Page() {
       document.removeEventListener('keydown', handleEscapeKey)
     }
   }, [])
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleToggle = () => {
-    setToggled(!toggled)
-  }
 
   const handleSave = () => {
     setIsSaving(true)
@@ -72,18 +63,18 @@ export default function Page() {
           />
         </div>
         <div className="mt-[17px] ml-21 w-[746px] h-435 flex-grow overflow-y-auto border-1 border-solid border-[#00000014] rounded-xl shadow-md">
-          {editor && <BlockNoteView editor={editor} theme="light" />}
+          <DynamicBlockNoteEditor />
         </div>
         <div className="flex mt-8 ml-[556px] w-211 h-31">
           <button
-            type="button" // Add the type attribute with the value "button"
+            type="button"
             className="w-98 h-31 bg-white border border-[#fdba74] font-bold text-[#fb923c] rounded-full text-sm"
             onClick={moveBack}
           >
             작성취소
           </button>
           <button
-            type="button" // Add the type attribute with the value "button"
+            type="button"
             className="ml-20 w-98 h-31 shadow-md [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] text-[#ffffff] rounded-full text-sm"
             onClick={handleSave}
           >
@@ -91,6 +82,8 @@ export default function Page() {
           </button>
         </div>
       </div>
+      {isSaving && <div>저장 중...</div>}
+      {saveError && <div>{saveError}</div>}
     </div>
   )
 }
