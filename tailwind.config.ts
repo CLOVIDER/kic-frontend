@@ -31,6 +31,8 @@ const config: Config = {
       transparent: 'transparent',
       white: '#ffffff',
       customFont: '#333333',
+      orange: '#FF9900',
+      black: '#000000',
     },
     extend: {
       width: px0To500,

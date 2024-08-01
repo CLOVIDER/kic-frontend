@@ -10,7 +10,7 @@ export default function Person({ fill, ...props }: SVGProps<SVGSVGElement>) {
       fill="none"
       {...props}
     >
-      <g clip-path="url(#clip0_554_11756)">
+      <g clipPath="url(#clip0_554_11756)">
         <path
           d="M11.957 15C15.823 15 18.957 11.866 18.957 8C18.957 4.13401 15.823 1 11.957 1C8.09104 1 4.95703 4.13401 4.95703 8C4.95703 11.866 8.09104 15 11.957 15Z"
           fill={fill}
