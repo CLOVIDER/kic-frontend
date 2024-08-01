@@ -1,27 +1,60 @@
-name: CI
+name: CLOVIDER Client CI/CD Pipeline
 
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches: ['main']
+
+permissions:
+  contents: read
 
 jobs:
-  build:
+  build-and-push-image:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 레포지토리 체크아웃 중..
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: node 설치중..
-        uses: actions/setup-node@v2
+      - name: ENV File 설정중
+        run: |
+          touch .env
+          echo "${{ secrets.ENV }}" >> .env
+        shell: bash
+
+      - name: 카카오 컨테이너 레지스트리에 로그인중...
+        run: |
+          docker login kids-in-company.kr-central-2.kcr.dev --username ${{ secrets.KAKAO_ACCESS_ID }} --password ${{ secrets.KAKAO_ACCESS_SECRET }}
+
+      - name: Docker 이미지 빌드중..
+        uses: docker/build-push-action@v4
         with:
-          node-version: '18.18.2'
+          file: Dockerfile
+          context: .
+          push: false
+          tags: clovider-fe-app:latest
 
-      - name: pnpm 설치중..
-        run: npm install -g pnpm
+      - name: Docker 이미지 태그 설정중..
+        run: |
+          docker tag clovider-fe-app:latest kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
 
-      - name: 종속성 설치중...
-        run: pnpm install
+      - name: 카카오 컨테이너 레지스트리에 푸시중..
+        run: |
+          docker push kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
+  deploy-to-vm:
+    runs-on: ubuntu-latest
+    needs: build-and-push-image
+    steps:
+      - name: PEM 키 설정중
+        run: |
+          echo "${{ secrets.KAKAO_SSH_KEY_PEM }}" > kakao_ssh_key.pem
+          chmod 600 kakao_ssh_key.pem
+        shell: bash
 
-      - name: 빌드 중..
-        run: pnpm build
+      - name: Kakao VM에 배포중..
+        run: |
+          ssh -o StrictHostKeyChecking=no -i kakao_ssh_key.pem ubuntu@210.109.55.28 << 'EOF'
+            sudo docker login kids-in-company.kr-central-2.kcr.dev --username ${{ secrets.KAKAO_ACCESS_ID }} --password ${{ secrets.KAKAO_ACCESS_SECRET }}
+            sudo docker pull kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
+            sudo docker stop clovider-fe-app || true
+            sudo docker rm clovider-fe-app || true
+            sudo docker run -d --name clovider-fe-app -p 3000:3000 kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:latest
+        shell: bash
