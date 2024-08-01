@@ -1,15 +1,17 @@
 'use client'
 
-import { ReactNode, useState } from 'react'
+import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { StrictPropsWithChildren } from '@/type'
 
-export default function QueryProvider({ children }: { children: ReactNode }) {
+export default function QueryProvider({ children }: StrictPropsWithChildren) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
           queries: {
             staleTime: 60 * 1000,
+            retry: false,
           },
         },
       }),
