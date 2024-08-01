@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { FormData, Child } from '../../type/application'
+import { FormData, Child } from '../../../../type/application'
 
 export const useApplicationForm = () => {
   const [formData, setFormData] = useState<FormData>({

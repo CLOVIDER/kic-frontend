@@ -2,7 +2,7 @@
 
 import React, { useCallback, useMemo } from 'react'
 import Image from 'next/image'
-import { useRightSection2 } from '@/hooks/application/useRightSection2'
+import { useRightSection2 } from '@/app/(user)/application/hooks/useRightSection2'
 import { RightSection2Props, Item } from '@/type/application'
 
 export default function RightSection2({

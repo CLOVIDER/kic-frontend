@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useApplicationForm } from '@/hooks/application/useApplicationForm'
 import { ApplicationFormProps } from '@/type/application'
+import { useApplicationForm } from '../hooks/useApplicationForm'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
 
