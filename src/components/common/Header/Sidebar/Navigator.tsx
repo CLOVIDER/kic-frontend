@@ -13,13 +13,13 @@ export default function Navigator() {
     return [
       {
         label: '어린이집 정보',
-        isActive: pathname === '/info',
+        isActive: pathname === '/kindergarten',
         href: '/kindergarten',
         icon: <Home fill={pathname === '/info' ? '#FFFFFF' : '#717579'} />,
       },
       {
         label: '신청하기',
-        isActive: pathname === '/form',
+        isActive: pathname === '/apply',
         href: '/apply',
         icon: (
           <Lightning fill={pathname === '/apply' ? '#FFFFFF' : '#717579'} />
@@ -28,12 +28,12 @@ export default function Navigator() {
       {
         label: '신청내역',
         isActive: pathname === '/history',
-        href: '/',
+        href: '/history',
         icon: <Person fill={pathname === '/history' ? '#FFFFFF' : '#717579'} />,
       },
       {
         label: '공지사항',
-        isActive: pathname === '/board',
+        isActive: pathname === '/notice',
         href: '/notice',
         icon: <Boxes fill={pathname === '/notice' ? '#FFFFFF' : '#717579'} />,
       },
