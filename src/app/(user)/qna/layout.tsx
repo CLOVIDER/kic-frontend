@@ -1,17 +1,13 @@
-import React from 'react'
+import { PropsWithChildren } from 'react'
+import type { Metadata } from 'next'
 
-export default function QnaLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  return (
-    <div className="flex justify-center w-full h-full">
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1, user-scalable=yes"
-      />
-      {children}
-    </div>
-  )
+export const metadata: Metadata = {
+  title: '문의사항',
+  description: '문의사항',
+}
+
+type LayoutProps = PropsWithChildren<object>
+
+export default function NoticeLayout({ children }: LayoutProps) {
+  return <div className="flex justify-center w-full h-full">{children}</div>
 }
