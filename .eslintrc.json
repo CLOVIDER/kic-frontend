@@ -25,6 +25,11 @@
     "import/prefer-default-export": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-no-useless-fragment": "off",
+    "prettier/prettier": [ "error",
+      {
+        "endOfLine" : "auto"
+      }
+    ],
     "react/require-default-props": "off",
     "react/no-unused-prop-types": "off",
     "no-restricted-syntax": "off"
