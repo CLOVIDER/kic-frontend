@@ -1,6 +1,6 @@
-import { Qna } from './type'
+import { Qna } from '../type/Qna'
 
-export const notices: Qna[] = [
+export const qna: Qna[] = [
   {
     id: 1,
     title: '공지사항 1',
@@ -91,4 +91,4 @@ export const notices: Qna[] = [
   },
 ]
 
-export const totalItems = notices.length
+export const totalItems = qna.length
