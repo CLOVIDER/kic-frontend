@@ -16,9 +16,9 @@ export default function Page() {
 
         <div className="flex flex-col gap-30 h-full justify-center">
           <p className="text-58 font-bold">
-            우리 아이의
+            우리 아이와
             <br />
-            친절한 관리자
+            함께하는 출근길
           </p>
 
           <p className="text-23">사내 어린이집 신청 서비스</p>
