@@ -31,7 +31,7 @@ export function useButton(props: UseButtonProp) {
       ref: domRef,
       onClick: handleClick,
       className: cn(
-        `py-10 px-40 rounded-button bg-primary h-51 text-[22px] text-[#fff] flex items-center gap-10 justify-center focus:outline-none`,
+        `py-10 px-40 rounded-button h-51 text-[22px] text-[#fff] flex items-center gap-10 justify-center focus:outline-none whitespace-nowrap`,
         disabled && 'cursor-not-allowed opacity-70',
         className,
       ),
