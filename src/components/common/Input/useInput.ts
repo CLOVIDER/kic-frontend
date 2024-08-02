@@ -56,7 +56,7 @@ export function useInput(props: UseInputProps) {
       ...otherProps,
       ref: domRef,
       className: cn(
-        'bg-transparent p-5 focus:outline-none',
+        'bg-[#ffffff] rounded-8 border border-[#CCCCCC] py-5 px-10 focus:outline-none',
         otherProps.className,
       ),
       onChange: handleChangeValue,
