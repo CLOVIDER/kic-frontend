@@ -1,13 +1,15 @@
 'use client'
 
-import { Button, Input, Setting } from '@/components'
-import Image from 'next/image'
 import {
+  Button,
+  Input,
+  Setting,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
+} from '@/components'
+import Image from 'next/image'
 import Title from '../Title'
 import { useKindergarten } from './useKindergarten'
 
