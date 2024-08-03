@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 import { cn } from '@/util'
-import { useStatusBox } from './useStatusBox'
+import { useHomeContext } from '@/app/(home)/components/HomeFetcher/HomeContext'
 
 export default function StatusBox({
   children,
@@ -11,7 +11,9 @@ export default function StatusBox({
   children?: ReactNode
   className?: string
 }) {
-  const { currentStatus, currentPeriod, dDay } = useStatusBox()
+  const { periodStart, periodEnd, recruitStatus, remainPeriod } =
+    useHomeContext()
+
   return (
     <div
       className={cn(
@@ -19,15 +21,25 @@ export default function StatusBox({
         className,
       )}
     >
-      <div className="flex flex-row items-center gap-20 h-80">
-        <span className="font-sans font-semibold text-80">D-{dDay}</span>
-        <div className="flex flex-col leading-35 pt-10">
-          <div className="text-35 font-medium">{currentStatus}</div>
-          <div className="text-20">
-            {currentPeriod.start} ~ {currentPeriod.end}
+      {recruitStatus === '모집없음' ? (
+        <div className="flex flex-row items-center gap-20 h-80">
+          <div className="text-35 font-medium">
+            현재 진행중인 공고가 없습니다.
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex flex-row items-center gap-20 h-80">
+          <span className="font-sans font-semibold text-80">
+            D-{remainPeriod}
+          </span>
+          <div className="flex flex-col leading-35 pt-10">
+            <div className="text-35 font-medium">{recruitStatus}</div>
+            <div className="text-20">
+              {periodStart} ~ {periodEnd}
+            </div>
+          </div>
+        </div>
+      )}
       {children}
     </div>
   )

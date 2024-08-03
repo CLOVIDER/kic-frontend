@@ -3,6 +3,13 @@
 import { generateContext } from '@/react-utils'
 import { HomeResponse } from './type'
 
-export const [HomeProvider, useHomeContext] = generateContext<HomeResponse>({
-  name: 'landing-context',
-})
+interface HomeContextValue extends HomeResponse {
+  periodStart: string | null
+  periodEnd: string | null
+}
+
+export const [HomeProvider, useHomeContext] = generateContext<HomeContextValue>(
+  {
+    name: 'landing-context',
+  },
+)
