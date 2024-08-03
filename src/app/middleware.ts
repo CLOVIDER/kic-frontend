@@ -24,7 +24,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  if (role === 'user' && currentPath.startsWith('/admin')) {
+  if (role !== 'admin' && currentPath.startsWith('/admin')) {
     const url = request.nextUrl.clone()
     url.pathname = '/'
     return NextResponse.redirect(url)
