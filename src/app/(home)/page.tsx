@@ -1,8 +1,16 @@
+'use client'
+
 import Navigator from '@/components/common/Header/Sidebar/Navigator'
 import Image from 'next/image'
-import { CompanyLogo } from '@/components'
-import { HomeFetcher } from './components/HomeFetcher'
-import LandingBox from './components/LandingBox'
+import {
+  Button,
+  CompanyLogo,
+  CompetitionRate,
+  Right,
+  StatusBox,
+} from '@/components'
+import { AsyncBoundaryWithQuery } from '@/react-utils'
+import HomeFallback from './components/HomeFallback'
 
 export default function Home() {
   return (
@@ -14,9 +22,17 @@ export default function Home() {
       <div className="mt-40 ml-60">
         <CompanyLogo />
         <div className="relative ml-110 mt-150">
-          <HomeFetcher>
-            <LandingBox />
-          </HomeFetcher>
+          <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
+            <StatusBox>
+              <CompetitionRate />
+              <Button
+                className="absolute z-10 right-160 top-120 w-auto px-20 h-35 bg-[#000000] rounded-full !text-15 whitespace-nowrap"
+                rightIcon={<Right width="20" />}
+              >
+                신청하기
+              </Button>
+            </StatusBox>
+          </AsyncBoundaryWithQuery>
         </div>
       </div>
       <Image

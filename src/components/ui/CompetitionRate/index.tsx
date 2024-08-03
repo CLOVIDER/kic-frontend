@@ -1,7 +1,16 @@
-import { ProgressBar } from '@/components/common'
+'use client'
+
 import { cn } from '@/util'
+import { ProgressBar } from '@/components/common'
+import { useHomePage } from '@/app/(home)/components/api/queries'
 
 export default function CompetitionRate({ className }: { className?: string }) {
+  const { data } = useHomePage()
+
+  if (!data || !data.kindergartenClassList || !data.rateList) return <></>
+
+  const { kindergartenClassList, rateList } = data
+
   return (
     <div
       className={cn(
@@ -13,8 +22,16 @@ export default function CompetitionRate({ className }: { className?: string }) {
         <span className="mr-4">▼ </span> 실시간 경쟁률
       </div>
       <div className="ml-20 mt-10">
-        <ProgressBar label="새빛 어린이집" value={4.1} bar="bg-[#34C759]" />
-        <ProgressBar label="햇빛 어린이집" value={5.6} bar="bg-[#FD5353]" />
+        {kindergartenClassList!.map(
+          (kindergartenClass: string, index: number) => (
+            <ProgressBar
+              key={kindergartenClass}
+              label={kindergartenClass}
+              value={Number(rateList![index])}
+              bar={index % 2 === 0 ? 'bg-[#34C759]' : 'bg-[#FD5353]'}
+            />
+          ),
+        )}
       </div>
     </div>
   )

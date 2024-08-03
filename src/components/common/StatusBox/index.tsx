@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 import { cn } from '@/util'
-import { useHomeContext } from '@/app/(home)/components/HomeFetcher/HomeContext'
+import { useHomePage } from '@/app/(home)/components/api/queries'
 
 export default function StatusBox({
   children,
@@ -11,8 +11,10 @@ export default function StatusBox({
   children?: ReactNode
   className?: string
 }) {
-  const { periodStart, periodEnd, recruitStatus, remainPeriod } =
-    useHomeContext()
+  const { data } = useHomePage()
+  if (!data) return <></>
+
+  const { periodStart, periodEnd, recruitStatus, remainPeriod } = data
 
   return (
     <div
