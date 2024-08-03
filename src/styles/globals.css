@@ -36,3 +36,17 @@ body {
     background: linear-gradient(245deg, #D6DCD1 57.34%, #FFDDB4 81.64%, #C7B4FF 105.59%);
   }
 }
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+.gradient-button {
+  background: linear-gradient(90deg, #ffbb38 0%, #ffe39f 100%);
+}
