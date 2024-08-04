@@ -7,7 +7,7 @@ export interface Qna {
   answered: boolean
 }
 
-export interface NoticesResponse {
+export interface QnasResponse {
   notices: Qna[]
   totalItems: number
 }

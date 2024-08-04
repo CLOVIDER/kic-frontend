@@ -36,7 +36,7 @@ export function QnaList({ paginatedNotices }: QnaListProps) {
             className="cursor-pointer"
           >
             <div className="mt-28 ml-21 w-[742px] border border-[#d5d1d1]" />
-            <div className="ml-24 mt-18 w-[371px] h-[29px] text-20">
+            <div className="ml-24 mt-18 w-[600px] h-[29px] text-20">
               <span
                 className={item.answered ? 'text-[#7dbc72]' : 'text-[#ffab2d]'}
               >
