@@ -1,5 +1,3 @@
-'use client'
-
 import Navigator from '@/components/common/Header/Sidebar/Navigator'
 import Image from 'next/image'
 import {

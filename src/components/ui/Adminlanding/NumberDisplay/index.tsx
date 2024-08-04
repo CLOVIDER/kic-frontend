@@ -14,7 +14,7 @@ export default function NumberDisplay({
   return (
     <div className="flex flex-col">
       <span className="text-15 h-15">{title}</span>
-      <span className={`text-56 h-56 font-bold ${podkova.className}`}>
+      <span className={`text-60 h-56 font-bold ${podkova.className}`}>
         {number}
       </span>
     </div>
