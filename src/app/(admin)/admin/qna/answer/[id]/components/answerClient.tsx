@@ -1,7 +1,7 @@
 'use client'
 
+import DynamicBlockNoteEditor from '@/components/common/BlockNote/DynamicBlockNoteEditor'
 import { useQnaDetail } from '../../../[id]/hooks/useQnaDetail'
-import DynamicBlockNoteEditor from './DynamicBlockNoteEditor'
 
 export default function AnswerClient() {
   const { qnaData } = useQnaDetail()

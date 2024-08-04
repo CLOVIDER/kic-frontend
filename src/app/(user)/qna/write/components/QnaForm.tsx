@@ -1,10 +1,10 @@
 'use client'
 
 import React from 'react'
+import DynamicBlockNoteEditor from '@/components/common/BlockNote/DynamicBlockNoteEditor'
 import TitleInput from './TitleInput'
 import PrivacyToggle from './PrivacyToggle'
 import SaveButtons from './SaveButtons'
-import DynamicBlockNoteEditor from './DynamicBlockNoteEditor'
 import { useQnaForm } from '../hooks/useQnaForm'
 
 export default function QnaForm() {
