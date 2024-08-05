@@ -1,5 +1,5 @@
 // data.ts
-import { QnaData } from './types/QnaData.js'
+import { QnaData } from './type'
 
 export const qnaDataList: QnaData[] = [
   {
