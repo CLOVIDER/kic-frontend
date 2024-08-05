@@ -1,5 +1,3 @@
-// data/notice.ts
-
 import { Notice } from '@/components/types/notice'
 
 export const notices: Notice[] = [
