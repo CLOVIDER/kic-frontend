@@ -11,10 +11,22 @@ export default function StatusBox({
   children?: ReactNode
   className?: string
 }) {
-  const { data } = useHomePage()
-  if (!data) return <></>
+  const {
+    data: { periodStart, periodEnd, recruitStatus, remainPeriod },
+  } = useHomePage()
 
-  const { periodStart, periodEnd, recruitStatus, remainPeriod } = data
+  const splitDateTime = (dateTime: string) => {
+    const date = dateTime.slice(0, dateTime.lastIndexOf('.'))
+    const time = dateTime.slice(dateTime.lastIndexOf('.') + 1)
+    return { date, time }
+  }
+
+  const { date: startDate, time: startTime } = periodStart
+    ? splitDateTime(periodStart)
+    : { date: 'N/A', time: 'N/A' }
+  const { date: endDate, time: endTime } = periodEnd
+    ? splitDateTime(periodEnd)
+    : { date: 'N/A', time: 'N/A' }
 
   return (
     <div
@@ -37,7 +49,7 @@ export default function StatusBox({
           <div className="flex flex-col leading-35 pt-10">
             <div className="text-35 font-medium">{recruitStatus}</div>
             <div className="text-20">
-              {periodStart} ~ {periodEnd}
+              {startDate} {startTime}시 ~ {endDate} {endTime}시
             </div>
           </div>
         </div>

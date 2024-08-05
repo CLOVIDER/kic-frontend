@@ -40,7 +40,7 @@ export default function Home() {
         alt="landing"
         width={460}
         height={428}
-        className="absolute bottom-150 right-140"
+        className="absolute bottom-150 right-120"
         priority
       />
     </main>
