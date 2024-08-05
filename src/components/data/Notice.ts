@@ -1,6 +1,6 @@
 // data/notice.ts
 
-import { Notice } from '../types/Notice'
+import { Notice } from '../types/notice'
 
 export const notices: Notice[] = [
   {

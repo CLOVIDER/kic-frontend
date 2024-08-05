@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { qna } from '@/components/qna/data/qna'
+import { qna } from '../data'
 
 const ITEMS_PER_PAGE = 5
 

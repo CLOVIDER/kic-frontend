@@ -1,6 +1,6 @@
 import { useParams } from 'next/navigation'
 import { qnaDataList } from '../data'
-import { QnaData } from '../types/QnaData'
+import { QnaData } from '../type'
 
 export function useQnaDetail() {
   const params = useParams()
