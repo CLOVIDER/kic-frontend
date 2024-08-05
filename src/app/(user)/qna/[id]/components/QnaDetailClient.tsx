@@ -1,8 +1,10 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useQnaDetail } from '../hooks/useQnaDetail'
 
 export default function QnaDetailClient() {
+  const router = useRouter()
   const { qnaData } = useQnaDetail()
 
   if (!qnaData) {
@@ -12,10 +14,10 @@ export default function QnaDetailClient() {
   return (
     <div className="absolute w-[1280px] h-[720px] mt-40 bg-white flex-col flex justify-between">
       <div className="w-[787px] h-[602px] mt-39 ml-256 border-1 border-solid border-[#00000014] rounded-xl overflow-hidden shadow-md">
-        <div className="ml-21 w-[118px] h-[39px] text-32 font-inter font-bold">
+        <div className="mt-22 ml-21 w-[118px] h-[39px] text-32 font-inter font-bold">
           문의사항
         </div>
-        <div className="ml-21 mt-14 w-[745px] h-496 rounded-20 shadow-md border-[#00000014] border-1 border-solid box-border overflow-hidden">
+        <div className="ml-25 mt-14 w-[745px] h-473 rounded-20 shadow-md border-[#00000014] border-1 border-solid box-border overflow-hidden">
           <div className="ml-20 mt-6 relative w-full flex flex-row items-center justify-start py-0 px-5 box-border gap-2.5 text-left text-base text-dimgray font-noto-sans">
             <div className="relative text-16 leading-[24px] font-bold">
               제목
@@ -49,6 +51,15 @@ export default function QnaDetailClient() {
             <div className="font-bold mb-2">내용</div>
             <div>{qnaData.content}</div>
           </div>
+        </div>
+        <div className="flex ml-[669px] mt-8 w-324 h-31">
+          <button
+            className="w-98 h-30 padding-3 rounded-16 border-1 text-15 leading-24 text-center border-[#ffc044] text-[#ffab2d]"
+            type="button"
+            onClick={() => router.back()}
+          >
+            이전
+          </button>
         </div>
       </div>
     </div>

@@ -14,6 +14,10 @@ export function QnaList({ paginatedNotices }: QnaListProps) {
     router.push(`/admin/qna/${id}`)
   }
 
+  const handleAnswerClick = (id: number) => {
+    router.push(`/admin/qna/answer/${id}`)
+  }
+
   function handleKeyPress(
     event: KeyboardEvent<HTMLDivElement>,
     id: number,
@@ -24,11 +28,12 @@ export function QnaList({ paginatedNotices }: QnaListProps) {
   }
 
   return (
-    <div className="mt-6 w-[742px] h-472px]">
+    <div className="mt-6 w-[742px] h-472">
+      <div className="h-3" />
       {paginatedNotices.map((item) => (
         <Fragment key={item.id}>
-          <div className="mt-20 ml-21 w-[728px] border border-[#d5d1d1]" />
-          <div className="flex">
+          <div className="mt-19 ml-21 w-[742px] border border-[#d5d1d1]" />
+          <div className="flex w-[742px] h-81">
             <div
               key={item.id}
               onClick={() => handleNoticeClick(item.id)}
@@ -37,7 +42,7 @@ export function QnaList({ paginatedNotices }: QnaListProps) {
               tabIndex={0}
               className="cursor-pointer"
             >
-              <div className="ml-24 mt-18 w-[600px] h-[29px] text-20 font-bold">
+              <div className="ml-24 mt-18 w-[600px] h-29 text-20">
                 <span
                   className={
                     item.answered ? 'text-[#7dbc72]' : 'text-[#ffab2d]'
@@ -45,20 +50,21 @@ export function QnaList({ paginatedNotices }: QnaListProps) {
                 >
                   {item.answered ? '[답변완료]' : '[문의중]'}{' '}
                 </span>
-                <span className="font-bold">{item.title}</span>
+                <span className="">{item.title}</span>
               </div>
-              <div className="mt-11 ml-21 w-[150px] h-[14px] text-[#828282] text-10">
+              <div className="mt-11 ml-21 w-150 h-14 text-[#828282] text-10">
                 <span className="w-[53px]">{item.date}</span>
                 <span className="ml-9 w-[1px]">|</span>
                 <span className="ml-9 w-[40px]">{item.author}</span>
               </div>
             </div>
-            <div className="mt-8 ml-20 w-85">
+            <div className="mt-12 ml-20 w-85 h-73">
               <button
                 className={`w-101 h-31 text-16 text-[#ffffff] rounded-16 ${
                   item.answered ? 'bg-[#ffbb38]' : 'bg-[#7DBC72]'
                 }`}
                 type="button"
+                onClick={() => handleAnswerClick(item.id)}
               >
                 {item.answered ? '답변수정' : '답변작성'}
               </button>

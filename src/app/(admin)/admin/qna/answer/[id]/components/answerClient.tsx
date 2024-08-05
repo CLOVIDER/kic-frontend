@@ -1,18 +1,24 @@
 'use client'
 
 import DynamicBlockNoteEditor from '@/components/common/BlockNote/DynamicBlockNoteEditor'
+import { useRouter } from 'next/navigation'
 import { useQnaDetail } from '../../../[id]/hooks/useQnaDetail'
 
 export default function AnswerClient() {
+  const router = useRouter()
   const { qnaData } = useQnaDetail()
+
+  const handlePrevious = () => {
+    router.push('/admin/qna')
+  }
 
   if (!qnaData) {
     return <div>문의사항을 찾을 수 없습니다.</div>
   }
 
   return (
-    <div className="absolute w-[1280px] h-[720px] mt-40 bg-white justify-between">
-      <div className="w-[787px] h-[648px] mt-461 ml-256 border-1 border-solid border-[#00000014] rounded-xl overflow-hidden shadow-md">
+    <div className="absolute w-[1280px] h-[720px] mt-50 bg-white justify-between">
+      <div className="w-[787px] h-[648px] mt-10 ml-256 border-1 border-solid border-[#00000014] rounded-xl overflow-hidden shadow-md">
         <div className="ml-22 mt-11">
           <div className="w-251 h-39">
             <span className="text-32 leading-39">문의사항 답변 작성</span>
@@ -60,6 +66,7 @@ export default function AnswerClient() {
           <button
             className="w-98 h-30 padding-3 rounded-16 border-1 text-15 leading-24 text-center border-[#ffc044] text-[#ffab2d]"
             type="button"
+            onClick={handlePrevious}
           >
             작성취소
           </button>

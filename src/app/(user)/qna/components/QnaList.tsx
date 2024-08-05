@@ -10,7 +10,7 @@ interface QnaListProps {
 
 export function QnaList({ paginatedNotices }: QnaListProps) {
   const router = useRouter()
-  const handleNoticeClick = (id: number) => {
+  const handleClick = (id: number) => {
     router.push(`/qna/${id}`)
   }
 
@@ -19,7 +19,7 @@ export function QnaList({ paginatedNotices }: QnaListProps) {
     id: number,
   ): void {
     if (event.key === 'Enter' || event.key === ' ') {
-      handleNoticeClick(id)
+      handleClick(id)
     }
   }
 
@@ -27,16 +27,16 @@ export function QnaList({ paginatedNotices }: QnaListProps) {
     <div className="mt-6 w-[742px] h-472px]">
       {paginatedNotices.map((item) => (
         <Fragment key={item.id}>
+          <div className="mt-28 ml-21 w-[742px] border border-[#d5d1d1]" />
           <div
             key={item.id}
-            onClick={() => handleNoticeClick(item.id)}
+            onClick={() => handleClick(item.id)}
             onKeyDown={(event) => handleKeyPress(event, item.id)}
             role="button"
             tabIndex={0}
             className="cursor-pointer"
           >
-            <div className="mt-28 ml-21 w-[742px] border border-[#d5d1d1]" />
-            <div className="ml-24 mt-18 w-[600px] h-[29px] text-20">
+            <div className="ml-24 mt-18 w-[600px] h-29 text-20">
               <span
                 className={item.answered ? 'text-[#7dbc72]' : 'text-[#ffab2d]'}
               >

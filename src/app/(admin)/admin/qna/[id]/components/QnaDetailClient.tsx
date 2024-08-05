@@ -1,12 +1,21 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useQnaDetail } from '../hooks/useQnaDetail'
+import { qna } from '../../data'
 
 export default function QnaDetailClient() {
+  const router = useRouter()
   const { qnaData } = useQnaDetail()
 
-  if (!qnaData) {
+  const currentQna = qna.find((item) => item.id === qnaData?.id)
+
+  if (!qnaData || !currentQna) {
     return <div>문의사항을 찾을 수 없습니다.</div>
+  }
+
+  const handleAnswerClick = (id: number) => {
+    router.push(`/admin/qna/answer/${id}`)
   }
 
   return (
@@ -50,18 +59,28 @@ export default function QnaDetailClient() {
             <div>{qnaData.content}</div>
           </div>
         </div>
-        <div className="flex ml-[556px] mt-8 w-211 h-31">
+        <div className="flex ml-[443px] mt-8 w-324 h-31">
           <button
             className="w-98 h-30 padding-3 rounded-16 border-1 text-15 leading-24 text-center border-[#ffc044] text-[#ffab2d]"
             type="button"
+            onClick={() => router.back()}
           >
-            작성취소
+            이전
           </button>
           <button
-            className="ml-15 w-98 h-30 padding-3 rounded-16 text-15 leading-24 text-center shadow-md [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] text-[#ffffff]"
+            className={`ml-15 w-98 h-30 text-16 text-[#ffffff] rounded-16 ${
+              currentQna.answered ? 'bg-[#ffbb38]' : 'bg-[#7DBC72]'
+            }`}
+            type="button"
+            onClick={() => handleAnswerClick(qnaData.id)}
+          >
+            {currentQna.answered ? '답변수정' : '답변작성'}
+          </button>
+          <button
+            className="ml-15 w-98 h-30 rounded-16 bg-[#FF7E6D] text-[#ffffff] text-16"
             type="button"
           >
-            저장
+            삭제
           </button>
         </div>
       </div>

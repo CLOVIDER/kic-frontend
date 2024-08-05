@@ -24,7 +24,7 @@ export default function QnaPageClient({ initialQna }: QnaPageClientProps) {
   return (
     <div className="absolute w-[1280px] h-[720px] mt-40 bg-white flex-col flex justify-between">
       <div className="w-[787px] h-[602px] mt-40 ml-256 border-1 border-solid border-[#00000014] rounded-xl overflow-hidden shadow-md">
-        <div className="flex mt-26 w-[742px] h-[39px]">
+        <div className="flex mt-26 w-[787px] h-[39px]">
           <div className="ml-21 w-[118px] h-[39px] text-32 font-inter font-bold">
             문의사항
           </div>
