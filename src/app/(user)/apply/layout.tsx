@@ -1,11 +1,13 @@
-import { StrictPropsWithChildren } from '@/type'
-import { Metadata } from 'next'
+import { PropsWithChildren } from 'react'
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '어린이집 추첨 신청하기',
-  description: 'KIC - 신청하기 페이지',
+  title: '지원페이지',
+  description: '지원페이지',
 }
 
-export default function Layout({ children }: StrictPropsWithChildren) {
-  return <main className="w-full h-full">{children}</main>
+type LayoutProps = PropsWithChildren<object>
+
+export default function AppLayout({ children }: LayoutProps) {
+  return <div className="flex justify-center w-full h-full">{children} </div>
 }

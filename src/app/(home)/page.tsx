@@ -1,9 +1,15 @@
-import { Button, CompanyLogo, CompetitionRate, StatusBox } from '@/components'
+'use client'
+
 import Navigator from '@/components/common/Header/Sidebar/Navigator'
-import Right from '@/components/common/Icons/Right'
 import Image from 'next/image'
+import {
+  Button,
+  CompanyLogo,
+  CompetitionRate,
+  Right,
+  StatusBox,
+} from '@/components'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
-import { HomeFetcher } from './components/HomeFetcher'
 import HomeFallback from './components/HomeFallback'
 
 export default function Home() {
@@ -16,20 +22,16 @@ export default function Home() {
       <div className="mt-40 ml-60">
         <CompanyLogo />
         <div className="relative ml-110 mt-150">
-          <AsyncBoundaryWithQuery>
-            <HomeFallback>
-              <HomeFetcher>
-                <StatusBox>
-                  <CompetitionRate />
-                  <Button
-                    className="absolute z-10 right-160 top-120 w-auto px-20 h-35 bg-[#000000] rounded-full !text-15 whitespace-nowrap"
-                    rightIcon={<Right width="20" />}
-                  >
-                    신청하기
-                  </Button>
-                </StatusBox>
-              </HomeFetcher>
-            </HomeFallback>
+          <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
+            <StatusBox>
+              <CompetitionRate />
+              <Button
+                className="absolute z-10 right-160 top-120 w-auto px-20 h-35 bg-[#000000] rounded-full !text-15 whitespace-nowrap"
+                rightIcon={<Right width="20" />}
+              >
+                신청하기
+              </Button>
+            </StatusBox>
           </AsyncBoundaryWithQuery>
         </div>
       </div>
@@ -38,7 +40,7 @@ export default function Home() {
         alt="landing"
         width={460}
         height={428}
-        className="absolute bottom-150 right-140"
+        className="absolute bottom-150 right-120"
         priority
       />
     </main>
