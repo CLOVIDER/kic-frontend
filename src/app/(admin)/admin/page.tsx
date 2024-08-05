@@ -17,7 +17,8 @@ export default function Page() {
       <div className="absolute top-10 left-140 w-full mb-100">
         <CompanyLogo />
       </div>
-      <div className="flex flex-row gap-100 px-110 mt-150 relative">
+
+      <div className="flex flex-row gap-100 px-110 mt-200 relative">
         <div className="flex flex-col gap-30">
           <StatusBox className="relative w-[590px] h-300">
             <div className="flex flex-row bg-white w-450 px-50 pt-15 pb-30 rounded-32 shadow-md gap-50">
@@ -41,6 +42,7 @@ export default function Page() {
           />
           <LandingLower />
         </div>
+
         <div className="flex flex-col gap-30">
           <div className="relative">
             <CompetitionRate className="w-370" />

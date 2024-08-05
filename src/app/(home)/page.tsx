@@ -13,6 +13,7 @@ export default function Home() {
         <p className="py-50 px-55 text-20 text-[#D7D7D7]">menu</p>
         <Navigator />
       </div>
+
       <div className="mt-40 ml-60">
         <CompanyLogo />
         <div className="relative ml-110 mt-150">
