@@ -5,11 +5,9 @@ import { ProgressBar } from '@/components/common'
 import { useHomePage } from '@/app/(home)/components/api/queries'
 
 export default function CompetitionRate({ className }: { className?: string }) {
-  const { data } = useHomePage()
-
-  if (!data || !data.kindergartenClassList || !data.rateList) return <></>
-
-  const { kindergartenClassList, rateList } = data
+  const {
+    data: { kindergartenClassList, rateList },
+  } = useHomePage()
 
   return (
     <div
