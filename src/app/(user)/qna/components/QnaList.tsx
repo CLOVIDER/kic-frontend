@@ -2,6 +2,7 @@
 
 import { KeyboardEvent, Fragment } from 'react'
 import { useRouter } from 'next/navigation'
+import cn from '@/util/cn'
 import { QnaItem } from '../type/QnaItem'
 
 interface QnaListProps {
@@ -38,7 +39,9 @@ export function QnaList({ paginatedNotices }: QnaListProps) {
           >
             <div className="ml-24 mt-18 w-[600px] h-29 text-20">
               <span
-                className={item.answered ? 'text-[#7dbc72]' : 'text-[#ffab2d]'}
+                className={cn(
+                  item.answered ? 'text-[#7dbc72]' : 'text-[#ffab2d]',
+                )}
               >
                 {item.answered ? '[답변완료]' : '[문의중]'}{' '}
               </span>

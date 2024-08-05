@@ -1,4 +1,4 @@
-import { Notice } from '@/components/types/notice'
+import { Notice } from '@/components/types/Notice'
 
 export const notices: Notice[] = [
   {

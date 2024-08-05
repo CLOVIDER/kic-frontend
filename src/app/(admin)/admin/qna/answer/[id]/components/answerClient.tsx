@@ -1,6 +1,7 @@
 'use client'
 
 import DynamicBlockNoteEditor from '@/components/common/BlockNote/DynamicBlockNoteEditor'
+import cn from '@/util/cn'
 import { useRouter } from 'next/navigation'
 import { useQnaDetail } from '../../../[id]/hooks/useQnaDetail'
 
@@ -47,7 +48,9 @@ export default function AnswerClient() {
                 공개여부
               </div>
               <div
-                className={`relative text-16 leading-[24px] ${qnaData.privacy ? 'text-[#ff0000]' : 'text-[#7DBC72]'}`}
+                className={cn(
+                  `relative text-16 leading-[24px] ${qnaData.privacy ? 'text-[#ff0000]' : 'text-[#7DBC72]'}`,
+                )}
               >
                 {qnaData.privacy ? '비공개' : '공개'}
               </div>

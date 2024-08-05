@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import cn from '@/util/cn'
 import { useQnaDetail } from '../hooks/useQnaDetail'
 
 export default function QnaDetailClient() {
@@ -41,7 +42,9 @@ export default function QnaDetailClient() {
               공개여부
             </div>
             <div
-              className={`relative text-16 leading-[24px] ${qnaData.privacy ? 'text-[#ff0000]' : 'text-[#7DBC72]'}`}
+              className={cn(
+                `relative text-16 leading-[24px] ${qnaData.privacy ? 'text-[#ff0000]' : 'text-[#7DBC72]'}`,
+              )}
             >
               {qnaData.privacy ? '비공개' : '공개'}
             </div>
