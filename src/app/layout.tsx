@@ -30,7 +30,7 @@ export default function RootLayout({
           {/* /* TODO: fallback 컴포넌트 구현 */}
           <Suspense fallback={<>loading..</>}>
             <QueryProvider>
-              <NextUIProvider className="h-[calc(100%-54px)]">
+              <NextUIProvider className="h-full">
                 <Header />
                 {children}
               </NextUIProvider>

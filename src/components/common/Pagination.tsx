@@ -1,6 +1,6 @@
-import cn from '@/util/cn'
-import { Pagination as NextUIPagination, Button } from '@nextui-org/react'
 import Image from 'next/image'
+import { Pagination as NextUIPagination, Button } from '@nextui-org/react'
+import cn from '@/util/cn'
 
 interface PaginationProps {
   currentPage: number
@@ -16,12 +16,7 @@ export default function Pagination({
   return (
     <div className="flex ml-265 mt-34 w-[787px] h-28 justify-center items-center">
       <Button
-        className={cn(
-          'w-28 h-28 shadow-md bg-[#f1f2f6] rounded-4 min-w-0 p-0',
-          {
-            isDisabled: currentPage === 1,
-          },
-        )}
+        className="w-28 h-28 shadow-md bg-[#f1f2f6] rounded-4 min-w-0 p-0"
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
         isDisabled={currentPage === 1}
         isIconOnly
@@ -60,12 +55,7 @@ export default function Pagination({
       />
 
       <Button
-        className={cn(
-          'w-28 h-28 shadow-md bg-[#f1f2f6] rounded-4 min-w-0 p-0',
-          {
-            isDisabled: currentPage === totalPages,
-          },
-        )}
+        className="w-28 h-28 shadow-md bg-[#f1f2f6] rounded-4 min-w-0 p-0"
         onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
         isDisabled={currentPage === totalPages}
         isIconOnly
