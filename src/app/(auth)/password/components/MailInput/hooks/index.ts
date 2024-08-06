@@ -19,7 +19,7 @@ export default function useMail(id: string) {
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>, index: number) => {
-      if (e.target.value.length === 1 && index < 4) {
+      if (e.target.value.length === 1 && index < 5) {
         inputRefs.current[index + 1].focus()
       }
     },
