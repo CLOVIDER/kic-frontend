@@ -9,11 +9,11 @@ export default function MailInput() {
 
   return (
     <section>
-      <form className="flex flex-col w-326 gap-42">
+      <form className="flex flex-col gap-42">
         <h1 className="text-31 font-bold text-center">메일을 확인해주세요!</h1>
 
         <div className="w-full flex gap-20 text-22 font-bold">
-          {[0, 1, 2, 3, 4].map((i) => (
+          {[0, 1, 2, 3, 4, 5].map((i) => (
             <Input
               key={i}
               ref={(el) => {
