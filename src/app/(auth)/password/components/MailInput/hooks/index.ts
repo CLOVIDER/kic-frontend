@@ -7,9 +7,11 @@ import {
   useEffect,
   useRef,
 } from 'react'
+import { usePostEmailsVerify } from '@/app/(auth)/password/api/queries'
 
-export default function useMail() {
+export default function useMail(id: string) {
   const inputRefs = useRef<HTMLInputElement[]>([])
+  const { mutate } = usePostEmailsVerify(id)
 
   useEffect(() => {
     inputRefs.current[0].focus()
@@ -33,8 +35,10 @@ export default function useMail() {
     [],
   )
 
-  // TODO: API 연결
-  // const handleSubmitMail = useCallback(() => {}, [])
+  const handleVerifyEmails = useCallback(() => {
+    mutate(inputRefs.current.join(''))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputRefs])
 
-  return { handleChange, handleKeyDown, inputRefs }
+  return { handleChange, handleKeyDown, inputRefs, handleVerifyEmails }
 }

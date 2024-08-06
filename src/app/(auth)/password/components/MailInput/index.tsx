@@ -4,8 +4,9 @@ import { Button } from '@nextui-org/react'
 import { Input } from '@/components/common'
 import useMail from './hooks'
 
-export default function MailInput() {
-  const { handleChange, handleKeyDown, inputRefs } = useMail()
+export default function MailInput({ id }: { id: string }) {
+  const { handleChange, handleKeyDown, inputRefs, handleVerifyEmails } =
+    useMail(id)
 
   return (
     <section>
@@ -28,7 +29,10 @@ export default function MailInput() {
           ))}
         </div>
 
-        <Button className="bg-[#FFAB2D] p-16 font-bold w-full h-48 text-white tracking-[0.4px]">
+        <Button
+          onClick={handleVerifyEmails}
+          className="bg-[#FFAB2D] p-16 font-bold w-full h-48 text-white tracking-[0.4px]"
+        >
           확인하기
         </Button>
       </form>
