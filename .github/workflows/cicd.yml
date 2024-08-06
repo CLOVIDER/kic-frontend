@@ -24,7 +24,7 @@ jobs:
         run: |
           docker login kids-in-company.kr-central-2.kcr.dev --username ${{ secrets.KAKAO_ACCESS_ID }} --password ${{ secrets.KAKAO_ACCESS_SECRET }}
 
-      - name: Docker 이미지 빌드중..
+      - name: Docker 이미지 빌드중...
         uses: docker/build-push-action@v4
         with:
           file: Dockerfile

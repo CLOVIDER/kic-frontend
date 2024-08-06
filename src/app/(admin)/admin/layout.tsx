@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function layout({ children }: StrictPropsWithChildren) {
   return (
-    <main className="h-full flex justify-center items-center bg-[#FBFBFB]">
+    <main className="mt-54 w-full h-[calc(100%-54px)] flex justify-center items-center bg-[#FBFBFB]">
       {children}
     </main>
   )
