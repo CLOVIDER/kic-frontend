@@ -11,26 +11,9 @@ export default function StatusBox({
   children?: ReactNode
   className?: string
 }) {
-  const { data } = useHomePage()
-
-  if (!data) {
-    return (
-      <div
-        className={cn(
-          'w-auto h-295 rounded-32 bg-gradient-01 items-center flex flex-col justify-center gap-20 pb-10',
-          className,
-        )}
-      >
-        <div className="flex flex-row items-center gap-20 h-80">
-          <div className="text-35 font-medium">
-            데이터가 로드되지 않았습니다.
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  const { periodStart, periodEnd, recruitStatus, remainPeriod } = data
+  const {
+    data: { periodStart, periodEnd, recruitStatus, remainPeriod },
+  } = useHomePage()
 
   const splitDateTime = (dateTime: string) => {
     const date = dateTime.slice(0, dateTime.lastIndexOf('.'))
