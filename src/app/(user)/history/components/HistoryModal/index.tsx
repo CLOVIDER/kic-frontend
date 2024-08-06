@@ -64,7 +64,7 @@ export default function HistoryModal({ status }: AppProps) {
               </ModalHeader>
               <ModalBody>
                 {/* TODO: 조건부렌더링 */}
-                축하합ㄴㅣ다!
+                축하합니다!
               </ModalBody>
               <ModalFooter>
                 <Button color="default" variant="light" onPress={onClose}>

@@ -116,7 +116,6 @@ export default function History() {
       <div className="w-full">
         <Table
           classNames={{
-            base: '',
             wrapper: 'shadow-sm rounded py-30',
             thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
             th: 'bg-transparent h-full',
