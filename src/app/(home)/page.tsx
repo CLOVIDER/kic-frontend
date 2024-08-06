@@ -24,7 +24,7 @@ export default function Home() {
             <StatusBox>
               <CompetitionRate />
               <Button
-                className="absolute z-10 right-160 top-120 w-auto px-20 h-40 bg-[#000000] rounded-12! text-15 whitespace-nowrap"
+                className="absolute z-10 right-165 top-125 w-auto px-20 h-40 bg-[#000000] !rounded-16 !text-15 text-white whitespace-nowrap"
                 rightIcon={<Right width="20" />}
               >
                 신청하기
