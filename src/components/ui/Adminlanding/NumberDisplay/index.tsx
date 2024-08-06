@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 import { Podkova } from 'next/font/google'
 
@@ -14,11 +16,12 @@ export default function NumberDisplay({
 }) {
   const [displayNumber, setDisplayNumber] = useState(0)
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     let start = 0
     const end = number
-    const duration = 1000 // 애니메이션 지속 시간 (ms)
-    const increment = end / (duration / 16) // 한 프레임당 증가량 (16ms 간격으로 업데이트)
+    const duration = 1000
+    const increment = end / (duration / 16)
 
     if (start < end) {
       const timer = setInterval(() => {
@@ -27,9 +30,9 @@ export default function NumberDisplay({
           clearInterval(timer)
           setDisplayNumber(end)
         } else {
-          setDisplayNumber(Math.ceil(start)) // 소수점 올림
+          setDisplayNumber(Math.ceil(start))
         }
-      }, 16) // 16ms 마다 업데이트
+      }, 16)
 
       return () => clearInterval(timer)
     }
