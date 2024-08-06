@@ -1,3 +1,5 @@
+import { useRouter } from 'next/navigation'
+import { useCallback } from 'react'
 import {
   Table,
   TableHeader,
@@ -8,7 +10,6 @@ import {
   Chip,
   ChipProps,
 } from '@nextui-org/react'
-import { useCallback } from 'react'
 import { useApplicationsContext } from '../fetcher/ApplicationsFetcher'
 import { GetApplicationsResponse } from '../api'
 
@@ -20,84 +21,10 @@ const statusColorMap: Record<string, ChipProps['color']> = {
 
 const columns = [
   { name: '신청날짜', uid: 'createdAt' },
-  { name: '이름', uid: 'accountId' },
+  { name: '이름', uid: 'nameKo' },
   { name: '사원번호', uid: 'employeeNo' },
-  { name: '신청서', uid: 'application' },
   { name: '상태', uid: 'isAccept' },
 ]
-
-// const users = [
-//   {
-//     id: 1,
-//     createdAt: 'Tony Reichert',
-//     accountId: 'CEO',
-//     isAccept: '승인',
-//     application: '29',
-//   },
-//   {
-//     id: 2,
-//     createdAt: 'Zoey Lang',
-//     accountId: 'Technical Lead',
-//     isAccept: '미승인',
-//     application: '25',
-//   },
-//   {
-//     id: 3,
-//     createdAt: 'Jane Fisher',
-//     accountId: 'Senior Developer',
-//     isAccept: '승인',
-//     application: '22',
-//   },
-//   {
-//     id: 4,
-//     createdAt: 'William Howard',
-//     accountId: 'Community Manager',
-//     isAccept: '승인대기',
-//     application: '28',
-//   },
-//   {
-//     id: 5,
-//     createdAt: 'Kristen Copper',
-//     accountId: 'Sales Manager',
-//     isAccept: '승인',
-//     application: '24',
-//   },
-//   {
-//     id: 6,
-//     createdAt: 'Tony Reichert',
-//     accountId: 'CEO',
-//     isAccept: '승인',
-//     application: '29',
-//   },
-//   {
-//     id: 7,
-//     createdAt: 'Zoey Lang',
-//     accountId: 'Technical Lead',
-//     isAccept: '미승인',
-//     application: '25',
-//   },
-//   {
-//     id: 8,
-//     createdAt: 'Jane Fisher',
-//     accountId: 'Senior Developer',
-//     isAccept: '승인',
-//     application: '22',
-//   },
-//   {
-//     id: 9,
-//     createdAt: 'William Howard',
-//     accountId: 'Community Manager',
-//     isAccept: '승인대기',
-//     application: '28',
-//   },
-//   {
-//     id: 10,
-//     createdAt: 'Kristen Copper',
-//     accountId: 'Sales Manager',
-//     isAccept: '승인',
-//     application: '24',
-//   },
-// ]
 
 type Application = GetApplicationsResponse['content'][number]
 
@@ -105,6 +32,7 @@ export default function ApplicationTable() {
   const {
     applications: { content },
   } = useApplicationsContext()
+  const { push } = useRouter()
 
   const renderCell = useCallback(
     (application: Application, columnKey: React.Key) => {
@@ -116,7 +44,7 @@ export default function ApplicationTable() {
         case 'name':
           return (
             <div className="flex flex-col">
-              <p className="text-bold text-sm">{application.accountId}</p>
+              <p className="text-bold text-sm">{application.nameKo}</p>
             </div>
           )
         case 'isAccept':
@@ -138,35 +66,38 @@ export default function ApplicationTable() {
   )
 
   return (
-    <>
-      <Table
-        classNames={{
-          base: 'rounded-20',
-          wrapper: 'shadow-none !rounded-20',
-          thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
-          th: 'bg-transparent h-full',
-        }}
-      >
-        <TableHeader columns={columns} className="flex items-center">
-          {(column) => (
-            <TableColumn className="text-center" key={column.uid}>
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
+    <Table
+      classNames={{
+        base: 'rounded-20',
+        wrapper: 'shadow-none !rounded-20',
+        thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
+        th: 'bg-transparent h-full',
+      }}
+    >
+      <TableHeader columns={columns} className="flex items-center">
+        {(column) => (
+          <TableColumn className="text-center" key={column.uid}>
+            {column.name}
+          </TableColumn>
+        )}
+      </TableHeader>
 
-        <TableBody items={content}>
-          {(item) => (
-            <TableRow key={item.applicationId} className="h-45">
-              {(columnKey) => (
-                <TableCell className="text-center">
-                  {renderCell(item, columnKey)}
-                </TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </>
+      <TableBody items={content}>
+        {(item) => (
+          <TableRow
+            // FIXME: href
+            onClick={() => push('/')}
+            key={item.applicationId}
+            className="h-45 cursor-pointer"
+          >
+            {(columnKey) => (
+              <TableCell className="text-center">
+                {renderCell(item, columnKey)}
+              </TableCell>
+            )}
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
   )
 }

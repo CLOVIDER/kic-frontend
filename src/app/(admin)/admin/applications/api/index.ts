@@ -15,7 +15,7 @@ export interface GetApplicationsResponse {
   content: [
     {
       createdAt: string
-      accountId: string
+      nameKo: string
       employeeNo: string
       applicationId: number
       isAccept: string
