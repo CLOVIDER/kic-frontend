@@ -6,135 +6,17 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Table,
-  TableHeader,
-  TableColumn,
-  TableCell,
-  TableRow,
-  TableBody,
-  Chip,
-  ChipProps,
   Pagination,
 } from '@nextui-org/react'
-import { useCallback } from 'react'
-
-const statusColorMap: Record<string, ChipProps['color']> = {
-  승인: 'success',
-  미승인: 'danger',
-  승인대기: 'warning',
-}
-
-const columns = [
-  { name: '신청날짜', uid: 'applyDate' },
-  { name: '이름', uid: 'name' },
-  { name: '사원번호', uid: 'id' },
-  { name: '신청서', uid: 'application' },
-  { name: '상태', uid: 'status' },
-]
-
-const users = [
-  {
-    id: 1,
-    applyDate: 'Tony Reichert',
-    name: 'CEO',
-    status: '승인',
-    application: '29',
-  },
-  {
-    id: 2,
-    applyDate: 'Zoey Lang',
-    name: 'Technical Lead',
-    status: '미승인',
-    application: '25',
-  },
-  {
-    id: 3,
-    applyDate: 'Jane Fisher',
-    name: 'Senior Developer',
-    status: '승인',
-    application: '22',
-  },
-  {
-    id: 4,
-    applyDate: 'William Howard',
-    name: 'Community Manager',
-    status: '승인대기',
-    application: '28',
-  },
-  {
-    id: 5,
-    applyDate: 'Kristen Copper',
-    name: 'Sales Manager',
-    status: '승인',
-    application: '24',
-  },
-  {
-    id: 6,
-    applyDate: 'Tony Reichert',
-    name: 'CEO',
-    status: '승인',
-    application: '29',
-  },
-  {
-    id: 7,
-    applyDate: 'Zoey Lang',
-    name: 'Technical Lead',
-    status: '미승인',
-    application: '25',
-  },
-  {
-    id: 8,
-    applyDate: 'Jane Fisher',
-    name: 'Senior Developer',
-    status: '승인',
-    application: '22',
-  },
-  {
-    id: 9,
-    applyDate: 'William Howard',
-    name: 'Community Manager',
-    status: '승인대기',
-    application: '28',
-  },
-  {
-    id: 10,
-    applyDate: 'Kristen Copper',
-    name: 'Sales Manager',
-    status: '승인',
-    application: '24',
-  },
-]
-
-type UserType = (typeof users)[number]
+import { AsyncBoundaryWithQuery } from '@/react-utils'
+import { useState } from 'react'
+import ApplicationTable from './ApplicationTable'
+import { useKindergartensContext } from './fetcher/KindergartensFetcher'
+import ApplicationsFetcher from './fetcher/ApplicationsFetcher'
 
 export default function Page() {
-  const renderCell = useCallback((user: UserType, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof UserType]
-
-    switch (columnKey) {
-      case 'applyDate':
-        return user.applyDate
-      case 'name':
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm">{user.name}</p>
-          </div>
-        )
-      case 'status':
-        return (
-          <Chip
-            className="w-67 !max-w-67 h-21 px-8 text-14 font-bold"
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        )
-      default:
-        return cellValue
-    }
-  }, [])
+  const { kindergartens } = useKindergartensContext()
+  const [page, setPage] = useState<number>(0)
 
   return (
     <section className="w-[738px] flex flex-col gap-12">
@@ -148,19 +30,17 @@ export default function Page() {
               className="cursor-pointer w-120 h-33 bg-[#FEC46D] uppercase text-[white] flex justify-center items-center rounded-20"
             >
               <div className="flex justify-center items-center gap-10">
-                <p>All</p>
+                <p>ALL</p>
                 <DropdownIcon />
               </div>
             </DropdownTrigger>
 
             <DropdownMenu>
-              {/* TODO: 동적할당 및 상태 관리 */}
-              <DropdownItem className="text-center">햇빛 어린이집</DropdownItem>
-              <DropdownItem className="text-center">따뜻 어린이집</DropdownItem>
-              <DropdownItem className="text-center">
-                컴포즈 어린이집
-              </DropdownItem>
-              <DropdownItem className="text-center">커피 어린이집</DropdownItem>
+              {kindergartens.map(({ kindergartenId, kindergartenNm }) => (
+                <DropdownItem key={kindergartenId} className="text-center">
+                  {kindergartenNm}
+                </DropdownItem>
+              ))}
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -174,38 +54,16 @@ export default function Page() {
       </header>
 
       <section className="w-full h-[505px] rounded-20 border-1 border-[#BDB6B6]">
-        <Table
-          classNames={{
-            base: 'rounded-20',
-            wrapper: 'shadow-none !rounded-20',
-            thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
-            th: 'bg-transparent h-full',
-          }}
-        >
-          <TableHeader columns={columns} className="flex items-center">
-            {(column) => (
-              <TableColumn className="text-center" key={column.uid}>
-                {column.name}
-              </TableColumn>
-            )}
-          </TableHeader>
-
-          <TableBody items={users}>
-            {(item) => (
-              <TableRow key={item.id} className="h-45">
-                {(columnKey) => (
-                  <TableCell className="text-center">
-                    {renderCell(item, columnKey)}
-                  </TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+        <AsyncBoundaryWithQuery>
+          <ApplicationsFetcher page={page}>
+            <ApplicationTable />
+          </ApplicationsFetcher>
+        </AsyncBoundaryWithQuery>
       </section>
 
-      {/* TODO: 상태 관리 데이터 추가 */}
       <Pagination
+        page={page}
+        onChange={setPage}
         classNames={{
           base: 'flex justify-center',
           wrapper: 'gap-2',
