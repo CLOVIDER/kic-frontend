@@ -11,10 +11,11 @@ export interface KindergartenStatus {
 }
 
 export interface NoticeStatus {
-  noticeId: 0
+  noticeId: number
   title: string
   createdAt: string
 }
 
-export type KindergartenStatusResponse = KindergartenStatus[]
-export type NoticeStatusResponse = NoticeStatus[]
+export interface WaitingResponse {
+  num: number
+}

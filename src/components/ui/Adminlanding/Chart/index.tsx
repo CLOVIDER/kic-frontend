@@ -1,10 +1,10 @@
 'use client'
 
-import { useKindergartenStatus } from '@/app/(admin)/components/adminFetcher/queries'
+import { useAdminKinderStatusContext } from '@/app/(admin)/components/adminFetcher/adminContext'
 import KindergartenChart from './KindergartenChart'
 
 export default function Chart() {
-  const { data: kindergartenStatus } = useKindergartenStatus()
+  const { kindergartens } = useAdminKinderStatusContext()
 
   return (
     <div className="flex flex-col bg-white w-370 px-30 pt-15 pb-30 rounded-32 shadow-md">
@@ -12,10 +12,10 @@ export default function Chart() {
         <span className="mr-4">▼ </span> 신청 현황
       </div>
       <div className="flex gap-20">
-        {kindergartenStatus.map((status, index) => (
+        {kindergartens.map((data, index) => (
           <KindergartenChart
-            key={status.kindergartenNm}
-            {...status}
+            key={data.kindergartenNm}
+            {...data}
             showLegend={index === 0}
           />
         ))}

@@ -2,18 +2,35 @@
 
 import { generateContext } from '@/react-utils'
 import {
-  KindergartenStatusResponse,
-  NoticeStatusResponse,
+  KindergartenStatus,
+  NoticeStatus,
   RecruitStatusResponse,
+  WaitingResponse,
 } from './type'
 
 export interface AdminData {
   recruitStatus: RecruitStatusResponse
-  kindergartenStatus: KindergartenStatusResponse
-  qna: number
-  notice: NoticeStatusResponse
+  kindergartenStatus: KindergartenStatus[]
+  qna: WaitingResponse
+  notice: NoticeStatus[]
 }
 
-export const [AdminProvider, useAdminContext] = generateContext<AdminData>({
-  name: 'admin-context',
+export const [AdminRecruitProvider, useAdminRecuritContext] =
+  generateContext<RecruitStatusResponse>({
+    name: 'admin-recuruit-context',
+  })
+
+export const [AdminKinderStatusProvider, useAdminKinderStatusContext] =
+  generateContext<{ kindergartens: KindergartenStatus[] }>({
+    name: 'admin-kinder-status-context',
+  })
+
+export const [AdminQnAProvider, useAdminQnAContext] =
+  generateContext<WaitingResponse>({
+    name: 'admin-waiting-context',
+  })
+export const [AdminNoticeProvider, useAdminNoticeContext] = generateContext<{
+  notices: NoticeStatus[]
+}>({
+  name: 'admin-notice-context',
 })

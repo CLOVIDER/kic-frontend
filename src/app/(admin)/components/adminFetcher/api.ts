@@ -1,9 +1,5 @@
 import { http } from '@/api'
-import {
-  KindergartenStatusResponse,
-  NoticeStatusResponse,
-  RecruitStatusResponse,
-} from './type'
+import { KindergartenStatus, NoticeStatus, RecruitStatusResponse } from './type'
 
 export const getRecruitStatus = () =>
   http.get<RecruitStatusResponse>({
@@ -11,7 +7,7 @@ export const getRecruitStatus = () =>
   })
 
 export const getKindergaraten = () =>
-  http.get<KindergartenStatusResponse>({
+  http.get<KindergartenStatus[]>({
     url: '/api/admin/recruits/kindergartens/status',
   })
 
@@ -21,6 +17,6 @@ export const getQnA = () =>
   })
 
 export const getNotice = () =>
-  http.get<NoticeStatusResponse>({
+  http.get<NoticeStatus[]>({
     url: '/api/admin/notices/top3',
   })

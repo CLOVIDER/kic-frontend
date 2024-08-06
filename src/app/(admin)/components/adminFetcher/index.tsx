@@ -7,28 +7,39 @@ import {
   useQnA,
   useRecruitStatus,
 } from './queries'
-import { AdminProvider } from './adminContext'
+import {
+  AdminKinderStatusProvider,
+  AdminNoticeProvider,
+  AdminQnAProvider,
+  AdminRecruitProvider,
+} from './adminContext'
 
-export function AdminFetcher({ children }: StrictPropsWithChildren) {
-  const { data: recruitStatus } = useRecruitStatus()
-  const { data: qna } = useQnA()
-  const { data: notice } = useNotice()
-  const { data: kindergartenStatus } = useKindergartenStatus()
+export function AdminRecruitFetcher({ children }: StrictPropsWithChildren) {
+  const { data } = useRecruitStatus()
 
-  const adminData = {
-    recruitStatus,
-    qna,
-    notice,
-    kindergartenStatus,
-  }
+  return <AdminRecruitProvider {...data}>{children}</AdminRecruitProvider>
+}
+
+export function AdminQnAFetcher({ children }: StrictPropsWithChildren) {
+  const { data } = useQnA()
+
+  return <AdminQnAProvider {...{ num: data }}>{children}</AdminQnAProvider>
+}
+
+export function AdminNoticeFetcher({ children }: StrictPropsWithChildren) {
+  const { data } = useNotice()
+
+  return <AdminNoticeProvider notices={data}>{children}</AdminNoticeProvider>
+}
+
+export function AdminKinderStatusFetcher({
+  children,
+}: StrictPropsWithChildren) {
+  const { data } = useKindergartenStatus()
 
   return (
-    <AdminProvider
-      {...{
-        adminData,
-      }}
-    >
+    <AdminKinderStatusProvider kindergartens={data}>
       {children}
-    </AdminProvider>
+    </AdminKinderStatusProvider>
   )
 }
