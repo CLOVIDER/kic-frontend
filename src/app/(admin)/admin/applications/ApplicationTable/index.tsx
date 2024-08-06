@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
+import { Dispatch, SetStateAction, useCallback } from 'react'
 import {
   Table,
   TableHeader,
@@ -9,6 +9,7 @@ import {
   TableBody,
   Chip,
   ChipProps,
+  Pagination,
 } from '@nextui-org/react'
 import { useApplicationsContext } from '../fetcher/ApplicationsFetcher'
 import { GetApplicationsResponse } from '../api'
@@ -28,9 +29,15 @@ const columns = [
 
 type Application = GetApplicationsResponse['content'][number]
 
-export default function ApplicationTable() {
+export default function ApplicationTable({
+  page,
+  setPage,
+}: {
+  page: number
+  setPage: Dispatch<SetStateAction<number>>
+}) {
   const {
-    applications: { content },
+    applications: { content, totalPage },
   } = useApplicationsContext()
   const { push } = useRouter()
 
@@ -66,38 +73,60 @@ export default function ApplicationTable() {
   )
 
   return (
-    <Table
-      classNames={{
-        base: 'rounded-20',
-        wrapper: 'shadow-none !rounded-20',
-        thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
-        th: 'bg-transparent h-full',
-      }}
-    >
-      <TableHeader columns={columns} className="flex items-center">
-        {(column) => (
-          <TableColumn className="text-center" key={column.uid}>
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
+    <>
+      <Table
+        classNames={{
+          base: 'rounded-20',
+          wrapper: 'shadow-none !rounded-20 h-495',
+          thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
+          th: 'bg-transparent h-full',
+        }}
+        aria-label="table"
+      >
+        <TableHeader columns={columns} className="flex items-center">
+          {(column) => (
+            <TableColumn className="text-center" key={column.uid}>
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
 
-      <TableBody items={content}>
-        {(item) => (
-          <TableRow
-            // FIXME: href
-            onClick={() => push('/')}
-            key={item.applicationId}
-            className="h-45 cursor-pointer"
-          >
-            {(columnKey) => (
-              <TableCell className="text-center">
-                {renderCell(item, columnKey)}
-              </TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+        <TableBody items={content}>
+          {(item) => (
+            <TableRow
+              // FIXME: href
+              onClick={() => push('/')}
+              key={item.applicationId}
+              className="h-45 cursor-pointer"
+            >
+              {(columnKey) => (
+                <TableCell className="text-center">
+                  {renderCell(item, columnKey)}
+                </TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+
+      <div className="mt-30" />
+
+      <Pagination
+        page={page}
+        onChange={setPage}
+        classNames={{
+          base: 'flex justify-center',
+          wrapper: 'gap-2',
+          cursor: 'border-1 w-28 h-28 !rounded-4 bg-[#FF9F00]',
+          item: 'w-28 h-28 !rounded-4',
+          next: 'w-28 h-28 !rounded-4',
+          prev: 'w-28 h-28 !rounded-4',
+        }}
+        total={totalPage}
+        initialPage={1}
+        showShadow
+        showControls
+      />
+    </>
   )
 }

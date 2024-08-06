@@ -33,7 +33,7 @@ export interface GetApplicationsResponse {
 export interface GetApplicationsRequest {
   page: number
   size?: number
-  filter?: string
+  filter?: 'ALL' | 'ACCEPT' | 'UNACCEPT' | 'WAIT'
   q?: string
 }
 

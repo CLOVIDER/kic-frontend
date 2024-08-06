@@ -14,7 +14,12 @@ export const useGetKindergartens = () =>
 
 export const useGetApplications = (applicationQuery: GetApplicationsRequest) =>
   useSuspenseQuery({
-    queryKey: ['applications', applicationQuery.size],
+    queryKey: [
+      'applications',
+      applicationQuery.filter,
+      applicationQuery.page,
+      applicationQuery.q,
+    ],
     queryFn: () => getApplications(applicationQuery),
     select: ({ result }) => result,
   })

@@ -6,17 +6,25 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Pagination,
 } from '@nextui-org/react'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
-import { useState } from 'react'
+import { useDeferredValue, useState } from 'react'
 import ApplicationTable from './ApplicationTable'
-import { useKindergartensContext } from './fetcher/KindergartensFetcher'
 import ApplicationsFetcher from './fetcher/ApplicationsFetcher'
 
+const filterStatus = ['ALL', 'ACCEPT', 'UNACCEPT', 'WAIT'] as const
+const filterMAP = {
+  ALL: 'ALL',
+  ACCEPT: '승인',
+  UNACCEPT: '미승인',
+  WAIT: '승인대기',
+}
+
 export default function Page() {
-  const { kindergartens } = useKindergartensContext()
   const [page, setPage] = useState<number>(0)
+  const [filter, setFilter] = useState<(typeof filterStatus)[number]>('ALL')
+  const [searchInput, setSearchInput] = useState<string>('')
+  const deferredSearchInput = useDeferredValue(searchInput)
 
   return (
     <section className="w-[738px] flex flex-col gap-12">
@@ -36,9 +44,13 @@ export default function Page() {
             </DropdownTrigger>
 
             <DropdownMenu>
-              {kindergartens.map(({ kindergartenId, kindergartenNm }) => (
-                <DropdownItem key={kindergartenId} className="text-center">
-                  {kindergartenNm}
+              {filterStatus.map((status) => (
+                <DropdownItem
+                  onClick={() => setFilter(status)}
+                  key={status}
+                  className="text-center"
+                >
+                  {filterMAP[status]}
                 </DropdownItem>
               ))}
             </DropdownMenu>
@@ -46,6 +58,8 @@ export default function Page() {
         </div>
 
         <Input
+          value={searchInput}
+          onValueChange={setSearchInput}
           wrapperClassName="w-167 flex items-center px-14 rounded-42 border-[#FFAB2D] border-1"
           className="w-116 h-33 px-5 py-8 border-none rounded-42 placeholder:text-14"
           placeholder="검색하기"
@@ -55,28 +69,15 @@ export default function Page() {
 
       <section className="w-full h-[505px] rounded-20 border-1 border-[#BDB6B6]">
         <AsyncBoundaryWithQuery>
-          <ApplicationsFetcher page={page}>
-            <ApplicationTable />
+          <ApplicationsFetcher
+            page={page}
+            filter={filter}
+            q={deferredSearchInput}
+          >
+            <ApplicationTable page={page} setPage={setPage} />
           </ApplicationsFetcher>
         </AsyncBoundaryWithQuery>
       </section>
-
-      <Pagination
-        page={page}
-        onChange={setPage}
-        classNames={{
-          base: 'flex justify-center',
-          wrapper: 'gap-2',
-          cursor: 'border-1 w-28 h-28 !rounded-4 bg-[#FF9F00]',
-          item: 'w-28 h-28 !rounded-4',
-          next: 'w-28 h-28 !rounded-4',
-          prev: 'w-28 h-28 !rounded-4',
-        }}
-        total={10}
-        initialPage={1}
-        showShadow
-        showControls
-      />
     </section>
   )
 }

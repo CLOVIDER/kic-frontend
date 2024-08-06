@@ -25,7 +25,7 @@ axiosInstance.interceptors.request.use(
       return config
     }
     // eslint-disable-next-line
-    config.headers.Authorization = `Bearer ${process.env.NEXT_PUBLIC_MASTER_TOKEN}`;
+    config.headers.Authorization = `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}`
     return config
   },
   (error: AxiosError) => {
