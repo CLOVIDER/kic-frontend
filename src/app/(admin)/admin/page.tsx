@@ -12,7 +12,6 @@ import {
   CompetitionRate,
 } from '@/components'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
-import { AsyncBoundaryWithQuery } from '@/react-utils'
 import Image from 'next/image'
 import { Suspense } from 'react'
 import RecruitStatus from '../components/RecruitStatus'

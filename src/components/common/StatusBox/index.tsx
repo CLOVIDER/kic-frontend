@@ -3,7 +3,6 @@
 import { ReactNode } from 'react'
 import { cn } from '@/util'
 import { useHomePage } from '@/app/(home)/components/api/queries'
-import { useHomePage } from '@/app/(home)/components/api/queries'
 
 export default function StatusBox({
   children,
@@ -12,23 +11,6 @@ export default function StatusBox({
   children?: ReactNode
   className?: string
 }) {
-  const {
-    data: { periodStart, periodEnd, recruitStatus, remainPeriod },
-  } = useHomePage()
-
-  const splitDateTime = (dateTime: string) => {
-    const date = dateTime.slice(0, dateTime.lastIndexOf('.'))
-    const time = dateTime.slice(dateTime.lastIndexOf('.') + 1)
-    return { date, time }
-  }
-
-  const { date: startDate, time: startTime } = periodStart
-    ? splitDateTime(periodStart)
-    : { date: 'N/A', time: 'N/A' }
-  const { date: endDate, time: endTime } = periodEnd
-    ? splitDateTime(periodEnd)
-    : { date: 'N/A', time: 'N/A' }
-
   const {
     data: { periodStart, periodEnd, recruitStatus, remainPeriod },
   } = useHomePage()
