@@ -1,9 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
 import { CallIcon, ClockIcon, HomeIcon } from '@/components/common'
+import Link from 'next/link'
 import { useKindergartensContext } from '../fetcher/KindergartensFetcher'
 
 export default function Page({ params: { id } }: { params: { id: string } }) {
@@ -21,7 +22,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
   } = kindergartens[Number(id) - 1]
 
   return (
-    <AnimatePresence mode="wait">
+    <>
       <motion.div
         layoutId={String(kindergartenId)}
         initial={{ width: '940px', opacity: 1 }}
@@ -29,84 +30,107 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
         style={{ borderRadius: '20px' }}
         className="group shadow-medium h-489 absolute bg-[white]"
       />
-      <Card className="w-[940px] h-489 py-27 bg-transparent !shadow-none">
-        <CardHeader className="w-full flex justify-between px-51 items-start">
-          <header className="w-500 relative">
-            <motion.h1
-              layoutId={`${kindergartenId} title`}
-              exit={{ opacity: 0 }}
-              className="absolute text-30 font-bold text-[#FFAB2D]"
-            >
-              {kindergartenNm}
-            </motion.h1>
-            <motion.h2
-              layoutId={`${kindergartenId} sub-header`}
-              className="absolute top-45 text-15 font-medium"
-            >
-              {kindergartenAddr}
-            </motion.h2>
-          </header>
-
-          <motion.div
-            layoutId={`${kindergartenId} info`}
-            className="w-270 flex flex-col gap-3 mt-7"
+      <section className="relative">
+        <motion.nav
+          key="header"
+          initial={{ y: 100 }}
+          animate={{ y: 0 }}
+          exit={{ y: 100 }}
+          className="absolute right-5 top-[-50px] flex gap-12"
+        >
+          <Link
+            href="/kindergarten"
+            className="w-81 h-35 py-5 text-[#FFAB2D] bg-white border-[#FFAB2D] border-1 rounded-16 flex justify-center items-center"
           >
-            <div className="flex text-15">
-              <div className="flex gap-5">
-                <CallIcon />
-                <div className="w-70">연락처</div>
+            돌아가기
+          </Link>
+
+          <Link
+            href={`/kindergarten/edit/${id}`}
+            className="w-81 h-35 py-5 text-white bg-white [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] rounded-16 flex justify-center items-center"
+          >
+            편집
+          </Link>
+        </motion.nav>
+
+        <Card className="w-[940px] h-489 py-27 bg-transparent !shadow-none">
+          <CardHeader className="w-full flex justify-between px-51 items-start">
+            <header className="w-500 relative">
+              <motion.h1
+                layoutId={`${kindergartenId} title`}
+                exit={{ opacity: 0 }}
+                className="absolute text-30 font-bold text-[#FFAB2D]"
+              >
+                {kindergartenNm}
+              </motion.h1>
+              <motion.h2
+                layoutId={`${kindergartenId} sub-header`}
+                className="absolute top-45 text-15 font-medium"
+              >
+                {kindergartenAddr}
+              </motion.h2>
+            </header>
+            <motion.div
+              layoutId={`${kindergartenId} info`}
+              className="w-270 flex flex-col gap-3 mt-7"
+            >
+              <div className="flex text-15">
+                <div className="flex gap-5">
+                  <CallIcon />
+                  <div className="w-70">연락처</div>
+                </div>
+                <p>{kindergartenNo}</p>
               </div>
-              <p>{kindergartenNo}</p>
-            </div>
 
-            <div className="flex text-15">
-              <div className="flex gap-5">
-                <ClockIcon />
-                <div className="w-70">운영시간</div>
-              </div>
-              <p>{kindergartenTime}</p>
-            </div>
-
-            <div className="flex text-15">
-              <div className="flex gap-5">
-                <HomeIcon />
-                <div className="w-70">규모</div>
+              <div className="flex text-15">
+                <div className="flex gap-5">
+                  <ClockIcon />
+                  <div className="w-70">운영시간</div>
+                </div>
+                <p>{kindergartenTime}</p>
               </div>
 
-              <p className="text-14">
-                <span>{kindergartenScale}평</span> /{' '}
-                <span>{kindergartenCapacity}명</span>
-              </p>
-            </div>
-          </motion.div>
-        </CardHeader>
+              <div className="flex text-15">
+                <div className="flex gap-5">
+                  <HomeIcon />
+                  <div className="w-70">규모</div>
+                </div>
 
-        <CardBody className="w-full overflow-hidden">
-          <div className="mt-27 grid grid-cols-3 pl-45 w-fit gap-17">
-            <motion.div layoutId={`${kindergartenId} image`}>
-              {kindergartenImageUrls.map((src) => (
-                <Image
-                  key={src}
-                  src={src}
-                  alt="image"
-                  width={270}
-                  height={154}
-                  className="rounded-20"
-                />
-              ))}
+                <p className="text-14">
+                  <span>{kindergartenScale}평</span> /{' '}
+                  <span>{kindergartenCapacity}명</span>
+                </p>
+              </div>
             </motion.div>
-          </div>
+          </CardHeader>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="mt-13 text-15 px-51 overflow-hidden"
-          >
-            {kindergartenInfo}
-          </motion.p>
-        </CardBody>
-      </Card>
-    </AnimatePresence>
+          <CardBody className="w-full overflow-hidden">
+            <div className="mt-27 grid grid-cols-3 pl-45 w-fit gap-17">
+              <motion.div layoutId={`${kindergartenId} image`}>
+                {kindergartenImageUrls.map((src) => (
+                  <Image
+                    key={src}
+                    src={src}
+                    alt="image"
+                    width={270}
+                    height={154}
+                    className="rounded-20"
+                  />
+                ))}
+              </motion.div>
+            </div>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="mt-13 text-15 px-51 overflow-hidden"
+            >
+              {kindergartenInfo}
+            </motion.p>
+          </CardBody>
+        </Card>
+      </section>
+    </>
   )
 }
