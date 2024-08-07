@@ -4,16 +4,17 @@ import { Button } from '@nextui-org/react'
 import { Input } from '@/components/common'
 import useMail from './hooks'
 
-export default function MailInput() {
-  const { handleChange, handleKeyDown, inputRefs } = useMail()
+export default function MailInput({ id }: { id: string }) {
+  const { handleChange, handleKeyDown, inputRefs, handleVerifyEmails } =
+    useMail(id)
 
   return (
     <section>
-      <form className="flex flex-col w-326 gap-42">
+      <form className="flex flex-col gap-42">
         <h1 className="text-31 font-bold text-center">메일을 확인해주세요!</h1>
 
         <div className="w-full flex gap-20 text-22 font-bold">
-          {[0, 1, 2, 3, 4].map((i) => (
+          {[0, 1, 2, 3, 4, 5].map((i) => (
             <Input
               key={i}
               ref={(el) => {
@@ -28,7 +29,10 @@ export default function MailInput() {
           ))}
         </div>
 
-        <Button className="bg-[#FFAB2D] p-16 font-bold w-full h-48 text-white tracking-[0.4px]">
+        <Button
+          onClick={handleVerifyEmails}
+          className="bg-[#FFAB2D] p-16 font-bold w-full h-48 text-white tracking-[0.4px]"
+        >
           확인하기
         </Button>
       </form>
