@@ -1,5 +1,5 @@
-import { StrictPropsWithChildren } from '@/type'
 import { Suspense } from 'react'
+import { StrictPropsWithChildren } from '@/type'
 
 export default function Layout({ children }: StrictPropsWithChildren) {
   return (
