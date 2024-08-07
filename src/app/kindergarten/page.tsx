@@ -5,9 +5,9 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
 import { CallIcon, ClockIcon, HomeIcon } from '@/components/common'
-import { useKindergartensContext } from '../../fetcher/KindergartensFetcher'
+import { useKindergartensContext } from './fetcher/KindergartensFetcher'
 
-export default function KindergartenList() {
+export default function Page() {
   const { kindergartens } = useKindergartensContext()
 
   return (
@@ -27,7 +27,7 @@ export default function KindergartenList() {
           }) => (
             <Link
               key={kindergartenId}
-              href={`?kdgId=${kindergartenId}`}
+              href={`/kindergarten/${kindergartenId}`}
               className="hover:translate-y-[-10px] transition-all duration-[250ms]"
             >
               <motion.div

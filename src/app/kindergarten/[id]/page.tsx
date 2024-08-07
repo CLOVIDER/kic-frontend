@@ -1,12 +1,12 @@
 'use client'
 
+import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
 import { CallIcon, ClockIcon, HomeIcon } from '@/components/common'
-import Image from 'next/image'
-import { useKindergartensContext } from '../../fetcher/KindergartensFetcher'
+import { useKindergartensContext } from '../fetcher/KindergartensFetcher'
 
-export default function KindergartenDetail({ id }: { id: string }) {
+export default function Page({ params: { id } }: { params: { id: string } }) {
   const { kindergartens } = useKindergartensContext()
   const {
     kindergartenId,
