@@ -2,12 +2,21 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { useFunnel } from '@/components'
+import { useState } from 'react'
 import MailInput from './components/MailInput'
+import IdInut from './components/IdInput'
 
 export default function Page() {
+  const Funnel = useFunnel(['id', 'mail'], {
+    stepQueryKey: 'mail',
+    initialStep: 'id',
+  })
+  const [id, setId] = useState<string>('')
+
   return (
     <>
-      <div className="relative flex justify-center items-center">
+      <motion.div layout className="relative flex justify-center items-center">
         <div className="absolute left-160 h-492">
           <div className="absolute top-0 w-226 h-226 rounded-full bg-[#DDA82A] blur-[158.5px]" />
 
@@ -33,9 +42,17 @@ export default function Page() {
             alt="adminLogin"
           />
         </motion.div>
-      </div>
+      </motion.div>
 
-      <MailInput />
+      <Funnel>
+        <Funnel.Step name="id">
+          <IdInut id={id} setId={setId} />
+        </Funnel.Step>
+
+        <Funnel.Step name="mail">
+          <MailInput id={id} />
+        </Funnel.Step>
+      </Funnel>
     </>
   )
 }

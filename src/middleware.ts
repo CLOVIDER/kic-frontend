@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { ACCESS_TOKEN, ROLE } from '@/constants'
+// import { ACCESS_TOKEN, ROLE } from '@/constants'
 
-const protectedRoutes = ['/apply', '/apply/application']
-const publicRoutes = ['/login']
+// const protectedRoutes = ['/apply', '/apply/application']
+// const publicRoutes = ['/login']
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get(ACCESS_TOKEN)
-  const role = request.cookies.get(ROLE)?.value
+  // const token = request.cookies.get(ACCESS_TOKEN)
+  // const role = request.cookies.get(ROLE)?.value
   const response = NextResponse.next()
   const { pathname } = request.nextUrl
 

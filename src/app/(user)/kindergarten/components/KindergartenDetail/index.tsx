@@ -3,24 +3,27 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
 import { CallIcon, ClockIcon, HomeIcon } from '@/components/common'
-import { dummyCards } from '../../constants'
+import Image from 'next/image'
+import { useKindergartensContext } from '../../fetcher/KindergartensFetcher'
 
-export default function KindergartenDetail() {
+export default function KindergartenDetail({ id }: { id: string }) {
+  const { kindergartens } = useKindergartensContext()
   const {
-    name,
-    description,
-    address,
-    area,
-    squareFeet,
-    capacity,
-    phone,
-    time,
-  } = dummyCards[0]
+    kindergartenId,
+    kindergartenAddr,
+    kindergartenImageUrls,
+    kindergartenInfo,
+    kindergartenNm,
+    kindergartenNo,
+    kindergartenScale,
+    kindergartenCapacity,
+    kindergartenTime,
+  } = kindergartens[Number(id) - 1]
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        layoutId="card"
+        layoutId={String(kindergartenId)}
         initial={{ width: '940px', opacity: 1 }}
         exit={{ width: '333px', opacity: 0 }}
         style={{ borderRadius: '20px' }}
@@ -30,28 +33,30 @@ export default function KindergartenDetail() {
         <CardHeader className="w-full flex justify-between px-51 items-start">
           <header className="w-500 relative">
             <motion.h1
-              // TODO: layout name을 key로 사용해서 가변적으로 수정해야 함
-              layoutId="name"
+              layoutId={`${kindergartenId} title`}
               exit={{ opacity: 0 }}
               className="absolute text-30 font-bold text-[#FFAB2D]"
             >
-              {name}
+              {kindergartenNm}
             </motion.h1>
             <motion.h2
-              layoutId="sub-header"
+              layoutId={`${kindergartenId} sub-header`}
               className="absolute top-45 text-15 font-medium"
             >
-              {address}
+              {kindergartenAddr}
             </motion.h2>
           </header>
 
-          <div className="w-270 flex flex-col gap-3 mt-7">
+          <motion.div
+            layoutId={`${kindergartenId} info`}
+            className="w-270 flex flex-col gap-3 mt-7"
+          >
             <div className="flex text-15">
               <div className="flex gap-5">
                 <CallIcon />
                 <div className="w-70">연락처</div>
               </div>
-              <p>{phone}</p>
+              <p>{kindergartenNo}</p>
             </div>
 
             <div className="flex text-15">
@@ -59,7 +64,7 @@ export default function KindergartenDetail() {
                 <ClockIcon />
                 <div className="w-70">운영시간</div>
               </div>
-              <p>{time}</p>
+              <p>{kindergartenTime}</p>
             </div>
 
             <div className="flex text-15">
@@ -67,23 +72,39 @@ export default function KindergartenDetail() {
                 <HomeIcon />
                 <div className="w-70">규모</div>
               </div>
-              <p>
-                {area}{' '}
-                <span className="text-10 text-[#A0A5A9]">({squareFeet}평)</span>{' '}
-                / {capacity}명
+
+              <p className="text-14">
+                <span>{kindergartenScale}평</span> /{' '}
+                <span>{kindergartenCapacity}명</span>
               </p>
             </div>
-          </div>
+          </motion.div>
         </CardHeader>
 
-        <CardBody className="w-full">
+        <CardBody className="w-full overflow-hidden">
           <div className="mt-27 grid grid-cols-3 pl-45 w-fit gap-17">
-            <div className="w-270 h-154 rounded-20 bg-primary" />
-            <div className="w-270 h-154 rounded-20 bg-primary" />
-            <div className="w-270 h-154 rounded-20 bg-primary" />
+            <motion.div layoutId={`${kindergartenId} image`}>
+              {kindergartenImageUrls.map((src) => (
+                <Image
+                  key={src}
+                  src={src}
+                  alt="image"
+                  width={270}
+                  height={154}
+                  className="rounded-20"
+                />
+              ))}
+            </motion.div>
           </div>
 
-          <p className="mt-13 text-15 px-51">{description}</p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="mt-13 text-15 px-51 overflow-hidden"
+          >
+            {kindergartenInfo}
+          </motion.p>
         </CardBody>
       </Card>
     </AnimatePresence>
