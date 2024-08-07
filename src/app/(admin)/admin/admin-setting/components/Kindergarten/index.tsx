@@ -47,7 +47,10 @@ export default function Kindergarten() {
           <div className="flex flex-row justify-between items-center mb-2">
             <p>{kindergarten.kindergartenNm}</p>
             <Button
-              onClick={() => addClass(kIndex)}
+              onClick={(e) => {
+                e.preventDefault()
+                addClass(kIndex)
+              }}
               className="items-center justify-center p-13 w-15 h-18 bg-[#FFE4A3] font-bold text-[20px] text-[#ffffff] shadow-md"
             >
               +
@@ -59,14 +62,12 @@ export default function Kindergarten() {
             <p>모집인원</p>
           </div>
           <div className="mt-4">
-            {classes[kIndex].map((classInfo, cIndex) => (
-              <div
-                key={classInfo.classIndex}
-                className="flex flex-row gap-10 mb-2"
-              >
+            {classes[kIndex].map(({ ageClass, recruitCnt }, cIndex) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <div key={cIndex} className="flex flex-row gap-10 mb-2">
                 <Input
                   type="text"
-                  value={classInfo.className}
+                  value={ageClass}
                   onChange={(e) =>
                     updateClassName(kIndex, cIndex, e.target.value)
                   }
@@ -75,7 +76,7 @@ export default function Kindergarten() {
                 />
                 <Input
                   type="number"
-                  value={classInfo.capacity}
+                  value={recruitCnt}
                   onChange={(e) =>
                     updateClassCapacity(
                       kIndex,

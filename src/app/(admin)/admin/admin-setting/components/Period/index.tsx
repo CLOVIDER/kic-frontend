@@ -15,7 +15,7 @@ export default function Period() {
   } = usePeriod()
 
   return (
-    <section className="">
+    <section>
       <Title
         title="모집 기간"
         subtitle="설정된 기간에 따라 자동으로 모집이 진행됩니다."
