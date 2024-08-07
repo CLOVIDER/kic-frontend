@@ -18,23 +18,23 @@ export function middleware(request: NextRequest) {
     return response
   }
 
-  if (!token && protectedRoutes.includes(pathname)) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
-  }
+  // if (!token && protectedRoutes.includes(pathname)) {
+  //   const url = request.nextUrl.clone()
+  //   url.pathname = '/'
+  //   return NextResponse.redirect(url)
+  // }
 
-  if (token && publicRoutes.includes(pathname)) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
-  }
+  // if (token && publicRoutes.includes(pathname)) {
+  //   const url = request.nextUrl.clone()
+  //   url.pathname = '/'
+  //   return NextResponse.redirect(url)
+  // }
 
-  if (role !== 'admin' && pathname.startsWith('/admin')) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
-  }
+  // if (role !== 'admin' && pathname.startsWith('/admin')) {
+  //   const url = request.nextUrl.clone()
+  //   url.pathname = '/'
+  //   return NextResponse.redirect(url)
+  // }
 
   return response
 }

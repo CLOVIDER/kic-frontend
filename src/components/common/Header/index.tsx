@@ -9,7 +9,7 @@ export default function Header() {
   const pathname = usePathname()
 
   return (
-    <header className="absolute top-0 w-full z-10">
+    <header className="absolute top-0 w-full z-10 bg-[#FBFBFB]">
       <div className="flex justify-between items-center p-15">
         <Sidebar>
           <HamburgerMenu className={pathname === '/' ? 'hidden' : ''} />
