@@ -74,8 +74,8 @@ export default function KindergartenDetail({ id }: { id: string }) {
               </div>
 
               <p className="text-14">
-                <span>{kindergartenScale}</span>
-                <span>{kindergartenCapacity}</span>
+                <span>{kindergartenScale}평</span> /{' '}
+                <span>{kindergartenCapacity}명</span>
               </p>
             </div>
           </motion.div>
