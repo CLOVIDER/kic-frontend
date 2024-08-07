@@ -31,7 +31,7 @@ export default function StatusBox({
   return (
     <div
       className={cn(
-        'w-[664px] h-295 rounded-32 bg-gradient-01 px-50 flex flex-col justify-center font-sans py-20',
+        'w-[664px] h-295 rounded-32 bg-gradient-01 px-50 flex flex-col pt-10 font-sans shadow-sm',
         className,
       )}
     >
@@ -47,7 +47,7 @@ export default function StatusBox({
             <span>D-{remainPeriod}</span>
             <span className="text-50 font-medium">{recruitStatus}</span>
           </p>
-          <div className="text-20 absolute bottom-0 ml-5 text-center">
+          <div className="text-20 absolute bottom-0 ml-5">
             {startDate} {startTime}시 ~ {endDate} {endTime}시
           </div>
         </div>
