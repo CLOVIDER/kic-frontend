@@ -1,12 +1,26 @@
 export interface ApplicationPayload {
-  isSingleParent: string
+  isSingleParent: '0' | '1'
   childrenCnt: number
-  isDisability: string
-  isDualIncome: string
-  isEmployeeCouple: string
-  isSibling: string
-  childrenRecruitList: Record<string, unknown>[]
-  imageUrls: string
+  isDisability: '0' | '1'
+  isDualIncome: '0' | '1'
+  isEmployeeCouple: '0' | '1'
+  isSibling: '0' | '1'
+  childrenRecruitList: {
+    id: number
+    name: string
+    recruitId: number
+  }[]
+  imageUrls: {
+    [key in DocumentType]: string
+  }
+}
+
+export enum DocumentType {
+  SINGLE_PARENT = 'SINGLE_PARENT',
+  DISABILITY = 'DISABILITY',
+  DUAL_INCOME = 'DUAL_INCOME',
+  EMPLOYEE_COUPLE = 'EMPLOYEE_COUPLE',
+  SIBLING = 'SIBLING',
 }
 
 export interface ApplicationResponse {

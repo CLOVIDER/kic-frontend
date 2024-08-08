@@ -17,14 +17,15 @@ export default function RightSection1({
   kindergartenName,
   dropdownOptions,
   onSubmit,
-  initialData,
+  formData,
+  setFormData,
 }: RightSection1Props) {
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     kindergartenName.map(() => '분반선택'),
   )
   const [children, setChildren] = useState<Child[]>(
-    initialData.childrenRecruitList?.length > 0
-      ? (initialData.childrenRecruitList as Child[])
+    formData.childrenRecruitList?.length > 0
+      ? formData.childrenRecruitList.map((child) => ({ ...child, classes: {} }))
       : [{ id: 1, name: '', classes: {} }],
   )
 
@@ -65,12 +66,27 @@ export default function RightSection1({
     (e: React.FormEvent) => {
       e.preventDefault()
       const data: Partial<ApplicationPayload> = {
-        childrenRecruitList: children,
+        childrenRecruitList: children.map((child) => ({
+          id: child.id,
+          name: child.name,
+          recruitId: parseInt(Object.values(child.classes)[0] || '0', 10),
+        })),
         childrenCnt: children.length,
       }
       onSubmit(data)
     },
     [children, onSubmit],
+  )
+
+  const updateSelectedOptions = useCallback(
+    (kindergarten: string, value: string) => {
+      setSelectedOptions((prev) =>
+        prev.map((option, index) =>
+          kindergartenName[index] === kindergarten ? value : option,
+        ),
+      )
+    },
+    [kindergartenName],
   )
 
   // const memoizedDropdownOptions = useMemo(

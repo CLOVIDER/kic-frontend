@@ -1,8 +1,13 @@
 'use client'
 
+import {
+  DocumentType,
+  ApplicationFormProps,
+  ApplicationPayload,
+  Child,
+} from '@/type/application'
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ApplicationFormProps, ApplicationPayload } from '@/type/application'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
 import { saveApplicationTemp, submitApplication } from '../api/api'
@@ -20,7 +25,13 @@ export default function ApplicationForm({
     isEmployeeCouple: '0',
     isSibling: '0',
     childrenRecruitList: [],
-    imageUrls: '',
+    imageUrls: {
+      SINGLE_PARENT: '',
+      DISABILITY: '',
+      DUAL_INCOME: '',
+      EMPLOYEE_COUPLE: '',
+      SIBLING: '',
+    },
   })
   const [uploadedFiles, setUploadedFiles] = useState<{ [key: string]: File }>(
     {},
@@ -28,6 +39,8 @@ export default function ApplicationForm({
   const [selectedItems, setSelectedItems] = useState<{
     [key: string]: boolean
   }>({})
+
+  const [children, setChildren] = useState<Child[]>([])
 
   const handleNext = (data: Partial<ApplicationPayload>) => {
     setFormData((prev) => ({ ...prev, ...data }))
@@ -39,10 +52,24 @@ export default function ApplicationForm({
   }
 
   const handleSubmit = async (data: Partial<ApplicationPayload>) => {
-    const finalData = { ...formData, ...data }
+    const finalData = {
+      ...formData,
+      ...data,
+      childrenRecruitList: children.map((child) => ({
+        id: child.id,
+        name: child.name,
+        recruitId: parseInt(Object.values(child.classes)[0], 10),
+      })),
+      imageUrls: Object.fromEntries(
+        Object.entries(uploadedFiles).map(([key, file]) => [
+          DocumentType[key as keyof typeof DocumentType],
+          file.name,
+        ]),
+      ) as { [key in DocumentType]: string },
+    }
     try {
-      await submitApplication(finalData)
-      // Handle successful submission
+      await submitApplication(finalData as ApplicationPayload)
+      // 성공 처리 로직
     } catch (error) {
       console.error('Error submitting application:', error)
     }
@@ -109,19 +136,19 @@ export default function ApplicationForm({
               kindergartenName={kindergartenName}
               dropdownOptions={dropdownOptions}
               onSubmit={handleNext}
-              initialData={formData}
+              formData={formData}
+              setFormData={setFormData}
             />
           ) : (
             <RightSection2
               onPrevious={handlePrevious}
               onSubmit={handleSubmit}
               onTempSave={handleTempSave}
-              initialData={formData}
               uploadedFiles={uploadedFiles}
-              selectedItems={selectedItems}
               onFileUpload={handleFileUpload}
               onDeleteFile={handleDeleteFile}
-              onCheckboxChange={handleCheckboxChange}
+              formData={formData}
+              setFormData={setFormData}
             />
           )}
         </motion.div>

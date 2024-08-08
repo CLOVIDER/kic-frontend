@@ -10,12 +10,14 @@ export default function RightSection2({
   onPrevious,
   onSubmit,
   onTempSave,
+  setFormData,
   uploadedFiles,
-  selectedItems,
   onFileUpload,
   onDeleteFile,
-  onCheckboxChange,
 }: RightSection2Props) {
+  const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>(
+    {},
+  )
   const [items] = useState<Item[]>([
     { id: 'isSingleParent', name: '한부모 가정', isRequired: false },
     { id: 'isDisability', name: '장애 유무', isRequired: false },
@@ -26,20 +28,12 @@ export default function RightSection2({
 
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({})
 
-  const handleFileUpload = useCallback(
-    (id: string) => {
-      const input = document.createElement('input')
-      input.type = 'file'
-      input.onchange = (e: Event) => {
-        const file = (e.target as HTMLInputElement).files?.[0]
-        if (file) {
-          onFileUpload(id, file)
-        }
-      }
-      input.click()
-    },
-    [onFileUpload],
-  )
+  const handleFileUpload = useCallback((id: string) => {
+    const fileInput = fileInputRefs.current[id]
+    if (fileInput) {
+      fileInput.click()
+    }
+  }, [])
 
   const handleFileChange = useCallback(
     (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,20 +52,28 @@ export default function RightSection2({
           ...acc,
           [key]: value ? '1' : '0',
         }),
-        {},
+        {} as Record<string, '0' | '1'>,
       ),
-      imageUrls: Object.values(uploadedFiles)
-        .map((file) => file.name)
-        .join(','),
+      imageUrls: Object.entries(uploadedFiles).reduce(
+        (acc, [key, file]) => ({
+          ...acc,
+          [key as keyof typeof DocumentType]: file.name,
+        }),
+        {} as Record<keyof typeof DocumentType, string>,
+      ),
     }
     onSubmit(data)
   }, [selectedItems, uploadedFiles, onSubmit])
 
   const handleCheckboxChange = useCallback(
     (id: string) => {
-      onCheckboxChange(id)
+      setSelectedItems((prev) => ({ ...prev, [id]: !prev[id] }))
+      setFormData((prev) => ({
+        ...prev,
+        [id]: prev[id as keyof ApplicationPayload] === '1' ? '0' : '1',
+      }))
     },
-    [onCheckboxChange],
+    [setFormData],
   )
 
   const handleDeleteFile = useCallback(
