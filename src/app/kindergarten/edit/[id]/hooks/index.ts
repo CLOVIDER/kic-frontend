@@ -44,6 +44,10 @@ export default function useEdit(id: number) {
     [images.length],
   )
 
+  const handleRemoveFile = useCallback((filePath: string) => {
+    setImages((prev) => prev.filter((path) => path !== filePath))
+  }, [])
+
   const handleSubmit = useCallback(() => {
     if (
       !id ||
@@ -93,5 +97,6 @@ export default function useEdit(id: number) {
     setImages,
     handleSubmit,
     handleImages,
+    handleRemoveFile,
   }
 }

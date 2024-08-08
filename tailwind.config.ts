@@ -13,8 +13,8 @@ const px0To100 = {
     {},
   ),
 }
-const px0To500 = {
-  ...Array.from(Array(501)).reduce(
+const px0To1000 = {
+  ...Array.from(Array(10000)).reduce(
     (acc, _, i) => ({ ...acc, [i]: `${i}px` }),
     {},
   ),
@@ -35,14 +35,14 @@ const config: Config = {
       black: '#000000',
     },
     extend: {
-      width: px0To500,
-      height: px0To500,
+      width: px0To1000,
+      height: px0To1000,
       borderWidth: px0To10,
       fontSize: px0To100,
       lineHeight: px0To100,
-      minWidth: px0To500,
-      minHeight: px0To500,
-      spacing: px0To500,
+      minWidth: px0To1000,
+      minHeight: px0To1000,
+      spacing: px0To1000,
       borderRadius: { ...px0To100, button: 6 },
     },
   },

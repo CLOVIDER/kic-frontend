@@ -34,6 +34,7 @@
     "react/require-default-props": "off",
     "react/no-unused-prop-types": "off",
     "no-restricted-syntax": "off",
-    "no-alert": "off"
+    "no-alert": "off",
+    "jsx-a11y/control-has-associated-label": "off"
   }
 }

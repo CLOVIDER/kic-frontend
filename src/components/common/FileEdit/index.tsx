@@ -1,14 +1,18 @@
 'use client'
 
-import { useRef, ChangeEvent, useCallback } from 'react'
+import { useRef, ChangeEvent, useCallback, type PropsWithChildren } from 'react'
+import { cn } from '@/lib/utils'
 import Input from '../Input'
 import Button from '../Button'
 
 export default function FileEdit({
   onFileSelect,
-}: {
+  className,
+  children,
+}: PropsWithChildren<{
   onFileSelect: (file: File) => void
-}) {
+  className?: string
+}>) {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,9 +41,9 @@ export default function FileEdit({
       />
       <Button
         onClick={handleButtonClick}
-        className="w-70 m-5 p-4 bg-primary/30 text-primary"
+        className={cn('w-70 m-5 p-4 bg-primary/30 text-primary', className)}
       >
-        edit
+        {children}
       </Button>
     </div>
   )

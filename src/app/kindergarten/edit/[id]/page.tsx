@@ -11,6 +11,7 @@ import {
   FileEdit,
   HomeIcon,
   Input,
+  Plus,
 } from '@/components/common'
 import useEdit from './hooks'
 
@@ -34,6 +35,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
     handleSubmit,
     images,
     handleImages,
+    handleRemoveFile,
   } = useEdit(Number(id))
 
   return (
@@ -60,7 +62,12 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
           >
             저장
           </Button>
-          <FileEdit onFileSelect={handleImages} />
+          <FileEdit
+            onFileSelect={handleImages}
+            className="p-0 text-[14px] h-35 m-0 text-[white] [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)]"
+          >
+            이미지 추가
+          </FileEdit>
         </nav>
 
         <Card className="w-[940px] h-489 py-27 bg-transparent !shadow-none">
@@ -139,20 +146,22 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
           </CardHeader>
 
           <CardBody className="w-full overflow-hidden">
-            <div className="mt-27 grid grid-cols-3 pl-45 w-fit gap-17">
+            <div className="mt-27 grid grid-cols-3 pl-51 w-fit gap-17">
               <motion.div
                 layoutId={`${kindergartenId} image`}
-                className="flex gap-20 h-200"
+                className="flex gap-20 w-[840px] h-153"
               >
                 {images.map((src) => (
-                  <Image
-                    key={src}
-                    src={src}
-                    alt="image"
-                    width={270}
-                    height={154}
-                    className="rounded-20 hover:opacity-45"
-                  />
+                  <div key={src} className="relative group w-240 h-160">
+                    <Image src={src} alt="image" className="rounded-20" fill />
+                    <button
+                      type="button"
+                      className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black bg-opacity-50 text-white rounded-20"
+                      onClick={() => handleRemoveFile(src)}
+                    >
+                      <Plus className="rotate-45" />
+                    </button>
+                  </div>
                 ))}
               </motion.div>
             </div>
@@ -160,7 +169,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
             <Textarea
               classNames={{
                 base: 'px-51 mt-13 text-15 ',
-                input: 'bg-white',
+                input: 'bg-white p-20',
                 mainWrapper: 'bg-[white]',
                 innerWrapper: 'bg-white',
               }}

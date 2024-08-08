@@ -105,20 +105,15 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
           </CardHeader>
 
           <CardBody className="w-full overflow-hidden">
-            <div className="mt-27 grid grid-cols-3 pl-45 w-fit gap-17">
+            <div className="mt-27 flex mx-auto w-fit gap-17 mb-10">
               <motion.div
                 layoutId={`${kindergartenId} image`}
                 className="flex gap-20"
               >
                 {kindergartenImageUrls.map((src) => (
-                  <Image
-                    key={src}
-                    src={src}
-                    alt="image"
-                    width={270}
-                    height={154}
-                    className="rounded-20"
-                  />
+                  <div key={src} className="w-240 h-160 relative">
+                    <Image src={src} alt="image" fill className="rounded-20" />
+                  </div>
                 ))}
               </motion.div>
             </div>
