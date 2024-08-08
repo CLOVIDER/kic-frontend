@@ -2,25 +2,31 @@ import http from './core'
 
 export const postImage = (
   domainName: 'notice' | 'kindergarten',
-  file: string,
-) =>
-  http.post({
-    url: '/api/upload/image',
-    params: {
-      domainName,
-    },
-    data: {
-      file,
-    },
-  })
+  file: File,
+) => {
+  const formData = new FormData()
+  formData.append('file', file)
 
-export const postDocument = (applicationId: string, file: string) =>
-  http.post({
+  return http.post<string>({
     url: '/api/upload/image',
-    params: {
-      applicationId,
-    },
-    data: {
-      file,
+    params: { domainName },
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
     },
   })
+}
+
+export const postDocument = (applicationId: string, file: string) => {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  return http.post<string>({
+    url: '/api/upload/document',
+    params: { applicationId },
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+}

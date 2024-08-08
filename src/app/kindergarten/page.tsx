@@ -61,7 +61,10 @@ export default function Page() {
                 </CardHeader>
 
                 <CardBody className="mt-7 overflow-hidden">
-                  <motion.div layoutId={`${kindergartenId} image`}>
+                  <motion.div
+                    layoutId={`${kindergartenId} image`}
+                    className="flex gap-10"
+                  >
                     <Image
                       className="rounded-20"
                       src={kindergartenImageUrls[0]}

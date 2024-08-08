@@ -106,7 +106,10 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
 
           <CardBody className="w-full overflow-hidden">
             <div className="mt-27 grid grid-cols-3 pl-45 w-fit gap-17">
-              <motion.div layoutId={`${kindergartenId} image`}>
+              <motion.div
+                layoutId={`${kindergartenId} image`}
+                className="flex gap-20"
+              >
                 {kindergartenImageUrls.map((src) => (
                   <Image
                     key={src}
@@ -124,7 +127,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="mt-13 text-15 px-51 overflow-hidden"
+              className="mt-13 text-15 px-51 overflow-hidden whitespace-pre-wrap"
             >
               {kindergartenInfo}
             </motion.p>
