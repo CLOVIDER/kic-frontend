@@ -8,11 +8,21 @@ export interface Child {
   }
 }
 
-export interface FormData {
-  children: Child[]
+export interface ApplicationPayload {
+  isSingleParent: string
+  childrenCnt: number
+  isDisability: string
+  isDualIncome: string
+  isEmployeeCouple: string
+  isSibling: string
+  childrenRecruitList: Record<string, unknown>[]
+  imageUrls: string
+}
+
+export interface FormData extends ApplicationPayload {
   selectedOptions: string[]
-  uploadedFiles: string[]
-  selectedItems: boolean[]
+  uploadedFiles: { [key: string]: UploadedFile }
+  selectedItems: { [key: string]: boolean }
 }
 
 export interface LeftSectionProps {
@@ -24,12 +34,20 @@ export interface LeftSectionProps {
 export interface RightSection1Props {
   kindergartenName: string[]
   dropdownOptions: { key: string; label: string }[]
-  onSubmit: (children: Child[], selectedOptions: string[]) => void
+  onSubmit: (data: Partial<ApplicationPayload>) => void
+  initialData: Partial<ApplicationPayload>
 }
 
 export interface RightSection2Props {
   onPrevious: () => void
-  onSubmit: (uploadedFiles: string[], selectedItems: boolean[]) => void
+  onSubmit: (data: Partial<ApplicationPayload>) => Promise<void>
+  onTempSave: () => Promise<void>
+  initialData: ApplicationPayload
+  uploadedFiles: { [key: string]: File }
+  selectedItems: { [key: string]: boolean }
+  onFileUpload: (id: string, file: File) => void
+  onDeleteFile: (id: string) => void
+  onCheckboxChange: (id: string) => void
 }
 
 export interface ApplicationFormProps {

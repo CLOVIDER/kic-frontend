@@ -1,10 +1,14 @@
 import React from 'react'
 import Image from 'next/image'
 import { LeftSectionProps } from '@/type/application'
-import { useLeftSection } from '../hooks/useLeftSection'
 
 export default function LeftSection({ name, date, ifCC }: LeftSectionProps) {
-  const { formattedDate, ccStatus } = useLeftSection(date, ifCC)
+  const formattedDate = new Date(date).toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  })
+  const ccStatus = ifCC ? 'Y' : 'N'
 
   return (
     <div className="h-[547px] w-[366px] mt-87 ml-123 flex flex-col items-center">

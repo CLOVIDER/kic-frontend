@@ -1,6 +1,4 @@
-'use client'
-
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback } from 'react'
 import Image from 'next/image'
 import {
   Dropdown,
@@ -9,19 +7,26 @@ import {
   DropdownItem,
   Button,
 } from '@nextui-org/react'
-import { Child, RightSection1Props } from '@/type/application'
+import {
+  RightSection1Props,
+  Child,
+  ApplicationPayload,
+} from '@/type/application'
 
 export default function RightSection1({
   kindergartenName,
   dropdownOptions,
   onSubmit,
+  initialData,
 }: RightSection1Props) {
-  const [selectedOptions] = useState<string[]>(
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(
     kindergartenName.map(() => '분반선택'),
   )
-  const [children, setChildren] = useState<Child[]>([
-    { id: 1, name: '', classes: {} },
-  ])
+  const [children, setChildren] = useState<Child[]>(
+    initialData.childrenRecruitList?.length > 0
+      ? (initialData.childrenRecruitList as Child[])
+      : [{ id: 1, name: '', classes: {} }],
+  )
 
   const addChild = useCallback(() => {
     setChildren((prevChildren) => [
@@ -59,15 +64,27 @@ export default function RightSection1({
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault()
-      onSubmit(children, selectedOptions)
+      const data: Partial<ApplicationPayload> = {
+        childrenRecruitList: children,
+        childrenCnt: children.length,
+      }
+      onSubmit(data)
     },
-    [children, selectedOptions, onSubmit],
+    [children, onSubmit],
   )
 
-  const memoizedDropdownOptions = useMemo(
-    () => dropdownOptions,
-    [dropdownOptions],
-  )
+  // const memoizedDropdownOptions = useMemo(
+  //   () => dropdownOptions,
+  //   [dropdownOptions],
+  // )
+
+  const handleDropdownChange = (kindergarten: string, value: string) => {
+    setSelectedOptions((prev) =>
+      prev.map((option, index) =>
+        kindergartenName[index] === kindergarten ? value : option,
+      ),
+    )
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -133,13 +150,12 @@ export default function RightSection1({
                         </Button>
                       </DropdownTrigger>
                       <DropdownMenu
-                        aria-label="Dynamic Actions"
-                        className="min-w-[138px]"
                         onAction={(key) => {
-                          const selectedOption = memoizedDropdownOptions.find(
+                          const selectedOption = dropdownOptions.find(
                             (option) => option.key === key,
                           )
                           if (selectedOption) {
+                            handleDropdownChange(name, selectedOption.label)
                             updateChildInfo(
                               child.id,
                               'class',
@@ -149,11 +165,8 @@ export default function RightSection1({
                           }
                         }}
                       >
-                        {memoizedDropdownOptions.map((option) => (
-                          <DropdownItem
-                            key={option.key}
-                            className="text-center justify-center"
-                          >
+                        {dropdownOptions.map((option) => (
+                          <DropdownItem key={option.key}>
                             {option.label}
                           </DropdownItem>
                         ))}

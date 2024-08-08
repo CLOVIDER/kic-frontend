@@ -1,25 +1,85 @@
-'use client'
-
-import React, { useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useRef, useMemo } from 'react'
 import Image from 'next/image'
-import { RightSection2Props, Item } from '@/type/application'
-import { useRightSection2 } from '../hooks/useRightSection2'
+import {
+  RightSection2Props,
+  Item,
+  ApplicationPayload,
+} from '@/type/application'
 
 export default function RightSection2({
   onPrevious,
   onSubmit,
+  onTempSave,
+  uploadedFiles,
+  selectedItems,
+  onFileUpload,
+  onDeleteFile,
+  onCheckboxChange,
 }: RightSection2Props) {
-  const {
-    items,
-    uploadedFiles,
-    selectedItems,
-    handleCheckboxChange,
-    handleFileUpload,
-    handleFileChange,
-    handleDeleteFile,
-    handleSubmit,
-    fileInputRefs,
-  } = useRightSection2(onSubmit)
+  const [items] = useState<Item[]>([
+    { id: 'isSingleParent', name: '한부모 가정', isRequired: false },
+    { id: 'isDisability', name: '장애 유무', isRequired: false },
+    { id: 'isDualIncome', name: '맞벌이 여부', isRequired: false },
+    { id: 'isEmployeeCouple', name: '부부 직원', isRequired: false },
+    { id: 'isSibling', name: '형제자매 유무', isRequired: false },
+  ])
+
+  const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({})
+
+  const handleFileUpload = useCallback(
+    (id: string) => {
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.onchange = (e: Event) => {
+        const file = (e.target as HTMLInputElement).files?.[0]
+        if (file) {
+          onFileUpload(id, file)
+        }
+      }
+      input.click()
+    },
+    [onFileUpload],
+  )
+
+  const handleFileChange = useCallback(
+    (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (file) {
+        onFileUpload(id, file)
+      }
+    },
+    [onFileUpload],
+  )
+
+  const handleSubmit = useCallback(() => {
+    const data: Partial<ApplicationPayload> = {
+      ...Object.entries(selectedItems).reduce(
+        (acc, [key, value]) => ({
+          ...acc,
+          [key]: value ? '1' : '0',
+        }),
+        {},
+      ),
+      imageUrls: Object.values(uploadedFiles)
+        .map((file) => file.name)
+        .join(','),
+    }
+    onSubmit(data)
+  }, [selectedItems, uploadedFiles, onSubmit])
+
+  const handleCheckboxChange = useCallback(
+    (id: string) => {
+      onCheckboxChange(id)
+    },
+    [onCheckboxChange],
+  )
+
+  const handleDeleteFile = useCallback(
+    (id: string) => {
+      onDeleteFile(id)
+    },
+    [onDeleteFile],
+  )
 
   const renderItem = useCallback(
     (item: Item) => (
@@ -118,6 +178,7 @@ export default function RightSection2({
         <div className="w-[148px]" />
         <button
           type="button"
+          onClick={onTempSave}
           className="w-[98px] h-[31px] [background:linear-gradient(90deg,_rgba(255,_171,_45,_0.13),_rgba(153,_103,_27,_0.11))] border border-[#e6d5c5] font-bold text-[#fb923c] rounded-full text-sm"
         >
           임시저장
