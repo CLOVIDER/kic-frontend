@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 type LayoutProps = PropsWithChildren<object>
 
 export default function NoticeLayout({ children }: LayoutProps) {
-  return <div className="flex justify-center w-full h-full">{children}</div>
+  return <main className="flex justify-center w-full h-full">{children}</main>
 }

@@ -9,12 +9,20 @@ function LoadingSpinner() {
   )
 }
 
-const BlockNoteEditor = dynamic(() => import('./BlockNoteEditor'), {
+const BlockNoteEditor = dynamic(() => import('./BlocknoteEditor'), {
   ssr: false,
   loading: () => <LoadingSpinner />,
 })
 
-export default function DynamicBlockNoteEditor() {
+interface DynamicBlockNoteEditorProps {
+  domainName: string
+  setUploadedImageUrls: (urls: string[]) => void
+}
+
+export default function DynamicBlockNoteEditor({
+  domainName,
+  setUploadedImageUrls,
+}: DynamicBlockNoteEditorProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
 
@@ -39,7 +47,10 @@ export default function DynamicBlockNoteEditor() {
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <BlockNoteEditor />
+      <BlockNoteEditor
+        domainName={domainName}
+        setUploadedImageUrls={setUploadedImageUrls}
+      />
     </Suspense>
   )
 }

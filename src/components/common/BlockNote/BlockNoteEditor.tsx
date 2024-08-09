@@ -1,23 +1,35 @@
-'use client'
-
 import '@blocknote/core/style.css'
 import '@blocknote/react/style.css'
 import '@blocknote/mantine/style.css'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/mantine'
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useState } from 'react'
+import { uploadImage } from './UploadImage'
 
-export default function BlockNoteEditor() {
-  const handleUpload = useCallback(async (file: File) => {
-    // 파일을 Data URL로 변환
-    return new Promise<string>((resolve) => {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        resolve(reader.result as string)
+interface BlockNoteEditorProps {
+  domainName: string
+  setUploadedImageUrls: (urls: string[]) => void
+}
+
+export default function BlockNoteEditor({
+  domainName,
+  setUploadedImageUrls,
+}: BlockNoteEditorProps) {
+  const [imageUrls, setImageUrls] = useState<string[]>([])
+  const handleUpload = useCallback(
+    async (file: File): Promise<string> => {
+      try {
+        const url = await uploadImage(file, domainName)
+        setImageUrls((prevUrls) => [...prevUrls, url])
+        setUploadedImageUrls([...imageUrls, url])
+        return url
+      } catch (error) {
+        console.error('Failed to upload image:', error)
+        throw error
       }
-      reader.readAsDataURL(file)
-    })
-  }, [])
+    },
+    [domainName, imageUrls, setUploadedImageUrls],
+  )
 
   const editor = useCreateBlockNote({
     uploadFile: handleUpload,
