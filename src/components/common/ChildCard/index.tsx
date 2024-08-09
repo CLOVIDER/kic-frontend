@@ -1,8 +1,9 @@
 import { cn } from '@/lib/utils'
+import { RecruitInfo } from '../Application/ApplicationContext/api'
 
 interface ChildCardProps {
   name: string
-  kindergartenList: string[]
+  kindergartenList: RecruitInfo[]
   className?: string
 }
 
@@ -20,8 +21,10 @@ export default function ChildCard({
     >
       <div className="my-10 text-[#5a5650] font-semibold underline">{name}</div>
       <ul className="list-disc list-inside text-[#666666] text-14">
-        {kindergartenList.map((kindergarten) => (
-          <li key={kindergarten}>{kindergarten}</li>
+        {kindergartenList.map(({ kindergartenNm, ageClass }) => (
+          <li key={kindergartenNm}>
+            {kindergartenNm} {ageClass}
+          </li>
         ))}
       </ul>
     </div>
