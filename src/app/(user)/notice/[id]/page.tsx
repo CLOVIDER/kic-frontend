@@ -1,32 +1,41 @@
 'use client'
 
+import { useEffect, useState, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { notices as dummyNotices } from '@/components/data/Notice'
 import Image from 'next/image'
-import { formatDate } from '@/util/formatDate'
-import { useEffect, useRef } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { fetchNoticeDetail, NoticeItem } from '@/components/common/notice/api'
+import NoticeDetailFetcher from './components/NoticeDetailFetcher'
 
 export default function NoticeDetail() {
   const router = useRouter()
   const { id } = useParams()
   const noticeId = Number(id)
+  const [noticeData, setNoticeData] = useState<NoticeItem | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const toastShown = useRef(false)
 
   useEffect(() => {
     if (Number.isNaN(noticeId)) {
       router.push('/notice')
+      return
     }
+
+    const fetchData = async () => {
+      try {
+        const response = await fetchNoticeDetail(noticeId)
+        setNoticeData(response.result)
+        setIsLoading(false)
+      } catch (err) {
+        setError('Failed to fetch Notice detail')
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
   }, [noticeId, router])
-
-  const noticeIndex = dummyNotices.findIndex((notice) => notice.id === noticeId)
-  const toastShown = useRef(false)
-
-  if (noticeIndex === -1) {
-    return <div>Notice not found</div>
-  }
-
-  const notice = dummyNotices[noticeIndex]
 
   const handleNavigation = (direction: 'prev' | 'next' | 'list') => {
     if (direction === 'list') {
@@ -34,15 +43,11 @@ export default function NoticeDetail() {
       return
     }
 
-    const newIndex = direction === 'prev' ? noticeIndex - 1 : noticeIndex + 1
+    const newId = direction === 'prev' ? noticeId - 1 : noticeId + 1
 
-    if (newIndex < 0 || newIndex >= dummyNotices.length) {
+    if (newId < 1) {
       if (!toastShown.current) {
-        toast.error(
-          direction === 'prev'
-            ? 'This is the first notice.'
-            : 'This is the last notice.',
-        )
+        toast.error('This is the first notice.')
         toastShown.current = true
       }
       return
@@ -50,82 +55,70 @@ export default function NoticeDetail() {
 
     toast.dismiss()
     toastShown.current = false
-    router.push(`/notice/${dummyNotices[newIndex].id}`)
+    router.push(`/notice/${newId}`)
   }
 
   return (
-    <div>
+    <div className="relative">
       <ToastContainer position="top-center" autoClose={5000} />
-      <div className="mt-83 w-[700px] h-[638px]">
-        <div className="flex h-24">
+
+      {/* NoticeDetailFetcher Component */}
+      <div className="mt-83 w-[700px] h-[638px] relative z-10">
+        {noticeData ? (
+          <NoticeDetailFetcher
+            noticeData={noticeData}
+            isLoading={isLoading}
+            error={error}
+          />
+        ) : (
+          <p>Notice data is not available.</p>
+        )}
+      </div>
+
+      {/* Buttons */}
+      <div className="absolute top-0 right-0 mt-130 flex justify-end z-20">
+        <button
+          type="button"
+          className="w-24 h-24"
+          onClick={() => handleNavigation('prev')}
+          aria-label="Previous"
+        >
           <Image
-            src={notice.authorImgSrc}
-            className="w-24 h-24 rounded-[50%]"
-            alt={notice.author}
+            className="mr-5"
+            src="/images/left.svg"
+            width={28}
+            height={28}
+            alt=""
+          />
+        </button>
+        <button
+          type="button"
+          className="w-24 h-24"
+          onClick={() => handleNavigation('list')}
+          aria-label="List"
+        >
+          <Image
+            className="mr-5"
+            src="/images/list.svg"
             width={24}
             height={24}
+            alt=""
           />
-          <div className="w-[600px] h-24 text-14 font-inter ml-10">
-            {notice.author}
-          </div>
-          <button
-            type="button"
-            className="w-24 h-24"
-            onClick={() => handleNavigation('prev')}
-            aria-label="Previous"
-          >
-            <Image
-              className="mr-5"
-              src="/images/left.svg"
-              width={28}
-              height={28}
-              alt=""
-            />
-          </button>
-          <button
-            type="button"
-            className="w-24 h-24"
-            onClick={() => handleNavigation('list')}
-            aria-label="List"
-          >
-            <Image
-              className="mr-5"
-              src="/images/list.svg"
-              width={24}
-              height={24}
-              alt=""
-            />
-          </button>
-          <button
-            type="button"
-            className="w-24 h-24"
-            onClick={() => handleNavigation('next')}
-            aria-label="Next"
-          >
-            <Image
-              className="mr-5"
-              src="/images/right.svg"
-              width={28}
-              height={28}
-              alt=""
-            />
-          </button>
-        </div>
-        <div className="mt-16 h-20 text-14 text-[#ec8f03]">
-          {formatDate(notice.date)}
-        </div>
-        <div className="mt-16 max-h-39 text-32 text-[#000000] text-opacity-60 overflow-hidden">
-          {notice.title}
-        </div>
-        <div className="mt-16">
+        </button>
+        <button
+          type="button"
+          className="w-24 h-24"
+          onClick={() => handleNavigation('next')}
+          aria-label="Next"
+        >
           <Image
-            src={notice.contentImgSrc}
-            alt={notice.title}
-            width={700}
-            height={720}
+            className="mr-5"
+            src="/images/right.svg"
+            width={28}
+            height={28}
+            alt=""
           />
-        </div>
-        <div className="mt-16">{notice.content}</div>
+        </button>
       </div>
     </div>
   )

@@ -2,8 +2,8 @@ import { PropsWithChildren } from 'react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'notice (admin)',
-  description: 'notice list page for administrator',
+  title: 'notice - write (admin)',
+  description: 'notice write page for administrator',
 }
 
 type LayoutProps = PropsWithChildren<unknown>
