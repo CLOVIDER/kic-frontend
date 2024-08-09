@@ -5,6 +5,7 @@ import {
   Item,
   ApplicationPayload,
 } from '@/type/application'
+import { uploadImage } from '@/components/common/Application/api/documentApi'
 
 export default function RightSection2({
   onPrevious,
@@ -25,6 +26,7 @@ export default function RightSection2({
     { id: 'isEmployeeCouple', name: '부부 직원', isRequired: false },
     { id: 'isSibling', name: '형제자매 유무', isRequired: false },
   ])
+  const [isUploading, setIsUploading] = useState<Record<string, boolean>>({})
 
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({})
 
@@ -36,13 +38,25 @@ export default function RightSection2({
   }, [])
 
   const handleFileChange = useCallback(
-    (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    async (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0]
       if (file) {
-        onFileUpload(id, file)
+        setIsUploading({ ...isUploading, [id]: true })
+        try {
+          const url = await uploadImage(file)
+          onFileUpload(id, url)
+          setFormData((prev) => ({
+            ...prev,
+            imageUrls: { ...prev.imageUrls, [id]: url },
+          }))
+        } catch (error) {
+          console.error('File upload failed:', error)
+        } finally {
+          setIsUploading({ ...isUploading, [id]: false })
+        }
       }
     },
-    [onFileUpload],
+    [onFileUpload, setFormData, isUploading]
   )
 
   const handleSubmit = useCallback(() => {
@@ -114,7 +128,7 @@ export default function RightSection2({
             onClick={() => handleFileUpload(item.id)}
             className="w-[84px] h-[24px] bg-[#ffde8d] text-12 text-gray-700 rounded border-[1px] border-solid border-[#cccccc]"
           >
-            {uploadedFiles[item.id] ? '📎 완료' : '📎 파일'}
+            {isUploading[item.id] ? '업로드 중...' : uploadedFiles[item.id] ? '📎 완료' : '📎 파일'}
           </button>
           <input
             type="file"
@@ -147,6 +161,7 @@ export default function RightSection2({
       handleFileChange,
       handleDeleteFile,
       fileInputRefs,
+      isUploading,
     ],
   )
 

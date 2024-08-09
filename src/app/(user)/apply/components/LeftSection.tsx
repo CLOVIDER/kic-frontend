@@ -1,20 +1,39 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { LeftSectionProps } from '@/type/application'
+import { getEmployeeData } from '@/components/common/application/api/getData'
 
-export default function LeftSection({ name, date, ifCC }: LeftSectionProps) {
-  const formattedDate = new Date(date).toLocaleDateString('ko-KR', {
+export default function LeftSection() {
+  const [employeeData, setEmployeeData] = useState<any>(null)
+
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const data = await getEmployeeData()
+        setEmployeeData(data)
+      } catch (error) {
+        console.error('Error fetching employee data:', error)
+      }
+    }
+    fetchEmployeeData()
+  }, [])
+
+  if (!employeeData) {
+    return <div>Loading...</div>
+  }
+
+  const { nameKo, workedAt, isCouple } = employeeData
+  const formattedDate = new Date(workedAt).toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
   })
-  const ccStatus = ifCC ? 'Y' : 'N'
+  const ccStatus = isCouple ? 'Y' : 'N'
 
   return (
     <div className="h-[547px] w-[366px] mt-87 ml-123 flex flex-col items-center">
       <div className="font-bold text-[31px]">
         <span className="text-[#202020]">안녕하세요 </span>
-        <span className="text-[#ffaa2c]">{name}</span>
+        <span className="text-[#ffaa2c]">{nameKo}</span>
         <span className="text-[#202020]">님 !</span>
       </div>
       <p className="relative mt-49 left-[16px] font-medium text-[20px] text-center text-[#202020]">

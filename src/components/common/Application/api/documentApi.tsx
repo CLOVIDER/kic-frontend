@@ -13,8 +13,7 @@ export const uploadImage = async (file: File): Promise<string> => {
       },
     })
 
-    return response.result // 직접 URL 문자열 반환
-    // throw new Error(`Image upload failed: ${response.message}`)
+    return response.result
   } catch (error) {
     console.error('Error uploading file:', error)
     throw error

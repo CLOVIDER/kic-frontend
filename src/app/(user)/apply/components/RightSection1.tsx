@@ -18,7 +18,6 @@ export default function RightSection1({
   dropdownOptions,
   onSubmit,
   formData,
-  setFormData,
 }: RightSection1Props) {
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     kindergartenName.map(() => '분반선택'),
@@ -78,16 +77,16 @@ export default function RightSection1({
     [children, onSubmit],
   )
 
-  const updateSelectedOptions = useCallback(
-    (kindergarten: string, value: string) => {
-      setSelectedOptions((prev) =>
-        prev.map((option, index) =>
-          kindergartenName[index] === kindergarten ? value : option,
-        ),
-      )
-    },
-    [kindergartenName],
-  )
+  // const updateSelectedOptions = useCallback(
+  //   (kindergarten: string, value: string) => {
+  //     setSelectedOptions((prev) =>
+  //       prev.map((option, index) =>
+  //         kindergartenName[index] === kindergarten ? value : option,
+  //       ),
+  //     )
+  //   },
+  //   [kindergartenName],
+  // )
 
   // const memoizedDropdownOptions = useMemo(
   //   () => dropdownOptions,
@@ -182,7 +181,10 @@ export default function RightSection1({
                         }}
                       >
                         {dropdownOptions.map((option) => (
-                          <DropdownItem key={option.key}>
+                          <DropdownItem
+                            key={option.key}
+                            className="text-center"
+                          >
                             {option.label}
                           </DropdownItem>
                         ))}

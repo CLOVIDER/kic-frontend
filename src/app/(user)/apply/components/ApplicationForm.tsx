@@ -6,16 +6,14 @@ import {
   ApplicationPayload,
   Child,
 } from '@/type/application'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
 import { saveApplicationTemp, submitApplication } from '../api/api'
+import { getRecruitData } from '@/components/common/Application/api/getData'
 
-export default function ApplicationForm({
-  kindergartenName,
-  dropdownOptions,
-}: ApplicationFormProps) {
+export default function ApplicationForm() {
   const [currentSection, setCurrentSection] = useState(1)
   const [formData, setFormData] = useState<ApplicationPayload>({
     isSingleParent: '0',
@@ -33,14 +31,26 @@ export default function ApplicationForm({
       SIBLING: '',
     },
   })
-  const [uploadedFiles, setUploadedFiles] = useState<{ [key: string]: File }>(
+  const [uploadedFiles, setUploadedFiles] = useState<{ [key: string]: string }>(
     {},
   )
   const [selectedItems, setSelectedItems] = useState<{
     [key: string]: boolean
   }>({})
-
   const [children, setChildren] = useState<Child[]>([])
+  const [recruitData, setRecruitData] = useState<any>(null)
+
+  useEffect(() => {
+    const fetchRecruitData = async () => {
+      try {
+        const data = await getRecruitData()
+        setRecruitData(data)
+      } catch (error) {
+        console.error('Error fetching recruit data:', error)
+      }
+    }
+    fetchRecruitData()
+  }, [])
 
   const handleNext = (data: Partial<ApplicationPayload>) => {
     setFormData((prev) => ({ ...prev, ...data }))
@@ -60,12 +70,7 @@ export default function ApplicationForm({
         name: child.name,
         recruitId: parseInt(Object.values(child.classes)[0], 10),
       })),
-      imageUrls: Object.fromEntries(
-        Object.entries(uploadedFiles).map(([key, file]) => [
-          DocumentType[key as keyof typeof DocumentType],
-          file.name,
-        ]),
-      ) as { [key in DocumentType]: string },
+      imageUrls: uploadedFiles,
     }
     try {
       await submitApplication(finalData as ApplicationPayload)
@@ -84,8 +89,8 @@ export default function ApplicationForm({
     }
   }
 
-  const handleFileUpload = (id: string, file: File) => {
-    setUploadedFiles((prev) => ({ ...prev, [id]: file }))
+  const handleFileUpload = (id: string, url: string) => {
+    setUploadedFiles((prev) => ({ ...prev, [id]: url }))
   }
 
   const handleDeleteFile = (id: string) => {
@@ -133,8 +138,17 @@ export default function ApplicationForm({
         >
           {currentSection === 1 ? (
             <RightSection1
-              kindergartenName={kindergartenName}
-              dropdownOptions={dropdownOptions}
+              kindergartenName={
+                recruitData?.map((item: any) => item.kindergartenNm) || []
+              }
+              dropdownOptions={
+                recruitData?.flatMap((item: any) =>
+                  item.aggClasses.map((className: string, index: number) => ({
+                    key: item.recruitIds[index].toString(),
+                    label: className,
+                  })),
+                ) || []
+              }
               onSubmit={handleNext}
               formData={formData}
               setFormData={setFormData}
