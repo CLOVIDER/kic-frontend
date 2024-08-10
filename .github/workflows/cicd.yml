@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-        
+
       - name: ENV File 설정중
         run: |
           touch .env
@@ -24,6 +24,9 @@ jobs:
         run: |
           docker login kids-in-company.kr-central-2.kcr.dev --username ${{ secrets.KAKAO_ACCESS_ID }} --password ${{ secrets.KAKAO_ACCESS_SECRET }}
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       - name: Docker 이미지 빌드중...
         uses: docker/build-push-action@v4
         with:
@@ -31,6 +34,7 @@ jobs:
           context: .
           push: false
           tags: clovider-fe-app:${{ github.sha }}
+          buildx: true
 
       - name: Docker 이미지 태그 설정중..
         run: |
