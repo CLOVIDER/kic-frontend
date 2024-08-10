@@ -73,3 +73,31 @@ export const createQna = async (
     throw new Error(`Failed to create Q&A: ${error}`)
   }
 }
+
+export const updateQnaAnswer = async (
+  qnaId: number,
+  answer: string,
+): Promise<BaseResponse<void>> => {
+  try {
+    const response = await http.patch<void>({
+      url: `/api/qnas/admin/${qnaId}`,
+      data: { answer },
+    })
+    return response
+  } catch (error) {
+    throw new Error(`Failed to update Q&A answer: ${error}`)
+  }
+}
+
+export const getQnaAnswer = async (
+  qnaId: number,
+): Promise<BaseResponse<void>> => {
+  try {
+    const response = await http.get<void>({
+      url: `/api/qnas/admin/${qnaId}`,
+    })
+    return response
+  } catch (error) {
+    throw new Error(`Failed to get Q&A answer: ${error}`)
+  }
+}

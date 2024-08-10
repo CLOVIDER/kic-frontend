@@ -1,24 +1,42 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import DynamicBlockNoteEditor from '@/components/common/BlockNote/DynamicBlockNoteEditor'
 import { createQna } from '@/components/qna/api'
+import { PartialBlock } from '@blocknote/core'
 import TitleInput from './components/TitleInput'
 import PrivacyToggle from './components/PrivacyToggle'
 import SaveButtons from './components/SaveButtons'
 
 export default function Page() {
   const [title, setTitle] = useState<string>('')
-  const [question] = useState<string>('')
+  const [question, setContent] = useState<string>('') // Rename 'content' to 'question'
   const [isVisibility, setIsVisibility] = useState<boolean>(true)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [saveError, setSaveError] = useState<string | null>(null)
-  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]) // Track uploaded image URLs
+  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [initialEditorContent, setInitialEditorContent] = useState<
+    PartialBlock[] | undefined
+  >(undefined)
 
   const router = useRouter()
-
   const domainName = 'qna'
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 세션 스토리지에서 내용을 불러옵니다.
+    const savedContent = sessionStorage.getItem('editorContent')
+    if (savedContent) {
+      setInitialEditorContent(JSON.parse(savedContent))
+      setContent(savedContent)
+    }
+
+    // 컴포넌트가 언마운트될 때 세션 스토리지를 초기화합니다.
+    return () => {
+      sessionStorage.removeItem('editorContent')
+    }
+  }, [])
 
   const moveBack = () => {
     router.push('/qna')
@@ -36,7 +54,7 @@ export default function Page() {
         title,
         question,
         isVisibility ? '1' : '0',
-        uploadedImageUrls,
+        uploadedImageUrls || [{}],
       )
 
       if (response.code === 200) {
@@ -68,6 +86,11 @@ export default function Page() {
           <DynamicBlockNoteEditor
             domainName={domainName}
             setUploadedImageUrls={setUploadedImageUrls}
+            setContent={(content) => {
+              setContent(content)
+              sessionStorage.setItem('editorContent', content) // 내용이 변경될 때마다 세션 스토리지에 저장
+            }}
+            // initialContent={initialEditorContent}
           />
         </div>
         <SaveButtons handleSave={handleSave} moveBack={moveBack} />

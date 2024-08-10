@@ -1,23 +1,30 @@
 import '@blocknote/core/style.css'
 import '@blocknote/react/style.css'
 import '@blocknote/mantine/style.css'
-import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/mantine'
-import { useEffect, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
+import { useCreateBlockNote } from '@blocknote/react'
 import { uploadImage } from './UploadImage'
 
 interface BlockNoteEditorProps {
   domainName: string
-  setUploadedImageUrls: (urls: string[]) => void
+  setUploadedImageUrls?: (urls: string[]) => void
+  setContent: (content: string) => void
+  enableImageUpload?: boolean
 }
 
-export default function BlockNoteEditor({
+export default function Editor({
   domainName,
   setUploadedImageUrls,
+  setContent,
+  enableImageUpload = true,
 }: BlockNoteEditorProps) {
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const handleUpload = useCallback(
     async (file: File): Promise<string> => {
+      if (!enableImageUpload || !domainName || !setUploadedImageUrls) {
+        throw new Error('Image upload is not enabled or missing required props')
+      }
       try {
         const url = await uploadImage(file, domainName)
         setImageUrls((prevUrls) => [...prevUrls, url])
@@ -28,18 +35,24 @@ export default function BlockNoteEditor({
         throw error
       }
     },
-    [domainName, imageUrls, setUploadedImageUrls],
+    [domainName, enableImageUpload, imageUrls, setUploadedImageUrls],
   )
 
   const editor = useCreateBlockNote({
-    uploadFile: handleUpload,
+    uploadFile: enableImageUpload ? handleUpload : undefined,
   })
 
-  useEffect(() => {
+  const handleChange = useCallback(() => {
     if (editor) {
-      // console.log('Editor initialized')
+      const jsonBlocks = editor.document
+      const contentString = JSON.stringify(jsonBlocks)
+      setContent(contentString)
     }
-  }, [editor])
+  }, [editor, setContent])
 
-  return <BlockNoteView editor={editor} theme="light" />
+  if (!editor) {
+    return null
+  }
+
+  return <BlockNoteView editor={editor} theme="light" onChange={handleChange} />
 }

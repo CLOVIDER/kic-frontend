@@ -1,46 +1,40 @@
 'use client'
 
+import DynamicBlockNoteEditor from '@/components/common/BlockNote/DynamicBlockNoteEditor'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
-
-const DynamicBlockNoteEditor = dynamic(
-  () => import('./components/BlockNoteEditor'),
-  { ssr: false },
-)
+import { useState } from 'react'
+import { createNotice } from '../api/api'
 
 export default function WritePage() {
   const [title, setTitle] = useState<string>('')
+  const [content, setContent] = useState<string>('')
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]) // Track uploaded image URLs
   const router = useRouter()
+  const domainName = 'notice'
 
   const moveBack = () => {
     router.push('/admin/notice')
   }
 
-  useEffect(() => {
-    const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        moveBack()
-      }
-    }
-
-    document.addEventListener('keydown', handleEscapeKey)
-
-    return () => {
-      document.removeEventListener('keydown', handleEscapeKey)
-    }
-  }, [])
-
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true)
     setSaveError(null)
     try {
-      // Save logic
-      moveBack()
+      const response = await createNotice(
+        title,
+        content,
+        uploadedImageUrls || [], // Include image URLs in the save request
+      )
+
+      if (response.code === 200) {
+        moveBack()
+      } else {
+        setSaveError('저장 중 오류가 발생했습니다.')
+      }
     } catch (error) {
       setSaveError('저장 중 오류가 발생했습니다.')
     } finally {
@@ -63,7 +57,11 @@ export default function WritePage() {
           />
         </div>
         <div className="mt-[17px] ml-21 w-[746px] h-435 flex-grow overflow-y-auto border-1 border-solid border-[#00000014] rounded-xl shadow-md">
-          <DynamicBlockNoteEditor />
+          <DynamicBlockNoteEditor
+            domainName={domainName}
+            setUploadedImageUrls={setUploadedImageUrls}
+            setContent={setContent}
+          />
         </div>
         <div className="flex mt-8 ml-[556px] w-211 h-31">
           <button
