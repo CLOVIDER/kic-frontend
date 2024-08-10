@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   build-and-push-image:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -41,7 +41,7 @@ jobs:
           docker push kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:${{ github.sha }}
 
   update-manifest-state:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-and-push-image
     steps:
       - name: Checkout kic-k8s Repository
