@@ -6,6 +6,7 @@ import {
   ApplicationPayload,
 } from '@/type/application'
 import { uploadImage } from '@/components/common/Application/api/documentApi'
+import { Button } from '@nextui-org/react'
 
 export default function RightSection2({
   onPrevious,
@@ -193,21 +194,21 @@ export default function RightSection2({
           이전
         </button>
         <div className="w-[148px]" />
-        <button
+        <Button
           type="button"
           onClick={onTempSave}
-          className="w-[98px] h-[31px] [background:linear-gradient(90deg,_rgba(255,_171,_45,_0.13),_rgba(153,_103,_27,_0.11))] border border-[#e6d5c5] font-bold text-[#fb923c] rounded-full text-sm"
+          className="w-[98px] h-[31px] [background:linear-gradient(90deg,_rgba(255,_171,_45,_0.13),_rgba(153,_103,_27,_0.11))] border bg-[#fff] border-[#e6d5c5] font-bold text-[#fb923c] rounded-full text-sm"
         >
           임시저장
-        </button>
+        </Button>
         <div className="w-[8px]" />
-        <button
+        <Button
           type="button"
           onClick={handleSubmit}
           className="w-[98px] h-[31px] shadow-md [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] text-[#ffffff] rounded-full text-sm"
         >
           제출
-        </button>
+        </Button>
       </div>
     </div>
   )

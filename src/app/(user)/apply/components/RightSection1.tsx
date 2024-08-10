@@ -166,8 +166,8 @@ export default function RightSection1({
                       </DropdownTrigger>
                       <DropdownMenu
                         onAction={(key) => {
-                          const selectedOption = dropdownOptions.find(
-                            (option) => option.key === key,
+                          const selectedOption = dropdownOptions[name]?.find(
+                            (option: any) => option.key === key,
                           )
                           if (selectedOption) {
                             handleDropdownChange(name, selectedOption.label)
@@ -180,7 +180,7 @@ export default function RightSection1({
                           }
                         }}
                       >
-                        {dropdownOptions.map((option) => (
+                        {dropdownOptions[name]?.map((option: any) => (
                           <DropdownItem
                             key={option.key}
                             className="text-center"

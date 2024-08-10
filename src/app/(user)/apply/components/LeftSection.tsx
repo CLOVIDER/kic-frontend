@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { getEmployeeData } from '@/components/common/application/api/getData'
@@ -27,7 +29,7 @@ export default function LeftSection() {
     month: '2-digit',
     day: '2-digit',
   })
-  const ccStatus = isCouple ? 'Y' : 'N'
+  const ccStatus = isCouple ? 'O' : 'X'
 
   return (
     <div className="h-[547px] w-[366px] mt-87 ml-123 flex flex-col items-center">
@@ -55,8 +57,8 @@ export default function LeftSection() {
             <div>입사일</div>
             <div className="w-93 mt-22">사내 부부 여부</div>
           </div>
-          <div className="w-90 h-72 text-[#666666] text-16 text-center">
-            <div className="w-90 h-24">{formattedDate}</div>
+          <div className="w-100 h-72 text-[#666666] text-16 text-center">
+            <div className="w-100 h-24">{formattedDate}</div>
             <div className="mt-22">{ccStatus}</div>
           </div>
         </div>

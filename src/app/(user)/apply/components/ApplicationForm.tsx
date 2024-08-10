@@ -6,7 +6,7 @@ import {
   ApplicationPayload,
   Child,
 } from '@/type/application'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
@@ -123,6 +123,20 @@ export default function ApplicationForm() {
     duration: 0.2,
   }
 
+  const kindergartenName =
+    recruitData?.map((item: any) => item.kindergartenNm) || []
+
+  const dropdownOptions =
+    recruitData?.reduce((acc: any, item: any) => {
+      acc[item.kindergartenNm] = item.aggClasses.map(
+        (className: string, index: number) => ({
+          key: item.recruitIds[index].toString(),
+          label: className,
+        }),
+      )
+      return acc
+    }, {}) || {}
+
   return (
     <div>
       <AnimatePresence mode="wait" custom={currentSection === 1 ? 1 : -1}>
@@ -138,17 +152,8 @@ export default function ApplicationForm() {
         >
           {currentSection === 1 ? (
             <RightSection1
-              kindergartenName={
-                recruitData?.map((item: any) => item.kindergartenNm) || []
-              }
-              dropdownOptions={
-                recruitData?.flatMap((item: any) =>
-                  item.aggClasses.map((className: string, index: number) => ({
-                    key: item.recruitIds[index].toString(),
-                    label: className,
-                  })),
-                ) || []
-              }
+              kindergartenName={kindergartenName}
+              dropdownOptions={dropdownOptions}
               onSubmit={handleNext}
               formData={formData}
               setFormData={setFormData}
