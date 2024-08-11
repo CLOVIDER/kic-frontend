@@ -10,14 +10,19 @@ export interface Child {
 }
 
 export interface ApplicationPayload {
-  isSingleParent: '0' | '1'
-  childrenCnt: number
-  isDisability: '0' | '1'
-  isDualIncome: '0' | '1'
-  isEmployeeCouple: '0' | '1'
-  isSibling: '0' | '1'
-  childrenRecruitList: Array<{ id: number; name: string; recruitId: number }>
-  imageUrls: { [key in DocumentType]: string }
+  isSingleParent: string
+  childrenCnt: number // string에서 number로 변경
+  isDisability: string
+  isDualIncome: string
+  isEmployeeCouple: string
+  isSibling: string
+  childrenRecruitList: {
+    childNm: string
+    recruitIds: number[]
+  }[]
+  imageUrls: {
+    [key: string]: string
+  }
 }
 
 export enum DocumentType {
@@ -44,8 +49,12 @@ export interface LeftSectionProps {
 export interface RightSection1Props {
   kindergartenName: string[]
   dropdownOptions: { key: string; label: string }[]
-  onSubmit: (data: Partial<ApplicationPayload>) => void
-  formData: ApplicationPayload
+  onSubmit: (
+    data: Partial<ApplicationPayload>,
+    updatedChildren: Child[],
+  ) => void
+  children: Child[]
+  setChildren: React.Dispatch<React.SetStateAction<Child[]>>
   setFormData: React.Dispatch<React.SetStateAction<ApplicationPayload>>
 }
 
@@ -55,8 +64,8 @@ export interface RightSection2Props {
   onTempSave: () => Promise<void>
   formData: ApplicationPayload
   setFormData: React.Dispatch<React.SetStateAction<ApplicationPayload>>
-  uploadedFiles: { [key: string]: File }
-  onFileUpload: (id: string, file: File) => void
+  uploadedFiles: { [key: string]: string }
+  onFileUpload: (id: string, url: string) => void
   onDeleteFile: (id: string) => void
 }
 

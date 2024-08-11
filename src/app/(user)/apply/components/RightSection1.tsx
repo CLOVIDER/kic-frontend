@@ -18,14 +18,11 @@ export default function RightSection1({
   dropdownOptions,
   onSubmit,
   formData,
+  children,
+  setChildren,
 }: RightSection1Props) {
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     kindergartenName.map(() => '분반선택'),
-  )
-  const [children, setChildren] = useState<Child[]>(
-    formData.childrenRecruitList?.length > 0
-      ? formData.childrenRecruitList.map((child) => ({ ...child, classes: {} }))
-      : [{ id: 1, name: '', classes: {} }],
   )
 
   const addChild = useCallback(() => {
@@ -33,13 +30,16 @@ export default function RightSection1({
       ...prevChildren,
       { id: Date.now(), name: '', classes: {} },
     ])
-  }, [])
+  }, [setChildren])
 
-  const removeChild = useCallback((id: number) => {
-    setChildren((prevChildren) =>
-      prevChildren.filter((child) => child.id !== id),
-    )
-  }, [])
+  const removeChild = useCallback(
+    (id: number) => {
+      setChildren((prevChildren) =>
+        prevChildren.filter((child) => child.id !== id),
+      )
+    },
+    [setChildren],
+  )
 
   const updateChildInfo = useCallback(
     (id: number, field: string, value: string, kindergarten?: string) => {
@@ -58,7 +58,7 @@ export default function RightSection1({
         }),
       )
     },
-    [],
+    [setChildren],
   )
 
   const handleSubmit = useCallback(
@@ -66,13 +66,14 @@ export default function RightSection1({
       e.preventDefault()
       const data: Partial<ApplicationPayload> = {
         childrenRecruitList: children.map((child) => ({
-          id: child.id,
-          name: child.name,
-          recruitId: parseInt(Object.values(child.classes)[0] || '0', 10),
+          childNm: child.name,
+          recruitIds: Object.values(child.classes).map((recruitId) =>
+            parseInt(recruitId, 10),
+          ),
         })),
         childrenCnt: children.length,
       }
-      onSubmit(data)
+      onSubmit(data, children)
     },
     [children, onSubmit],
   )

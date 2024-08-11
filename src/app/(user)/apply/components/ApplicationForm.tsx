@@ -1,17 +1,12 @@
 'use client'
 
-import {
-  DocumentType,
-  ApplicationFormProps,
-  ApplicationPayload,
-  Child,
-} from '@/type/application'
-import React, { useState, useEffect, useCallback } from 'react'
+import { ApplicationPayload, Child } from '@/type/application'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { getRecruitData } from '@/components/common/Application/api/getData'
+import { saveApplicationTemp, submitApplication } from '../api/api'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
-import { saveApplicationTemp, submitApplication } from '../api/api'
-import { getRecruitData } from '@/components/common/Application/api/getData'
 
 export default function ApplicationForm() {
   const [currentSection, setCurrentSection] = useState(1)
@@ -34,11 +29,18 @@ export default function ApplicationForm() {
   const [uploadedFiles, setUploadedFiles] = useState<{ [key: string]: string }>(
     {},
   )
-  const [selectedItems, setSelectedItems] = useState<{
-    [key: string]: boolean
-  }>({})
-  const [children, setChildren] = useState<Child[]>([])
-  const [recruitData, setRecruitData] = useState<any>(null)
+
+  // const [selectedItems, setSelectedItems] = useState<{
+  //   [key: string]: boolean
+  // }>({})
+
+  const [children, setChildren] = useState<Child[]>([
+    { id: 1, name: '', classes: {} },
+  ])
+
+  const [recruitData, setRecruitData] = useState<
+    { kindergartenNm: string; recruitIds: number[]; aggClasses: string[] }[]
+  >([])
 
   useEffect(() => {
     const fetchRecruitData = async () => {
@@ -52,8 +54,12 @@ export default function ApplicationForm() {
     fetchRecruitData()
   }, [])
 
-  const handleNext = (data: Partial<ApplicationPayload>) => {
+  const handleNext = (
+    data: Partial<ApplicationPayload>,
+    updatedChildren: Child[],
+  ) => {
     setFormData((prev) => ({ ...prev, ...data }))
+    setChildren(updatedChildren)
     setCurrentSection(2)
   }
 
@@ -62,18 +68,25 @@ export default function ApplicationForm() {
   }
 
   const handleSubmit = async (data: Partial<ApplicationPayload>) => {
-    const finalData = {
+    const childrenRecruitList = children
+      .filter((child) => child.name && Object.keys(child.classes).length > 0)
+      .map((child) => ({
+        childNm: child.name,
+        recruitIds: Object.values(child.classes).map((recruitId) =>
+          parseInt(recruitId, 10),
+        ),
+      }))
+
+    const finalData: ApplicationPayload = {
       ...formData,
       ...data,
-      childrenRecruitList: children.map((child) => ({
-        id: child.id,
-        name: child.name,
-        recruitId: parseInt(Object.values(child.classes)[0], 10),
-      })),
+      childrenRecruitList,
+      childrenCnt: childrenRecruitList.length,
       imageUrls: uploadedFiles,
     }
+
     try {
-      await submitApplication(finalData as ApplicationPayload)
+      await submitApplication(finalData)
       // 성공 처리 로직
     } catch (error) {
       console.error('Error submitting application:', error)
@@ -101,9 +114,9 @@ export default function ApplicationForm() {
     })
   }
 
-  const handleCheckboxChange = (id: string) => {
-    setSelectedItems((prev) => ({ ...prev, [id]: !prev[id] }))
-  }
+  // const handleCheckboxChange = (id: string) => {
+  //   setSelectedItems((prev) => ({ ...prev, [id]: !prev[id] }))
+  // }
 
   const pageVariants = {
     initial: (direction: number) => ({
@@ -126,8 +139,8 @@ export default function ApplicationForm() {
   const kindergartenName =
     recruitData?.map((item: any) => item.kindergartenNm) || []
 
-  const dropdownOptions =
-    recruitData?.reduce((acc: any, item: any) => {
+  const dropdownOptions = recruitData.reduce(
+    (acc: { [key: string]: { key: string; label: string }[] }, item) => {
       acc[item.kindergartenNm] = item.aggClasses.map(
         (className: string, index: number) => ({
           key: item.recruitIds[index].toString(),
@@ -135,7 +148,9 @@ export default function ApplicationForm() {
         }),
       )
       return acc
-    }, {}) || {}
+    },
+    {},
+  )
 
   return (
     <div>
@@ -156,7 +171,8 @@ export default function ApplicationForm() {
               dropdownOptions={dropdownOptions}
               onSubmit={handleNext}
               formData={formData}
-              setFormData={setFormData}
+              children={children}
+              setChildren={setChildren}
             />
           ) : (
             <RightSection2

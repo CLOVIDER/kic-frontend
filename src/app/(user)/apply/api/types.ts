@@ -1,6 +1,6 @@
 export interface ApplicationPayload {
   isSingleParent: string
-  childrenCnt: string
+  childrenCnt: number // string에서 number로 변경
   isDisability: string
   isDualIncome: string
   isEmployeeCouple: string
