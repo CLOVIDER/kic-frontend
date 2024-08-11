@@ -37,6 +37,7 @@ jobs:
           context: .
           push: false
           tags: clovider-fe-app:${{ github.sha }}
+          load: true
           
       - name: 빌드된 이미지 확인중..
         run: |
