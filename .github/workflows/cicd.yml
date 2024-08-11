@@ -37,6 +37,10 @@ jobs:
           context: .
           push: false
           tags: clovider-fe-app:${{ github.sha }}
+          
+      - name: 빌드된 이미지 확인중..
+        run: |
+          docker images
 
       - name: Docker 이미지 태그 설정중..
         run: |
