@@ -25,6 +25,7 @@ export default function Navigator() {
     return [
       createRoute('어린이집 정보', '/kindergarten', <Home />),
       createRoute('신청하기', '/apply', <Lightning />),
+      createRoute('신청결과', '/lottery', <Lightning />),
       createRoute('신청내역', '/history', <Person />),
       createRoute('공지사항', '/notice', <Boxes />),
       createRoute('1:1 문의', '/q', <Talk />),
