@@ -6,7 +6,7 @@ export default function Notification() {
   const { notices } = useAdminNoticeContext()
 
   return (
-    <div className="w-330 bg-white px-30 py-20 rounded-20 shadow-md border border-[#F2F2F2]">
+    <div className="w-360 bg-white px-30 py-20 rounded-20 shadow-md border border-[#F2F2F2]">
       <div className="text-red-500 font-bold mb-4 flex items-center text-[#EA7465]">
         <span className="mr-4">▼ </span> 공지사항
       </div>
