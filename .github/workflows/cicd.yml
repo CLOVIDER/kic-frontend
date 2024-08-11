@@ -35,7 +35,7 @@ jobs:
         with:
           file: Dockerfile
           context: .
-          push: true
+          push: false
           tags: clovider-fe-app:${{ github.sha }}
           
       - name: 빌드된 이미지 확인중..
