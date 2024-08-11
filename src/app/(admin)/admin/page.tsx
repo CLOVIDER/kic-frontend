@@ -23,19 +23,19 @@ import {
 export default function Page() {
   return (
     <Suspense>
-      <div className="w-full h-full px-20 flex flex-col justify-center items-center">
-        <div className="absolute top-10 left-140 w-full mb-100">
+      <div className="w-full flex flex-col justify-center items-center">
+        <div className="absolute top-10 left-140 w-full">
           <CompanyLogo />
         </div>
-        <div className="flex flex-row gap-70 px-110 mt-150 relative">
+        <div className="flex flex-row gap-70 px-110 mt-250 relative">
           <div className="flex flex-col gap-30">
             <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
-              <StatusBox>
+              <StatusBox className="w-[680px]">
                 <AdminRecruitFetcher>
                   <RecruitStatus />
                 </AdminRecruitFetcher>
                 <Button
-                  className="absolute z-10 left-460 top-180 w-auto px-20 h-40 bg-[#000000] rounded-12 !text-15 whitespace-nowrap"
+                  className="absolute z-10 left-460 top-180 w-auto px-20 h-40 bg-[#000000] rounded-15 !text-15 whitespace-nowrap"
                   rightIcon={<Right width="20" />}
                 >
                   모집 현황
