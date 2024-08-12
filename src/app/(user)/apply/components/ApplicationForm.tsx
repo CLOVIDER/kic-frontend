@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getRecruitData } from '@/components/common/Application/api/getRecruitData'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 import { saveApplicationTemp, submitApplication } from '../api/api'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
@@ -31,6 +32,7 @@ export default function ApplicationForm() {
   })
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({})
 
+  const router = useRouter()
   const [children, setChildren] = useState<Child[]>([
     { id: 1, name: '', classes: {} },
   ])
@@ -45,7 +47,10 @@ export default function ApplicationForm() {
         const data = (await getRecruitData()) as RecruitInfo[]
         setRecruitData(data)
       } catch (error) {
-        toast.error('Error fetching recruit data', { autoClose: 1000 })
+        toast.error('Error fetching recruit data', {
+          autoClose: 1000,
+          pauseOnHover: false,
+        })
       }
     }
     fetchRecruitData()
@@ -78,6 +83,7 @@ export default function ApplicationForm() {
         if (!child.name) {
           toast.error(`아이 ${index + 1}의 이름을 입력해주세요.`, {
             autoClose: 1000,
+            pauseOnHover: false,
           })
         } else if (
           Object.keys(child.classes).length === 0 ||
@@ -87,6 +93,7 @@ export default function ApplicationForm() {
             `아이 ${index + 1}의 모든 어린이집 분반을 선택해주세요.`,
             {
               autoClose: 1000,
+              pauseOnHover: false,
             },
           )
         }
@@ -113,9 +120,17 @@ export default function ApplicationForm() {
 
     try {
       await submitApplication(finalData)
+      toast.info('제출되었습니다!', {
+        autoClose: 500,
+        onClose: () => router.push('/'),
+        pauseOnHover: false,
+      })
       // 성공 처리 로직
     } catch (error) {
-      toast.error('Error submitting application', { autoClose: 1000 })
+      toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
+        autoClose: 1000,
+        pauseOnHover: false,
+      })
     }
   }
 
@@ -138,9 +153,16 @@ export default function ApplicationForm() {
 
     try {
       await saveApplicationTemp(finalData)
-      // Handle successful temp save
+      toast.info('임시저장 되었습니다!', {
+        autoClose: 500,
+        onClose: () => router.push('/'),
+        pauseOnHover: false,
+      })
     } catch (error) {
-      toast.error('Error saving application temporarily', { autoClose: 1000 })
+      toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
+        autoClose: 1000,
+        pauseOnHover: false,
+      })
     }
   }
 

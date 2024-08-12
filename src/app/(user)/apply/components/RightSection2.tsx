@@ -60,7 +60,10 @@ export default function RightSection2({
             imageUrls: { ...prev.imageUrls, [id]: url },
           }))
         } catch (error) {
-          toast.error('파일 업로드 에러 발생', { autoClose: 1000 })
+          toast.error('파일 업로드 에러 발생', {
+            autoClose: 1000,
+            pauseOnHover: false,
+          })
         } finally {
           setIsUploading((prev) => ({ ...prev, [id]: false }))
         }
@@ -88,9 +91,10 @@ export default function RightSection2({
       if (value && !uploadedFiles[key]) {
         // If the checkbox is selected but no file is uploaded
         toast.error(
-          `Please upload a file for ${items.find((item) => item.id === key)?.name}`,
+          `${items.find((item) => item.id === key)?.name}(을)를 위한 파일을 첨부해주세요`,
           {
             autoClose: 1000,
+            pauseOnHover: false,
           },
         )
         validationPassed = false
@@ -147,7 +151,7 @@ export default function RightSection2({
 
   const renderItem = useCallback(
     (item: Item) => (
-      <div key={item.id} className="w-full mb-10">
+      <div key={item.id} className="w-full mb-10 py-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <button
@@ -240,7 +244,7 @@ export default function RightSection2({
         </div>
       </div>
       <div className="ml-7 mt-65 w-[444px]">{memoizedItems}</div>
-      <div className="mt-114 w-[449px] h-[33px] flex items-center">
+      <div className="mt-85 w-[449px] h-[33px] flex items-center">
         <button
           type="button"
           onClick={onPrevious}
