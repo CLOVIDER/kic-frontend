@@ -12,7 +12,7 @@ export default function CompetitionRate({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'bg-white w-450 px-30 pt-15 pb-30 rounded-32 shadow-md',
+        'bg-white w-[545px] px-30 pt-15 pb-30 rounded-20 shadow-md',
         className,
       )}
     >
