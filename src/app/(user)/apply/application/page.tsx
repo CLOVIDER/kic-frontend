@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components'
-import { Application, If } from '@/components/common'
+import { Application } from '@/components/common'
 import Image from 'next/image'
 import './application.css'
-import { cn } from '@/lib/utils'
 
 export default function Page() {
   const [showComponents, setShowComponents] = useState(false)
@@ -33,26 +32,23 @@ export default function Page() {
         alt="bg"
         width={290}
         height={400}
-        className={cn(
-          'absolute transition-all ease-in-out image-center duration-1000',
-          animate && 'image-move',
-        )}
+        className={`absolute transition-all ease-in-out duration-1000 ${
+          animate ? 'image-move' : 'image-center'
+        }`}
       />
       <h1
-        className={cn(
-          'w-full flex justify-center text-30 mb-30 font-sans transition-all duration-1000 ease-in-out text-center',
-          animate && 'text-move',
-        )}
+        className={`w-full flex justify-center text-30 mb-30 font-sans transition-all duration-1000 ease-in-out ${
+          animate ? 'text-move' : 'text-center'
+        }`}
       >
         이미 신청하신 내역이 있어요 !
       </h1>
-      <If condition={showComponents}>
+      {showComponents && (
         <div className="ml-270 fade-in ease-in-out delay-300">
           <Application type="user" />
         </div>
-      </If>
-
-      <If condition={!showComponents}>
+      )}
+      {showComponents && (
         <div className="flex flex-row items-center gap-10 justify-end mr-210 fade-in delay-600">
           <Button className="border-1 p-16 border-orange rounded-[20px] w-120 h-40 bg-white text-[18px] text-orange">
             신청 취소
@@ -61,7 +57,7 @@ export default function Page() {
             수정
           </Button>
         </div>
-      </If>
+      )}
     </div>
   )
 }

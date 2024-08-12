@@ -12,7 +12,6 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import ApproveModal from '@/app/(admin)/components/Approve'
-import { If } from '@/components'
 import { useApplicationsContext } from '../fetcher/ApplicationsFetcher'
 import { GetApplicationsResponse } from '../api'
 
@@ -120,13 +119,14 @@ export default function ApplicationTable({
       </Table>
 
       <div className="mt-30" />
-      <If condition={selectedApplication != null}>
+
+      {selectedApplication && (
         <ApproveModal
-          application={selectedApplication!}
+          application={selectedApplication}
           isOpen={isOpen}
           onOpenChange={onOpenChange}
         />
-      </If>
+      )}
 
       <Pagination
         page={page}
