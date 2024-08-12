@@ -2,7 +2,12 @@
 
 'use client'
 
-import { ApplicationPayload, Child, RecruitInfo } from '@/type/application'
+import {
+  ApplicationPayload,
+  Child,
+  RecruitInfo,
+  DropdownOptions,
+} from '@/type/application'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getRecruitData } from '@/components/common/Application/api/getRecruitData'
@@ -106,7 +111,7 @@ export default function ApplicationForm() {
       .map((child) => ({
         childNm: child.name,
         recruitIds: Object.values(child.classes).map(
-          (recruitId) => parseInt(recruitId, 10) + 1,
+          (recruitId) => parseInt(recruitId, 10), // `recruitId`를 숫자로 변환하여 그대로 사용
         ),
       }))
 
@@ -140,7 +145,7 @@ export default function ApplicationForm() {
       .map((child) => ({
         childNm: child.name,
         recruitIds: Object.values(child.classes).map(
-          (recruitId) => parseInt(recruitId, 10) + 1,
+          (recruitId) => parseInt(recruitId, 10), // `recruitId`를 숫자로 변환하여 그대로 사용
         ),
       }))
 
@@ -209,14 +214,12 @@ export default function ApplicationForm() {
 
   const kindergartenName = recruitData?.map((item) => item.kindergartenNm) || []
 
-  const dropdownOptions = recruitData.reduce(
-    (acc: { [key: string]: { key: string; label: string }[] }, item) => {
-      acc[item.kindergartenNm] = item.aggClasses.map(
-        (className: string, index: number) => ({
-          key: item.recruitIds[index].toString(),
-          label: className,
-        }),
-      )
+  const dropdownOptions: DropdownOptions = recruitData.reduce(
+    (acc: DropdownOptions, item) => {
+      acc[item.kindergartenNm] = item.recruitIds.map((id, index) => ({
+        key: id.toString(),
+        label: item.aggClasses[index],
+      }))
       return acc
     },
     {},

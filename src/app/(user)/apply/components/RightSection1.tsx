@@ -7,11 +7,7 @@ import {
   DropdownItem,
   Button,
 } from '@nextui-org/react'
-import {
-  RightSection1Props,
-  ApplicationPayload,
-  DropdownOption,
-} from '@/type/application'
+import { RightSection1Props, ApplicationPayload } from '@/type/application'
 
 export default function RightSection1({
   kindergartenName,
@@ -44,7 +40,7 @@ export default function RightSection1({
             if (field === 'class' && kindergarten) {
               return {
                 ...child,
-                classes: { ...child.classes, [kindergarten]: value },
+                classes: { ...child.classes, [kindergarten]: value }, // value 대신 recruitId 사용
               }
             }
             return { ...child, [field]: value }
@@ -125,7 +121,12 @@ export default function RightSection1({
                           variant="solid"
                         >
                           <span className="ml-23">
-                            {child.classes[name] || '분반선택'}
+                            {child.classes[name]
+                              ? dropdownOptions[name].find(
+                                  (option) =>
+                                    option.key === child.classes[name],
+                                )?.label
+                              : '분반선택'}
                           </span>
                           <Image
                             alt=""
@@ -138,29 +139,18 @@ export default function RightSection1({
                       </DropdownTrigger>
                       <DropdownMenu
                         onAction={(key) => {
-                          const selectedOption = dropdownOptions[name]?.find(
-                            (option: DropdownOption) => option.key === key,
-                          )
-                          if (selectedOption) {
-                            updateChildInfo(
-                              child.id,
-                              'class',
-                              selectedOption.label,
-                              name,
-                            )
-                          }
+                          const stringKey = String(key)
+                          updateChildInfo(child.id, 'class', stringKey, name)
                         }}
                       >
-                        {dropdownOptions[name]?.map(
-                          (option: DropdownOption) => (
-                            <DropdownItem
-                              key={option.key}
-                              className="text-center"
-                            >
-                              {option.label}
-                            </DropdownItem>
-                          ),
-                        )}
+                        {dropdownOptions[name]?.map((option) => (
+                          <DropdownItem
+                            key={option.key}
+                            className="text-center"
+                          >
+                            {option.label}
+                          </DropdownItem>
+                        ))}
                       </DropdownMenu>
                     </Dropdown>
                   </div>

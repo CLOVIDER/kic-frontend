@@ -5,6 +5,10 @@ export interface DropdownOption {
   label: string
 }
 
+export interface DropdownOptions {
+  [kindergartenName: string]: DropdownOption[]
+}
+
 export interface ApplicationPayload {
   isSingleParent: string
   childrenCnt: number

@@ -151,12 +151,12 @@ export default function RightSection2({
 
   const renderItem = useCallback(
     (item: Item) => (
-      <div key={item.id} className="w-full mb-10 py-10">
+      <div key={item.id} className="w-full mb-6 py-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <button
+            <Button
               onClick={() => handleCheckboxChange(item.id)}
-              className="w-24 h-24 border rounded-lg border-solid border-[#CCCCCC] flex items-center justify-center cursor-pointer mr-16"
+              className="w-[24px] h-[24px] border rounded-lg border-solid bg-white border-[#CCCCCC] flex items-center justify-center cursor-pointer mr-[16px] px-0 py-0"
               type="button"
             >
               {selectedItems[item.id] && (
@@ -167,8 +167,8 @@ export default function RightSection2({
                   height={24}
                 />
               )}
-            </button>
-            <span className="text-lg">
+            </Button>
+            <span className="text-base">
               {item.name}
               {item.isRequired && (
                 <span className="text-[#ea7465] ml-1">*</span>
@@ -178,7 +178,7 @@ export default function RightSection2({
           <button
             type="button"
             onClick={() => handleFileUpload(item.id)}
-            className="w-[84px] h-[24px] bg-[#ffde8d] text-12 text-gray-700 rounded border-[1px] border-solid border-[#cccccc]"
+            className="w-[84px] h-[24px] bg-[#ffde8d] text-xs text-gray-700 rounded border-[1px] border-solid border-[#cccccc]"
           >
             {getButtonText(item.id)}
           </button>
@@ -191,27 +191,31 @@ export default function RightSection2({
             style={{ display: 'none' }}
           />
         </div>
-        {uploadedFiles[item.id] && (
-          <div className="ml-40 mt-2 flex items-center justify-between">
-            <div className="flex-1 mr-2 overflow-hidden">
-              <span className="text-sm truncate block">
-                {truncateFileName(uploadedFiles[item.id]?.name || '', 60)}
-              </span>
-            </div>
-            <div className="flex items-center">
-              <span className="text-sm text-gray-500 mr-2">
-                {formatFileSize(uploadedFiles[item.id]?.size || 0)}
-              </span>
-              <button
-                type="button"
-                onClick={() => handleDeleteFile(item.id)}
-                className="text-[#ef4444] text-sm"
-              >
-                X
-              </button>
-            </div>
-          </div>
-        )}
+        <div className="ml-10 mt-2 flex items-center justify-between h-21">
+          {uploadedFiles[item.id] ? (
+            <>
+              <div className="flex-1 mr-2 overflow-hidden">
+                <span className="text-sm truncate block">
+                  {truncateFileName(uploadedFiles[item.id]?.name || '', 30)}
+                </span>
+              </div>
+              <div className="flex items-center">
+                <span className="text-sm text-gray-500 mr-2">
+                  {formatFileSize(uploadedFiles[item.id]?.size || 0)}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteFile(item.id)}
+                  className="text-[#ef4444] text-sm"
+                >
+                  X
+                </button>
+              </div>
+            </>
+          ) : (
+            <span />
+          )}
+        </div>
       </div>
     ),
     [
