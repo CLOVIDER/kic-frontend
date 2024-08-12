@@ -99,7 +99,7 @@ export default function History() {
     <div className="flex flex-col w-full mx-200">
       <section className="relative flex flex-col items-start">
         <AsyncBoundaryWithQuery>
-          <StatusBox className="bg-[#FFE4A3]  h-145 border border-[#A0A5A9] w-500 z-20 absolute !rounded-16 shadow-sm" />
+          <StatusBox className="bg-[#FFE4A3] border border-[#A0A5A9] w-500 h-auto z-20 absolute !rounded-16 shadow-sm pt-0 pb-0" />
         </AsyncBoundaryWithQuery>
         <div className="border border-[#A0A5A9] p-30 rounded-10 mt-80 pt-100 gap-20 bg-white custom-box-shadow z-10 w-[1000px] flex flex-wrap">
           {kids.map(({ name, results, classes }) => (
