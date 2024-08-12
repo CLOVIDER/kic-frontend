@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import Image from 'next/image'
 import {
   Dropdown,
@@ -9,22 +9,17 @@ import {
 } from '@nextui-org/react'
 import {
   RightSection1Props,
-  Child,
   ApplicationPayload,
+  DropdownOption,
 } from '@/type/application'
 
 export default function RightSection1({
   kindergartenName,
   dropdownOptions,
   onSubmit,
-  formData,
   children,
   setChildren,
 }: RightSection1Props) {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>(
-    kindergartenName.map(() => '분반선택'),
-  )
-
   const addChild = useCallback(() => {
     setChildren((prevChildren) => [
       ...prevChildren,
@@ -77,30 +72,6 @@ export default function RightSection1({
     },
     [children, onSubmit],
   )
-
-  // const updateSelectedOptions = useCallback(
-  //   (kindergarten: string, value: string) => {
-  //     setSelectedOptions((prev) =>
-  //       prev.map((option, index) =>
-  //         kindergartenName[index] === kindergarten ? value : option,
-  //       ),
-  //     )
-  //   },
-  //   [kindergartenName],
-  // )
-
-  // const memoizedDropdownOptions = useMemo(
-  //   () => dropdownOptions,
-  //   [dropdownOptions],
-  // )
-
-  const handleDropdownChange = (kindergarten: string, value: string) => {
-    setSelectedOptions((prev) =>
-      prev.map((option, index) =>
-        kindergartenName[index] === kindergarten ? value : option,
-      ),
-    )
-  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -168,10 +139,9 @@ export default function RightSection1({
                       <DropdownMenu
                         onAction={(key) => {
                           const selectedOption = dropdownOptions[name]?.find(
-                            (option: any) => option.key === key,
+                            (option: DropdownOption) => option.key === key,
                           )
                           if (selectedOption) {
-                            handleDropdownChange(name, selectedOption.label)
                             updateChildInfo(
                               child.id,
                               'class',
@@ -181,14 +151,16 @@ export default function RightSection1({
                           }
                         }}
                       >
-                        {dropdownOptions[name]?.map((option: any) => (
-                          <DropdownItem
-                            key={option.key}
-                            className="text-center"
-                          >
-                            {option.label}
-                          </DropdownItem>
-                        ))}
+                        {dropdownOptions[name]?.map(
+                          (option: DropdownOption) => (
+                            <DropdownItem
+                              key={option.key}
+                              className="text-center"
+                            >
+                              {option.label}
+                            </DropdownItem>
+                          ),
+                        )}
                       </DropdownMenu>
                     </Dropdown>
                   </div>

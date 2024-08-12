@@ -2,10 +2,15 @@
 
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { getEmployeeData } from '@/components/common/application/api/getData'
+import {
+  EmployeeInfo,
+  getEmployeeData,
+} from '@/components/common/Application/api/getRecruitData'
 
 export default function LeftSection() {
-  const [employeeData, setEmployeeData] = useState<any>(null)
+  const [employeeData, setEmployeeData] = useState<EmployeeInfo | undefined>(
+    undefined,
+  )
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -17,7 +22,7 @@ export default function LeftSection() {
       }
     }
     fetchEmployeeData()
-  }, [])
+  }, [setEmployeeData])
 
   if (!employeeData) {
     return <div>Loading...</div>

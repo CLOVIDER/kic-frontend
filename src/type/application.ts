@@ -1,17 +1,13 @@
-// @/type/application.ts
+// /src/type/application.ts
 
-export interface Child {
-  id: number
-  name: string
-  classes: {
-    [kindergarten: string]: string
-  }
-  recruitId?: number
+export interface DropdownOption {
+  key: string
+  label: string
 }
 
 export interface ApplicationPayload {
   isSingleParent: string
-  childrenCnt: number // string에서 number로 변경
+  childrenCnt: number
   isDisability: string
   isDualIncome: string
   isEmployeeCouple: string
@@ -21,8 +17,17 @@ export interface ApplicationPayload {
     recruitIds: number[]
   }[]
   imageUrls: {
-    [key: string]: string
+    [key: string]: File | string
   }
+}
+
+export interface Child {
+  id: number
+  name: string
+  classes: {
+    [kindergarten: string]: string
+  }
+  recruitId?: number
 }
 
 export enum DocumentType {
@@ -48,7 +53,7 @@ export interface LeftSectionProps {
 
 export interface RightSection1Props {
   kindergartenName: string[]
-  dropdownOptions: { key: string; label: string }[]
+  dropdownOptions: { [key: string]: DropdownOption[] }
   onSubmit: (
     data: Partial<ApplicationPayload>,
     updatedChildren: Child[],
@@ -56,6 +61,7 @@ export interface RightSection1Props {
   children: Child[]
   setChildren: React.Dispatch<React.SetStateAction<Child[]>>
   setFormData: React.Dispatch<React.SetStateAction<ApplicationPayload>>
+  formData: ApplicationPayload
 }
 
 export interface RightSection2Props {
@@ -64,14 +70,15 @@ export interface RightSection2Props {
   onTempSave: () => Promise<void>
   formData: ApplicationPayload
   setFormData: React.Dispatch<React.SetStateAction<ApplicationPayload>>
-  uploadedFiles: { [key: string]: string }
-  onFileUpload: (id: string, url: string) => void
+  uploadedFiles: Record<string, File>
+  setUploadedFiles: React.Dispatch<React.SetStateAction<Record<string, File>>>
+  onFileUpload: (id: string, file: File) => void
   onDeleteFile: (id: string) => void
 }
 
 export interface ApplicationFormProps {
   kindergartenName: string[]
-  dropdownOptions: { key: string; label: string }[]
+  dropdownOptions: { [key: string]: DropdownOption[] } // 변경됨
 }
 
 export interface Item {
@@ -83,4 +90,10 @@ export interface Item {
 export interface UploadedFile {
   file: File
   name: string
+}
+
+export interface RecruitInfo {
+  kindergartenNm: string
+  recruitIds: number[]
+  aggClasses: string[]
 }

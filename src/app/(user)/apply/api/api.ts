@@ -1,7 +1,7 @@
 import { http } from '@/api'
 import { BaseResponse } from '@/api/types'
+import { ApplicationPayload } from '@/type/application'
 import {
-  ApplicationPayload,
   ApplicationResponse,
   FileUploadResponse,
   RecruitResponse,

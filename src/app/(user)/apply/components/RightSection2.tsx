@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react'
+import { toast } from 'react-toastify'
 import Image from 'next/image'
 import {
   RightSection2Props,
@@ -7,19 +8,27 @@ import {
 } from '@/type/application'
 import { uploadImage } from '@/components/common/Application/api/documentApi'
 import { Button } from '@nextui-org/react'
+import { formatFileSize, truncateFileName } from './utils'
 
 export default function RightSection2({
   onPrevious,
   onSubmit,
   onTempSave,
+  formData,
   setFormData,
   uploadedFiles,
+  setUploadedFiles,
   onFileUpload,
   onDeleteFile,
 }: RightSection2Props) {
-  const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>(
-    {},
-  )
+  const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({
+    isSingleParent: formData.isSingleParent === '1',
+    isDisability: formData.isDisability === '1',
+    isDualIncome: formData.isDualIncome === '1',
+    isEmployeeCouple: formData.isEmployeeCouple === '1',
+    isSibling: formData.isSibling === '1',
+  })
+  const [isUploading, setIsUploading] = useState<Record<string, boolean>>({})
   const [items] = useState<Item[]>([
     { id: 'isSingleParent', name: '한부모 가정', isRequired: false },
     { id: 'isDisability', name: '장애 유무', isRequired: false },
@@ -27,7 +36,6 @@ export default function RightSection2({
     { id: 'isEmployeeCouple', name: '부부 직원', isRequired: false },
     { id: 'isSibling', name: '형제자매 유무', isRequired: false },
   ])
-  const [isUploading, setIsUploading] = useState<Record<string, boolean>>({})
 
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({})
 
@@ -42,43 +50,76 @@ export default function RightSection2({
     async (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0]
       if (file) {
-        setIsUploading({ ...isUploading, [id]: true })
+        setIsUploading((prev) => ({ ...prev, [id]: true }))
         try {
           const url = await uploadImage(file)
-          onFileUpload(id, url)
+          onFileUpload(id, file)
+          setUploadedFiles((prev) => ({ ...prev, [id]: file }))
           setFormData((prev) => ({
             ...prev,
             imageUrls: { ...prev.imageUrls, [id]: url },
           }))
         } catch (error) {
-          console.error('File upload failed:', error)
+          toast.error('파일 업로드 에러 발생', { autoClose: 1000 })
         } finally {
-          setIsUploading({ ...isUploading, [id]: false })
+          setIsUploading((prev) => ({ ...prev, [id]: false }))
         }
       }
     },
-    [onFileUpload, setFormData, isUploading]
+    [onFileUpload, setFormData, setUploadedFiles],
+  )
+
+  const handleDeleteFile = useCallback(
+    (id: string) => {
+      onDeleteFile(id)
+      setFormData((prev) => ({
+        ...prev,
+        imageUrls: { ...prev.imageUrls, [id]: '' },
+      }))
+    },
+    [onDeleteFile, setFormData],
   )
 
   const handleSubmit = useCallback(() => {
+    let validationPassed = true
+
+    // Check if all selected items have corresponding uploaded files
+    for (const [key, value] of Object.entries(selectedItems)) {
+      if (value && !uploadedFiles[key]) {
+        // If the checkbox is selected but no file is uploaded
+        toast.error(
+          `Please upload a file for ${items.find((item) => item.id === key)?.name}`,
+          {
+            autoClose: 1000,
+          },
+        )
+        validationPassed = false
+      }
+    }
+
+    if (!validationPassed) {
+      return // Stop submission if validation fails
+    }
+
     const data: Partial<ApplicationPayload> = {
-      ...Object.entries(selectedItems).reduce(
+      ...Object.entries(selectedItems).reduce<Record<string, '0' | '1'>>(
         (acc, [key, value]) => ({
           ...acc,
           [key]: value ? '1' : '0',
         }),
-        {} as Record<string, '0' | '1'>,
+        {},
       ),
-      imageUrls: Object.entries(uploadedFiles).reduce(
+      imageUrls: Object.entries(uploadedFiles).reduce<Record<string, string>>(
         (acc, [key, file]) => ({
           ...acc,
-          [key as keyof typeof DocumentType]: file.name,
+          [key]: file.name,
         }),
-        {} as Record<keyof typeof DocumentType, string>,
+        {},
       ),
     }
+
     onSubmit(data)
-  }, [selectedItems, uploadedFiles, onSubmit])
+  }, [selectedItems, uploadedFiles, onSubmit, items])
 
   const handleCheckboxChange = useCallback(
     (id: string) => {
@@ -91,11 +132,17 @@ export default function RightSection2({
     [setFormData],
   )
 
-  const handleDeleteFile = useCallback(
+  const getButtonText = useCallback(
     (id: string) => {
-      onDeleteFile(id)
+      if (isUploading[id]) {
+        return '업로드 중...'
+      }
+      if (uploadedFiles[id]) {
+        return '📎 완료'
+      }
+      return '📎 파일'
     },
-    [onDeleteFile],
+    [isUploading, uploadedFiles],
   )
 
   const renderItem = useCallback(
@@ -129,7 +176,7 @@ export default function RightSection2({
             onClick={() => handleFileUpload(item.id)}
             className="w-[84px] h-[24px] bg-[#ffde8d] text-12 text-gray-700 rounded border-[1px] border-solid border-[#cccccc]"
           >
-            {isUploading[item.id] ? '업로드 중...' : uploadedFiles[item.id] ? '📎 완료' : '📎 파일'}
+            {getButtonText(item.id)}
           </button>
           <input
             type="file"
@@ -142,27 +189,35 @@ export default function RightSection2({
         </div>
         {uploadedFiles[item.id] && (
           <div className="ml-40 mt-2 flex items-center justify-between">
-            <span className="text-sm">{uploadedFiles[item.id]?.name}</span>
-            <button
-              type="button"
-              onClick={() => handleDeleteFile(item.id)}
-              className="text-[#ef4444] text-sm"
-            >
-              X
-            </button>
+            <div className="flex-1 mr-2 overflow-hidden">
+              <span className="text-sm truncate block">
+                {truncateFileName(uploadedFiles[item.id]?.name || '', 60)}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <span className="text-sm text-gray-500 mr-2">
+                {formatFileSize(uploadedFiles[item.id]?.size || 0)}
+              </span>
+              <button
+                type="button"
+                onClick={() => handleDeleteFile(item.id)}
+                className="text-[#ef4444] text-sm"
+              >
+                X
+              </button>
+            </div>
           </div>
         )}
       </div>
     ),
     [
       selectedItems,
+      getButtonText,
       uploadedFiles,
       handleCheckboxChange,
       handleFileUpload,
       handleFileChange,
       handleDeleteFile,
-      fileInputRefs,
-      isUploading,
     ],
   )
 

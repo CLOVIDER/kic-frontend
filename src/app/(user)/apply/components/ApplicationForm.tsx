@@ -1,9 +1,12 @@
+// src/app/(user)/apply/components/ApplicationForm.tsx
+
 'use client'
 
-import { ApplicationPayload, Child } from '@/type/application'
+import { ApplicationPayload, Child, RecruitInfo } from '@/type/application'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { getRecruitData } from '@/components/common/Application/api/getData'
+import { getRecruitData } from '@/components/common/Application/api/getRecruitData'
+import { toast } from 'react-toastify'
 import { saveApplicationTemp, submitApplication } from '../api/api'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
@@ -26,13 +29,7 @@ export default function ApplicationForm() {
       SIBLING: '',
     },
   })
-  const [uploadedFiles, setUploadedFiles] = useState<{ [key: string]: string }>(
-    {},
-  )
-
-  // const [selectedItems, setSelectedItems] = useState<{
-  //   [key: string]: boolean
-  // }>({})
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({})
 
   const [children, setChildren] = useState<Child[]>([
     { id: 1, name: '', classes: {} },
@@ -45,10 +42,10 @@ export default function ApplicationForm() {
   useEffect(() => {
     const fetchRecruitData = async () => {
       try {
-        const data = await getRecruitData()
+        const data = (await getRecruitData()) as RecruitInfo[]
         setRecruitData(data)
       } catch (error) {
-        console.error('Error fetching recruit data:', error)
+        toast.error('Error fetching recruit data', { autoClose: 1000 })
       }
     }
     fetchRecruitData()
@@ -68,12 +65,41 @@ export default function ApplicationForm() {
   }
 
   const handleSubmit = async (data: Partial<ApplicationPayload>) => {
+    // 유효성 검사
+    const invalidChildren = children.filter(
+      (child) =>
+        !child.name ||
+        Object.keys(child.classes).length === 0 ||
+        Object.values(child.classes).some((value) => !value),
+    )
+
+    if (invalidChildren.length > 0) {
+      invalidChildren.forEach((child, index) => {
+        if (!child.name) {
+          toast.error(`아이 ${index + 1}의 이름을 입력해주세요.`, {
+            autoClose: 1000,
+          })
+        } else if (
+          Object.keys(child.classes).length === 0 ||
+          Object.values(child.classes).some((value) => !value)
+        ) {
+          toast.error(
+            `아이 ${index + 1}의 모든 어린이집 분반을 선택해주세요.`,
+            {
+              autoClose: 1000,
+            },
+          )
+        }
+      })
+      return // 제출 중단
+    }
+
     const childrenRecruitList = children
       .filter((child) => child.name && Object.keys(child.classes).length > 0)
       .map((child) => ({
         childNm: child.name,
-        recruitIds: Object.values(child.classes).map((recruitId) =>
-          parseInt(recruitId, 10),
+        recruitIds: Object.values(child.classes).map(
+          (recruitId) => parseInt(recruitId, 10) + 1,
         ),
       }))
 
@@ -89,21 +115,42 @@ export default function ApplicationForm() {
       await submitApplication(finalData)
       // 성공 처리 로직
     } catch (error) {
-      console.error('Error submitting application:', error)
+      toast.error('Error submitting application', { autoClose: 1000 })
     }
   }
 
   const handleTempSave = async () => {
+    const childrenRecruitList = children
+      .filter((child) => child.name && Object.keys(child.classes).length > 0)
+      .map((child) => ({
+        childNm: child.name,
+        recruitIds: Object.values(child.classes).map(
+          (recruitId) => parseInt(recruitId, 10) + 1,
+        ),
+      }))
+
+    const finalData: ApplicationPayload = {
+      ...formData,
+      childrenRecruitList,
+      childrenCnt: childrenRecruitList.length,
+      imageUrls: uploadedFiles,
+    }
+
     try {
-      await saveApplicationTemp(formData)
+      await saveApplicationTemp(finalData)
       // Handle successful temp save
     } catch (error) {
-      console.error('Error saving application temporarily:', error)
+      toast.error('Error saving application temporarily', { autoClose: 1000 })
     }
   }
 
-  const handleFileUpload = (id: string, url: string) => {
-    setUploadedFiles((prev) => ({ ...prev, [id]: url }))
+  const handleFileUpload = (id: string, file: File) => {
+    setUploadedFiles((prev) => ({ ...prev, [id]: file }))
+    // FormData에 File 객체 직접 저장
+    setFormData((prev) => ({
+      ...prev,
+      imageUrls: { ...prev.imageUrls, [id]: file },
+    }))
   }
 
   const handleDeleteFile = (id: string) => {
@@ -112,11 +159,13 @@ export default function ApplicationForm() {
       delete newFiles[id]
       return newFiles
     })
+    // FormData에서도 삭제
+    setFormData((prev) => {
+      const newImageUrls = { ...prev.imageUrls }
+      delete newImageUrls[id]
+      return { ...prev, imageUrls: newImageUrls }
+    })
   }
-
-  // const handleCheckboxChange = (id: string) => {
-  //   setSelectedItems((prev) => ({ ...prev, [id]: !prev[id] }))
-  // }
 
   const pageVariants = {
     initial: (direction: number) => ({
@@ -136,8 +185,7 @@ export default function ApplicationForm() {
     duration: 0.2,
   }
 
-  const kindergartenName =
-    recruitData?.map((item: any) => item.kindergartenNm) || []
+  const kindergartenName = recruitData?.map((item) => item.kindergartenNm) || []
 
   const dropdownOptions = recruitData.reduce(
     (acc: { [key: string]: { key: string; label: string }[] }, item) => {
@@ -171,15 +219,18 @@ export default function ApplicationForm() {
               dropdownOptions={dropdownOptions}
               onSubmit={handleNext}
               formData={formData}
-              children={children}
               setChildren={setChildren}
-            />
+              setFormData={setFormData}
+            >
+              {children}
+            </RightSection1>
           ) : (
             <RightSection2
               onPrevious={handlePrevious}
               onSubmit={handleSubmit}
               onTempSave={handleTempSave}
               uploadedFiles={uploadedFiles}
+              setUploadedFiles={setUploadedFiles}
               onFileUpload={handleFileUpload}
               onDeleteFile={handleDeleteFile}
               formData={formData}
