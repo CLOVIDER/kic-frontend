@@ -1,4 +1,4 @@
-import { Button, Input } from '@/components'
+import { Input } from '@/components'
 import Image from 'next/image'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import Kindergarten from './components/Kindergarten'
@@ -6,6 +6,7 @@ import Title from './components/Title'
 import Period from './components/Period'
 import Weight from './components/Weight'
 import SettingFetcher from './components/SettingFetcher'
+import Buttons from './components/Buttons'
 
 export default function Page() {
   return (
@@ -34,12 +35,7 @@ export default function Page() {
             <Period />
           </div>
           <div className="flex flex-row gap-10 absolute bottom-150 right-130">
-            <Button className="w-98 h-31 bg-white border border-[#fdba74] font-semibold text-[#fb923c] rounded-16 text-sm">
-              이전
-            </Button>
-            <Button className="w-98 h-31 shadow-md gradient-button text-[#ffffff] font-bold rounded-16 text-sm">
-              저장
-            </Button>
+            <Buttons />
           </div>
         </form>
       </SettingFetcher>
