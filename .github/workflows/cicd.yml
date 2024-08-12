@@ -37,6 +37,11 @@ jobs:
           context: .
           push: false
           tags: clovider-fe-app:${{ github.sha }}
+          load: true
+          
+      - name: 빌드된 이미지 확인중..
+        run: |
+          docker images
 
       - name: Docker 이미지 태그 설정중..
         run: |
@@ -58,11 +63,13 @@ jobs:
           ref: "main"
 
       - name: Install yq
-        run: sudo snap install yq
+        run: |
+          sudo wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
 
       - name: Update image tag in deployment file
         run: |
-          yq e ".spec.template.spec.containers[0].image = \"kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:${{ github.sha }}\"" -i clovider-app/fe-deployment.yaml
+          yq w -i clovider-app/fe-deployment.yaml 'spec.template.spec.containers[0].image' "kids-in-company.kr-central-2.kcr.dev/clovider-registry/clovider-fe-app:${{ github.sha }}"
           
       - name: Commit and Push changes
         run: |
