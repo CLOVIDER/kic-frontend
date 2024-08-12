@@ -8,13 +8,6 @@ import {
   WaitingResponse,
 } from './type'
 
-export interface AdminData {
-  recruitStatus: RecruitStatusResponse
-  kindergartenStatus: KindergartenStatus[]
-  qna: WaitingResponse
-  notice: NoticeStatus[]
-}
-
 export const [AdminRecruitProvider, useAdminRecuritContext] =
   generateContext<RecruitStatusResponse>({
     name: 'admin-recuruit-context',

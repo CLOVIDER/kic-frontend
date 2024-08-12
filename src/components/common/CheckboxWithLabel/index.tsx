@@ -40,7 +40,7 @@ function CheckboxWithLabel({
             />
           </svg>
         </div>
-        <span className="whitespace-break-spaces ml-10 text-16">{text}</span>
+        <span className="whitespace-nowrap ml-10 text-16">{text}</span>
       </label>
     </div>
   )
