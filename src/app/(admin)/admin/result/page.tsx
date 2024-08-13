@@ -10,6 +10,7 @@ import {
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import { useDeferredValue, useState } from 'react'
 import { useKindergartensContext } from '@/app/(user)/kindergarten/fetcher/KindergartensFetcher'
+import { AGE_CLASS_MAP } from '@/app/(user)/kindergarten/api'
 import LotteriesFetcher from './fetcher/ResultApplicationsFetcher'
 import LotteryTable from './LotteryTable'
 
@@ -20,6 +21,9 @@ export default function Page() {
   const [kindergartenId, setKindergartenId] = useState<number>(0)
   const [classValue, setClassValue] = useState<'INFANT' | 'TODDLER' | 'KID'>(
     'INFANT',
+  )
+  const [className, setClassName] = useState<string>(
+    kindergartens[0].kindergartenClass[0].className,
   )
   const deferredSearchInput = useDeferredValue(searchInput)
 
@@ -34,23 +38,31 @@ export default function Page() {
               as="button"
               className="cursor-pointer w-120 h-33 bg-[#FEC46D] uppercase text-[white] flex justify-center items-center rounded-20"
             >
-              <div className="flex justify-center items-center gap-10">
-                <p>ALL</p>
+              <div className="flex justify-center items-center px-10">
+                {`${className} ${AGE_CLASS_MAP[classValue]}`.trim()}
+                <p />
                 <DropdownIcon />
               </div>
             </DropdownTrigger>
 
-            {/* TODO: 분반 정보 불러오기 */}
             <DropdownMenu>
-              {kindergartens.map(({ kindergartenId: kId, kindergartenNm }) => (
-                <DropdownItem
-                  key={kId}
-                  onClick={() => setKindergartenId(kId)}
-                  className="text-center"
-                >
-                  {kindergartenNm}
-                </DropdownItem>
-              ))}
+              {kindergartens.flatMap((kindergarten) =>
+                kindergarten.kindergartenClass.map(
+                  ({ className: kindergatenClassName, ageClass }) => (
+                    <DropdownItem
+                      key={`${kindergatenClassName}-${AGE_CLASS_MAP[ageClass]}`}
+                      onClick={() => {
+                        setKindergartenId(kindergarten.kindergartenId)
+                        setClassValue(ageClass)
+                        setClassName(kindergatenClassName)
+                      }}
+                      className="text-center text-13"
+                    >
+                      {`${kindergatenClassName}-${AGE_CLASS_MAP[ageClass]}`}
+                    </DropdownItem>
+                  ),
+                ),
+              )}
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -68,10 +80,10 @@ export default function Page() {
       <section className="w-full h-[505px] rounded-20 border-1 border-[#BDB6B6]">
         <AsyncBoundaryWithQuery>
           <LotteriesFetcher
-            kindergartenId={0}
+            kindergartenId={kindergartenId}
             page={page}
             classValue={classValue}
-            q={deferredSearchInput}
+            accountId={deferredSearchInput}
           >
             <LotteryTable page={page} setPage={setPage} />
           </LotteriesFetcher>

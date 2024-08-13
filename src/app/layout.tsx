@@ -27,7 +27,6 @@ export default function RootLayout({
     <html lang="ko">
       <body className={cn('overflow-hidden', Pretendard.className)}>
         <GlobalErrorBoundary renderFallback={<>로딩이 발생했어요 !</>}>
-          {/* /* TODO: fallback 컴포넌트 구현 */}
           <Suspense fallback={<>loading..</>}>
             <QueryProvider>
               <NextUIProvider className="h-full">

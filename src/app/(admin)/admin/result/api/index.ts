@@ -16,8 +16,8 @@ export interface GetLotteriesResponse extends Pagination {
 export interface GetLotteriesRequest {
   page: number
   size?: number
-  classValue?: 'INFANT' | 'TODDLER' | 'KID'
-  q?: string
+  classValue?: 'INFANT' | 'TODDLER' | 'KID' | ''
+  accountId?: string
   kindergartenId: number
 }
 
@@ -25,7 +25,7 @@ export const getLotteriesResult = ({
   page,
   size = 10,
   classValue,
-  q,
+  accountId,
   kindergartenId,
 }: GetLotteriesRequest) =>
   http.get<GetLotteriesResponse>({
@@ -33,7 +33,7 @@ export const getLotteriesResult = ({
     params: {
       page,
       size,
-      class: classValue,
-      q,
+      class: classValue || 'INFANT',
+      accountId,
     },
   })

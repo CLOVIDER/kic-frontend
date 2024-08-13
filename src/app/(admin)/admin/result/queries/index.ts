@@ -11,7 +11,7 @@ export const useGetLotteries = (lotteryInfo: GetLotteriesRequest) =>
       lotteryInfo.kindergartenId,
       lotteryInfo.classValue,
       lotteryInfo.page,
-      lotteryInfo.q,
+      lotteryInfo.accountId,
     ],
     queryFn: () => getLotteriesResult(lotteryInfo),
     select: ({ result }) => result,
