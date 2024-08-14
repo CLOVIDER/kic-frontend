@@ -43,7 +43,11 @@ export default function DropdownSelect({
           />
         </Button>
       </DropdownTrigger>
-      <DropdownMenu onAction={(key) => onSelect(options.find(option => option.key === key)!)}>
+      <DropdownMenu
+        onAction={(key) =>
+          onSelect(options.find((option) => option.key === key)!)
+        }
+      >
         {options.map((option) => (
           <DropdownItem key={option.key} className="text-center">
             {option.label}

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import {
   RightSection1Props,
   ApplicationPayload,
@@ -9,13 +9,6 @@ import FormSection from './common/FormSection'
 import ChildInput from './common/ChildInput'
 import DropdownSelect from './common/DropdownSelect'
 
-interface DropdownSelectProps {
-  options: DropdownOption[]
-  selectedOption: string
-  onSelect: (key: string, option: DropdownOption) => void
-  placeholder: string
-}
-
 export default function RightSection1({
   kindergartenName,
   dropdownOptions,
@@ -25,10 +18,13 @@ export default function RightSection1({
   selectedLabels,
   handleDropdownSelect,
 }: RightSection1Props & {
-  selectedLabels: Record<string, Record<string, string>>;
-  handleDropdownSelect: (childId: number, kindergarten: string, option: DropdownOption) => void;
+  selectedLabels: Record<string, Record<string, string>>
+  handleDropdownSelect: (
+    childId: number,
+    kindergarten: string,
+    option: DropdownOption,
+  ) => void
 }) {
-
   const addChild = useCallback(() => {
     setChildren((prevChildren) => [
       ...prevChildren,
@@ -101,7 +97,9 @@ export default function RightSection1({
                   <div className="w-[335px] text-[#666666] text-20">{name}</div>
                   <DropdownSelect
                     options={dropdownOptions[name]}
-                    selectedOption={selectedLabels[child.id.toString()]?.[name] || ''}
+                    selectedOption={
+                      selectedLabels[child.id.toString()]?.[name] || ''
+                    }
                     onSelect={(option) =>
                       handleDropdownSelect(child.id, name, option)
                     }

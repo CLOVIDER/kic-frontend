@@ -2,7 +2,12 @@
 
 'use client'
 
-import { ApplicationPayload, Child, DropdownOption, DropdownOptions } from '@/type/application'
+import {
+  ApplicationPayload,
+  Child,
+  DropdownOption,
+  DropdownOptions,
+} from '@/type/application'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
@@ -242,7 +247,7 @@ export default function ApplicationForm() {
   const handleDropdownSelect = (
     childId: number,
     kindergarten: string,
-    option: DropdownOption
+    option: DropdownOption,
   ) => {
     setSelectedLabels((prev) => ({
       ...prev,
