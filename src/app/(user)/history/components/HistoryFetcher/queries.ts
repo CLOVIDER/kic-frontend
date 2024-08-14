@@ -9,10 +9,10 @@ export const useChildResult = () =>
     select: (data) => data.result,
   })
 
-  export const useHistory = () =>
-    useSuspenseQuery({
-      queryKey: ['history'],
-      queryFn: () => getHistory(),
-      refetchOnMount:false,
-      select : (data) => data.result
-    })
+export const useHistory = () =>
+  useSuspenseQuery({
+    queryKey: ['history'],
+    queryFn: () => getHistory(),
+    refetchOnMount: false,
+    select: (data) => data.result,
+  })

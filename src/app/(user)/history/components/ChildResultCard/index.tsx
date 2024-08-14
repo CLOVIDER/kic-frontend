@@ -1,8 +1,8 @@
 import { Button, Chip, ChipProps } from '@nextui-org/react'
 import CancelModal from '@/components/common/CancelModal'
-import { LotteryResult } from '../HistoryFetcher/api'
 import { If } from '@/components'
 import { useRouter } from 'next/navigation'
+import { LotteryResult } from '../HistoryFetcher/api'
 
 const statusColorMap: Record<string, ChipProps['color']> = {
   당첨: 'danger',
@@ -66,7 +66,9 @@ export default function ChildResultCard({
                       등록/취소
                     </Button>
                   </If>
-                  <If condition={statusLabel === '대기' || statusLabel ==='당첨'}>
+                  <If
+                    condition={statusLabel === '대기' || statusLabel === '당첨'}
+                  >
                     <CancelModal id={applicationId}>
                       {(onOpen) => (
                         <Button

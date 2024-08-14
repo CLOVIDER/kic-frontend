@@ -5,7 +5,6 @@ import ChildResultCards from './components/ChildResultCard/ChildResultCards'
 import HistoryTable from './components/HistoryTable'
 
 export default function History() {
-  
   return (
     <div className="flex flex-col w-full mx-200">
       <section className="relative flex flex-col items-start">

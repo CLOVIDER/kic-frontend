@@ -40,7 +40,8 @@ export default function HistoryTable() {
           </div>
         )
       case 'result':
-        const displaytext = cellValue == 'WIN' ? '당첨' : '미당첨'
+        // eslint-disable-next-line no-case-declarations
+        const displaytext = cellValue === 'WIN' ? '당첨' : '미당첨'
         return (
           <Chip
             className="w-67 !max-w-67 h-21 px-8 text-14 font-bold"
