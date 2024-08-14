@@ -37,3 +37,8 @@ export const getLotteriesResult = ({
       accountId,
     },
   })
+
+export const postEmailsRecruits = () =>
+  http.post({
+    url: `/api/admin/emails/recruits`,
+  })

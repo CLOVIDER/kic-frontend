@@ -13,6 +13,7 @@ import {
   Button,
 } from '@nextui-org/react'
 import { If } from '@/components'
+import { usePostRecruits } from '@/app/(admin)/admin/result/queries/index'
 import { GetLotteriesResponse } from '../api'
 import { useLotteriesContext } from '../fetcher/ResultApplicationsFetcher'
 
@@ -42,6 +43,7 @@ export default function LotteryTable({
     lotteries: { content, totalPage },
   } = useLotteriesContext()
   const { push } = useRouter()
+  const { mutate } = usePostRecruits()
 
   const renderCell = useCallback(
     (application: Lottery, columnKey: React.Key) => {
@@ -78,7 +80,10 @@ export default function LotteryTable({
     <>
       <div className="absolute right-70 w-204 flex flex-col justify-center items-center gap-18 font-semibold text-[#EA7465]">
         {/* TODO: 결과 공지 API */}
-        <Button className="w-180 h-45 text-[20px] bg-[#FFFCF6] rounded-16 border-1 border-[#EA7465] font-semibold shadow-lg text-[#EA7465]">
+        <Button
+          onClick={() => mutate()}
+          className="w-180 h-45 text-[20px] bg-[#FFFCF6] rounded-16 border-1 border-[#EA7465] font-semibold shadow-lg text-[#EA7465]"
+        >
           결과 공지하기
         </Button>
 
