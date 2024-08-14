@@ -12,7 +12,7 @@ import {
 } from '@nextui-org/react'
 import { useCallback } from 'react'
 import { useHistoryContext } from '../HistoryFetcher'
-import { History, HistoryResponse } from '../HistoryFetcher/api'
+import { History } from '../HistoryFetcher/api'
 
 export default function HistoryTable() {
   const columns = [
@@ -40,7 +40,7 @@ export default function HistoryTable() {
           </div>
         )
       case 'result':
-        const displaytext = cellValue == 'WIN'? '당첨' :'미당첨'
+        const displaytext = cellValue == 'WIN' ? '당첨' : '미당첨'
         return (
           <Chip
             className="w-67 !max-w-67 h-21 px-8 text-14 font-bold"
@@ -48,7 +48,7 @@ export default function HistoryTable() {
             size="sm"
             variant="flat"
           >
-            {displaytext} 
+            {displaytext}
           </Chip>
         )
       case 'kindergarten':
@@ -60,7 +60,7 @@ export default function HistoryTable() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const {history} = useHistoryContext()
+  const { history } = useHistoryContext()
 
   return (
     <>

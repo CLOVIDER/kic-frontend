@@ -13,15 +13,15 @@ type UseKindergartenReturn = {
   kindergartens: Kindergarten[]
   classes: ClassInfo[][]
   addClass: (index: number) => void
-  removeClass: (kindergartenIndex: number, ageClass: string) => void
+  removeClass: (kindergartenIndex: number, ageClass: number) => void
   updateClassName: (
     kindergartenIndex: number,
-    ageClass: string,
+    ageClass: number,
     value: string,
   ) => void
   updateClassCapacity: (
     kindergartenIndex: number,
-    ageClass: string,
+    ageClass: number,
     value: number,
   ) => void
 }
@@ -46,7 +46,7 @@ export const useKindergarten = (): UseKindergartenReturn => {
   const addClass = (index: number): void => {
     setClasses((prevClasses) => {
       const newClass = {
-        ageClass: '',
+        ageClass: 0,
         recruitCnt: 0,
       }
       const newClasses = [...prevClasses]
@@ -61,7 +61,7 @@ export const useKindergarten = (): UseKindergartenReturn => {
     })
   }
 
-  const removeClass = (kindergartenIndex: number, ageClass: string): void => {
+  const removeClass = (kindergartenIndex: number, ageClass: number): void => {
     setClasses((prevClasses) => {
       const newClasses = [...prevClasses]
       if (newClasses[kindergartenIndex].length > 1) {
@@ -80,7 +80,7 @@ export const useKindergarten = (): UseKindergartenReturn => {
 
   const updateClassName = (
     kindergartenIndex: number,
-    ageClass: string,
+    ageClass: number,
     value: string,
   ): void => {
     setClasses((prevClasses) => {
@@ -89,7 +89,7 @@ export const useKindergarten = (): UseKindergartenReturn => {
         (cls) => cls.ageClass === ageClass,
       )
       if (classToUpdate) {
-        classToUpdate.ageClass = value
+        classToUpdate.ageClass = Number(value)
       }
 
       const updatedData = { ...settingData }
@@ -103,7 +103,7 @@ export const useKindergarten = (): UseKindergartenReturn => {
 
   const updateClassCapacity = (
     kindergartenIndex: number,
-    ageClass: string,
+    ageClass: number,
     value: number,
   ): void => {
     setClasses((prevClasses) => {
