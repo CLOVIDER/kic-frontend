@@ -12,7 +12,10 @@ export default function Page() {
 
   return (
     <AnimatePresence mode="wait">
-      <section className="flex gap-58">
+      <section
+        style={{ scrollbarWidth: 'none' }}
+        className="flex gap-58 w-[1000px] p-30 overflow-x-scroll"
+      >
         {kindergartens.map(
           ({
             kindergartenId,
@@ -28,7 +31,7 @@ export default function Page() {
             <Link
               key={kindergartenId}
               href={`/kindergarten/${kindergartenId}`}
-              className="hover:translate-y-[-10px] transition-all duration-[250ms]"
+              className="relative hover:translate-y-[-10px] transition-all duration-[250ms]"
             >
               <motion.div
                 layoutId={String(kindergartenId)}
@@ -63,7 +66,7 @@ export default function Page() {
                 <CardBody className="mt-7 overflow-hidden">
                   <motion.div
                     layoutId={`${kindergartenId} image`}
-                    className="flex gap-10"
+                    className="flex gap-10 w-268 h-153"
                   >
                     <Image
                       className="rounded-20"
