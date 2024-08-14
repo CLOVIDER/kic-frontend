@@ -6,15 +6,20 @@ export type GetLotteriesEmployeeResponse = Array<{
   lotteryId: number
 }>
 
-export type GetLotteriesDetailResponse = Array<{
-  childName: string
-  className: string
-  lotteryId: number
-}>
+export type GetLotteriesDetailResponse = {
+  result: {
+    id: number
+    createdAt: string
+    result: 'WIN' | 'WAIT' | 'LOSE'
+    kindergartenNm: string
+    waitingNum: string
+    endDate: number
+  }
+}
 
 export const getLotteriesEmployee = () =>
   http.get<GetLotteriesEmployeeResponse>({
-    url: '/api/lotteries/employee',
+    url: '/api/lotteries',
   })
 
 export const getLotteryDetailResult = (lotteryId: number) =>

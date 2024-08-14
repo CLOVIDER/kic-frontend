@@ -1,3 +1,5 @@
+'use client'
+
 import { useHomePage } from '@/app/(home)/components/api/queries'
 import { generateContext } from '@/react-utils'
 import { StrictPropsWithChildren } from '@/type'

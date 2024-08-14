@@ -18,7 +18,7 @@ export const useGetLotteryDetailResult = (lotteryId: number) =>
   useSuspenseQuery({
     queryKey: ['get-lotteries-result', lotteryId],
     queryFn: () => getLotteryDetailResult(lotteryId),
-    select: ({ result }) => result,
+    select: ({ result }) => result.result,
   })
 
 export const useGetLotteryPercent = (lotteryId: number) =>

@@ -1,10 +1,13 @@
+'use client'
+
 import { generateContext } from '@/react-utils'
 import { StrictPropsWithChildren } from '@/type'
 import { useGetLotteryDetailResult } from '../queries'
 import { GetLotteriesDetailResponse } from '../api'
 
-const [LotteryDetailProvider, useLotteryDetailContext] =
-  generateContext<GetLotteriesDetailResponse>({ name: 'lottery-detail' })
+const [LotteryDetailProvider, useLotteryDetailContext] = generateContext<
+  GetLotteriesDetailResponse['result']
+>({ name: 'lottery-detail' })
 
 function ResultFetcher({
   children,

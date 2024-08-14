@@ -16,6 +16,7 @@ export default function LotteryEntry() {
   return (
     <section className="flex">
       <motion.div
+        layoutId="image"
         initial={{ y: 0 }}
         animate={{ y: [0, -20, 0] }}
         transition={{
@@ -35,8 +36,8 @@ export default function LotteryEntry() {
       </motion.div>
 
       {/* {recruitStatus === '모집예정' && <LotteryEnd />}
-      {recruitStatus === '모집없음' && <LotteryEnd />} */}
-      {/* <LotteryPending /> */}
+      {recruitStatus === '모집없음' && <LotteryEnd />}
+      <LotteryPending /> */}
 
       <AsyncBoundaryWithQuery>
         <ChildrenFetcher>

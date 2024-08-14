@@ -1,11 +1,13 @@
 import Image from 'next/image'
 import { Button } from '@nextui-org/react'
+import { useLotteryDetailContext } from '@/app/(user)/lottery/fetcher/ResultFetcher'
 import ResultCard from '../ResultCard'
 import { useDeleteLottery, usePatchRegisterLottery } from '../../../queries'
 
 export default function ResultWinning({ id }: { id: number }) {
   const { mutate } = useDeleteLottery(id)
   const { mutate: mutateRegistry } = usePatchRegisterLottery(id)
+  const { kindergartenNm, endDate } = useLotteryDetailContext()
 
   return (
     <ResultCard className="gap-15">
@@ -14,11 +16,12 @@ export default function ResultWinning({ id }: { id: number }) {
       <ResultCard.Title className="mt-15">축하해요 !</ResultCard.Title>
 
       <ResultCard.SubTitle className="flex">
-        <span className="text-[#FFAB2D]">어린이집 이름</span>에 당첨됐어요 !!
+        <span className="text-[#FFAB2D] mx-5">{kindergartenNm}</span>에
+        당첨됐어요 !!
       </ResultCard.SubTitle>
 
       <ResultCard.Description className="mt-23 text-center">
-        등록기한 : ~ 2024.02.17까지
+        등록기한 : ~ {endDate}까지
         <br />
         등록기한까지 등록하지 않으시면 당첨 취소 처리됩니다.
       </ResultCard.Description>
