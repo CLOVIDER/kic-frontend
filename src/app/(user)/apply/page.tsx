@@ -14,19 +14,12 @@ export default function Page() {
 
   useEffect(() => {
     async function checkApplicationStatus() {
-      try {
-        const applicationStatus = await getApplicationData()
+      const applicationStatus = await getApplicationData()
 
-        if (applicationStatus.id === null) {
-          router.push('/apply')
-        } else {
-          router.push('/apply/application')
-        }
-      } catch (error) {
-        console.error('Error checking application status:', error)
-        // 에러 처리
-      } finally {
-        setLoading(false) // API 호출이 완료된 후 로딩 상태를 false로 설정
+      if (applicationStatus.id === null) {
+        setLoading(false)
+      } else {
+        router.push('/apply/application')
       }
     }
 
