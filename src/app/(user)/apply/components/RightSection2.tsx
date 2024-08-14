@@ -6,7 +6,7 @@ import {
   Item,
 } from '@/type/application'
 import { Button } from '@nextui-org/react'
-import { uploadDocument, submitApplication, saveApplicationTemp } from '../api'
+import { uploadDocument } from '../api'
 import FormSection from './common/FormSection'
 import CheckboxWithLabel from './common/CheckboxWithLabel'
 import FileUploadButton from './common/FileUploadButton'
@@ -88,47 +88,9 @@ export default function RightSection2({
       imageUrls: formData.imageUrls,
     }
 
-    try {
-      await submitApplication({ ...formData, ...data } as ApplicationPayload)
-      toast.info('제출되었습니다!', {
-        autoClose: 500,
-        pauseOnHover: false,
-      })
-      onSubmit(data)
-    } catch (error) {
-      toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
-        autoClose: 1000,
-        pauseOnHover: false,
-      })
-    }
+    // submitApplication 및 saveApplicationTemp 호출 제거
+    onSubmit(data)
   }, [selectedItems, formData, uploadedFiles, items, onSubmit])
-
-  const handleTempSave = useCallback(async () => {
-    const data: Partial<ApplicationPayload> = {
-      ...Object.entries(selectedItems).reduce<Record<string, '0' | '1'>>(
-        (acc, [key, value]) => ({
-          ...acc,
-          [key]: value ? '1' : '0',
-        }),
-        {},
-      ),
-      imageUrls: formData.imageUrls,
-    }
-
-    try {
-      await saveApplicationTemp({ ...formData, ...data } as ApplicationPayload)
-      toast.info('임시저장 되었습니다!', {
-        autoClose: 500,
-        pauseOnHover: false,
-      })
-      onTempSave()
-    } catch (error) {
-      toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
-        autoClose: 1000,
-        pauseOnHover: false,
-      })
-    }
-  }, [selectedItems, formData, onTempSave])
 
   return (
     <div className="w-453 h-507 mt-100 mr-103">
@@ -203,7 +165,7 @@ export default function RightSection2({
         </Button>
         <div className="w-[148px]" />
         <Button
-          onClick={handleTempSave}
+          onClick={onTempSave}
           className="w-[98px] h-[31px] [background:linear-gradient(90deg,_rgba(255,_171,_45,_0.13),_rgba(153,_103,_27,_0.11))] border bg-[#fff] border-[#e6d5c5] font-bold text-[#fb923c] rounded-full text-sm"
         >
           임시저장

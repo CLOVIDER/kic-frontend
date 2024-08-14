@@ -93,53 +93,131 @@ export default function ApplicationForm() {
     setCurrentSection(1)
   }
 
+  // const handleSubmit = async (data: Partial<ApplicationPayload>) => {
+  //   // 유효성 검사
+  //   const invalidChildren = children.filter(
+  //     (child) =>
+  //       !child.name ||
+  //       Object.keys(child.classes).length === 0 ||
+  //       Object.values(child.classes).some((value) => !value),
+  //   )
+
+  //   if (invalidChildren.length > 0) {
+  //     invalidChildren.forEach((child, index) => {
+  //       if (!child.name) {
+  //         toast.error(`아이 ${index + 1}의 이름을 입력해주세요.`, {
+  //           autoClose: 1000,
+  //           pauseOnHover: false,
+  //         })
+  //       } else if (
+  //         Object.keys(child.classes).length === 0 ||
+  //         Object.values(child.classes).some((value) => !value)
+  //       ) {
+  //         toast.error(
+  //           `아이 ${index + 1}의 모든 어린이집 분반을 선택해주세요.`,
+  //           {
+  //             autoClose: 1000,
+  //             pauseOnHover: false,
+  //           },
+  //         )
+  //       }
+  //     })
+  //     return // 제출 중단
+  //   }
+
+  //   const childrenRecruitList = children
+  //     .filter((child) => child.name && Object.keys(child.classes).length > 0)
+  //     .map((child) => ({
+  //       childNm: child.name,
+  //       recruitIds: Object.values(child.classes).map(
+  //         (recruitId) => parseInt(recruitId, 10), // `recruitId`를 숫자로 변환하여 그대로 사용
+  //       ),
+  //     }))
+
+  //   const finalData: ApplicationPayload = {
+  //     ...formData,
+  //     ...data,
+  //     childrenRecruitList,
+  //     childrenCnt: childrenRecruitList.length,
+  //     imageUrls: uploadedFiles,
+  //   }
+
+  //   try {
+  //     await submitApplication(finalData)
+  //     toast.info('제출되었습니다!', {
+  //       autoClose: 500,
+  //       onClose: () => router.push('/'),
+  //       pauseOnHover: false,
+  //     })
+  //     // 성공 처리 로직
+  //   } catch (error) {
+  //     toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
+  //       autoClose: 1000,
+  //       pauseOnHover: false,
+  //     })
+  //   }
+  // }
+
+  // const handleTempSave = async () => {
+  //   const childrenRecruitList = children
+  //     .filter((child) => child.name && Object.keys(child.classes).length > 0)
+  //     .map((child) => ({
+  //       childNm: child.name,
+  //       recruitIds: Object.values(child.classes).map(
+  //         (recruitId) => parseInt(recruitId, 10), // `recruitId`를 숫자로 변환하여 그대로 사용
+  //       ),
+  //     }))
+
+  //   const finalData: ApplicationPayload = {
+  //     ...formData,
+  //     childrenRecruitList,
+  //     childrenCnt: childrenRecruitList.length,
+  //     imageUrls: uploadedFiles,
+  //   }
+
+  //   try {
+  //     await saveApplicationTemp(finalData)
+  //     toast.info('임시저장 되었습니다!', {
+  //       autoClose: 500,
+  //       onClose: () => router.push('/'),
+  //       pauseOnHover: false,
+  //     })
+  //   } catch (error) {
+  //     toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
+  //       autoClose: 1000,
+  //       pauseOnHover: false,
+  //     })
+  //   }
+  // }
+
+  // 수정된 handleSubmit 함수
   const handleSubmit = async (data: Partial<ApplicationPayload>) => {
-    // 유효성 검사
-    const invalidChildren = children.filter(
-      (child) =>
-        !child.name ||
-        Object.keys(child.classes).length === 0 ||
-        Object.values(child.classes).some((value) => !value),
-    )
-
-    if (invalidChildren.length > 0) {
-      invalidChildren.forEach((child, index) => {
-        if (!child.name) {
-          toast.error(`아이 ${index + 1}의 이름을 입력해주세요.`, {
-            autoClose: 1000,
-            pauseOnHover: false,
-          })
-        } else if (
-          Object.keys(child.classes).length === 0 ||
-          Object.values(child.classes).some((value) => !value)
-        ) {
-          toast.error(
-            `아이 ${index + 1}의 모든 어린이집 분반을 선택해주세요.`,
-            {
-              autoClose: 1000,
-              pauseOnHover: false,
-            },
-          )
-        }
-      })
-      return // 제출 중단
-    }
-
     const childrenRecruitList = children
       .filter((child) => child.name && Object.keys(child.classes).length > 0)
       .map((child) => ({
         childNm: child.name,
         recruitIds: Object.values(child.classes).map(
-          (recruitId) => parseInt(recruitId, 10), // `recruitId`를 숫자로 변환하여 그대로 사용
+          (recruitId) => parseInt(recruitId, 10), // recruitId를 숫자로 변환하여 사용
         ),
       }))
+
+    const selectedImageUrls = Object.entries(formData.imageUrls).reduce(
+      (acc, [key, url]) => {
+        if (typeof url === 'string' && url) {
+          // url이 string인지 확인
+          acc[key] = url
+        }
+        return acc
+      },
+      {} as Record<string, string>,
+    )
 
     const finalData: ApplicationPayload = {
       ...formData,
       ...data,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
-      imageUrls: uploadedFiles,
+      imageUrls: selectedImageUrls,
     }
 
     try {
@@ -158,21 +236,33 @@ export default function ApplicationForm() {
     }
   }
 
+  // 수정된 handleTempSave 함수
   const handleTempSave = async () => {
     const childrenRecruitList = children
       .filter((child) => child.name && Object.keys(child.classes).length > 0)
       .map((child) => ({
         childNm: child.name,
         recruitIds: Object.values(child.classes).map(
-          (recruitId) => parseInt(recruitId, 10), // `recruitId`를 숫자로 변환하여 그대로 사용
+          (recruitId) => parseInt(recruitId, 10), // recruitId를 숫자로 변환하여 사용
         ),
       }))
+
+    const selectedImageUrls = Object.entries(formData.imageUrls).reduce(
+      (acc, [key, url]) => {
+        if (typeof url === 'string' && url) {
+          // url이 string인지 확인
+          acc[key] = url
+        }
+        return acc
+      },
+      {} as Record<string, string>,
+    )
 
     const finalData: ApplicationPayload = {
       ...formData,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
-      imageUrls: uploadedFiles,
+      imageUrls: selectedImageUrls,
     }
 
     try {
@@ -189,7 +279,6 @@ export default function ApplicationForm() {
       })
     }
   }
-
   const handleFileUpload = (id: string, file: File) => {
     setUploadedFiles((prev) => ({ ...prev, [id]: file }))
     // FormData에 File 객체 직접 저장
@@ -249,6 +338,18 @@ export default function ApplicationForm() {
     kindergarten: string,
     option: DropdownOption,
   ) => {
+    setChildren((prevChildren) =>
+      prevChildren.map((child) => {
+        if (child.id === childId) {
+          return {
+            ...child,
+            classes: { ...child.classes, [kindergarten]: option.key }, // recruitId 저장
+          }
+        }
+        return child
+      }),
+    )
+
     setSelectedLabels((prev) => ({
       ...prev,
       [childId.toString()]: {
