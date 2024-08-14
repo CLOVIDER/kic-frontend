@@ -59,7 +59,7 @@ export default function WritePage() {
         <div className="mt-[17px] ml-21 w-[746px] h-435 flex-grow overflow-y-auto border-1 border-solid border-[#00000014] rounded-xl shadow-md">
           <DynamicBlockNoteEditor
             domainName={domainName}
-            setUploadedImageUrls={setUploadedImageUrls}
+            imageUrls={setUploadedImageUrls}
             setContent={setContent}
           />
         </div>

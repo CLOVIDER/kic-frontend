@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { FormData, Child } from '../../../../type/application'
+import { toast } from 'react-toastify'
+import { FormData, Child } from '@/type/application'
 
 export const useApplicationForm = () => {
   const [formData, setFormData] = useState<FormData>({
@@ -33,11 +34,13 @@ export const useApplicationForm = () => {
       selectedItems,
     }))
     // 로직 추가할 부분. 테스트 위해 console.log 로 임시 대체.
-    console.log('Final form data:', {
-      ...formData,
-      uploadedFiles,
-      selectedItems,
-    })
+    toast.info(
+      `Final form data:${{
+        ...formData,
+        uploadedFiles,
+        selectedItems,
+      }}`,
+    )
   }
 
   return {
