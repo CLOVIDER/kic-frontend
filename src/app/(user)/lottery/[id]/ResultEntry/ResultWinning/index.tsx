@@ -1,8 +1,12 @@
 import Image from 'next/image'
 import { Button } from '@nextui-org/react'
 import ResultCard from '../ResultCard'
+import { useDeleteLottery, usePatchRegisterLottery } from '../../../queries'
 
-export default function ResultWinning() {
+export default function ResultWinning({ id }: { id: number }) {
+  const { mutate } = useDeleteLottery(id)
+  const { mutate: mutateRegistry } = usePatchRegisterLottery(id)
+
   return (
     <ResultCard className="gap-15">
       <Image src="/images/Winning.svg" alt="winning" width={177} height={177} />
@@ -25,10 +29,16 @@ export default function ResultWinning() {
         </Button>
 
         <div className="flex gap-7">
-          <Button className="bg-[white] w-105 h-40 border-1 border-[#E2C9A4] text-[#FFAB2D] ">
+          <Button
+            onClick={() => mutate()}
+            className="bg-[white] w-105 h-40 border-1 border-[#E2C9A4] text-[#FFAB2D] "
+          >
             등록 취소
           </Button>
-          <Button className="w-105 h-40 text-white gradient-button">
+          <Button
+            onClick={() => mutateRegistry()}
+            className="w-105 h-40 text-white gradient-button"
+          >
             등록
           </Button>
         </div>

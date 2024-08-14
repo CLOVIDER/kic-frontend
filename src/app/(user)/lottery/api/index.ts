@@ -26,3 +26,11 @@ export const getLotteryPercent = (lotteryId: number) =>
   http.get<number>({
     url: `/api/recruits/${lotteryId}/percents`,
   })
+
+export const deleteLottery = (lotteryId: number) =>
+  http.delete({ url: `/api/${lotteryId}` })
+
+export const patchRegistry = (lotteryId: number) =>
+  http.patch({
+    url: `/api/update/registry/${lotteryId}`,
+  })
