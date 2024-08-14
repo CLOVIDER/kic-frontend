@@ -8,6 +8,14 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+.rdp-root {
+  --rdp-day-height: 30px;
+  --rdp-day-width: 30px;
+  --rdp-nav_button-height	:15px;
+  --rdp-nav_button-width	: 15px;
+  --rdp-nav-height : 15px;
+}
+
 html {
   @apply h-full;
 }
