@@ -1,5 +1,6 @@
-import { Chip, ChipProps } from '@nextui-org/react'
+import { Button, Chip, ChipProps } from '@nextui-org/react'
 import HistoryModal from '../HistoryModal'
+import CancelModal from '@/components/common/CancelModal'
 
 const statusColorMap: Record<string, ChipProps['color']> = {
   당첨: 'success',
@@ -31,7 +32,17 @@ export default function ChildResultCard({
               >
                 {results[index]}
               </Chip>
-              <HistoryModal status="당첨" />
+              <CancelModal id={1}>
+                {(onOpen) => (
+                  <Button
+                    onPress={onOpen}
+                    className="h-20 bg-transparent text-[#716F6F] underline text-[12px] ml-10"
+                  >
+                    취소하기
+                  </Button>
+                )}
+              </CancelModal>
+              {/* <HistoryModal status="당첨" /> */}
             </div>
           </li>
         ))}
