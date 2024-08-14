@@ -12,15 +12,6 @@ import Title from '../Title'
 import { useKindergarten } from './useKindergarten'
 import '../setting.css'
 
-enum AgeClass {
-  ZERO = 0,
-  ONE = 1,
-  TWO = 2,
-  THREE = 3,
-  FOUR = 4,
-  FIVE = 5,
-}
-
 export default function Kindergarten() {
   const { kindergartens, classes, updateClassCapacity } = useKindergarten()
 

@@ -8,12 +8,12 @@ export const getSettingData = () =>
 
 export const patchSettingData = (data: Partial<SettingData>) =>
   http.patch<SettingResponse>({
-    url: 'api/admin/recruit',
+    url: 'api/admin/recruits',
     data,
   })
 
 export const postSettingData = (data: Partial<SettingData>) =>
   http.post<SettingResponse>({
-    url: 'api/admin/recruit',
+    url: 'api/admin/recruits',
     data,
   })
