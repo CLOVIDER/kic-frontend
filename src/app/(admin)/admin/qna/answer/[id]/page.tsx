@@ -5,9 +5,15 @@ import { useParams, useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { fetchQnaDetail, updateQnaAnswer, QnaItem } from '@/components/qna/api'
+import {
+  fetchQnaDetail,
+  updateQnaAnswer,
+  getQnaAnswer,
+  QnaItem,
+} from '@/components/qna'
 // import { PartialBlock } from '@blocknote/core'
-import QnaDetailFetcher from '../../../../../(user)/qna/[id]/components/QnaDetailFetcher'
+import { toast } from 'react-toastify'
+import QnaDetailFetcher from '@/app/(user)/qna/[id]/components/QnaDetailFetcher'
 
 export default function AnswerClient() {
   const { id } = useParams()
@@ -23,11 +29,27 @@ export default function AnswerClient() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        toast.info(`Starting to fetch QnA detail for ID:${id}`)
         const response = await fetchQnaDetail(Number(id))
+        toast.info(`QnA Detail fetched successfully:${response}`)
         setQnaData(response.result)
+
+        const answerResponse = await getQnaAnswer(Number(id))
+        toast.info(`QnA Answer fetched successfully:${answerResponse}`)
+        if (answerResponse !== null) {
+          setContent(answerResponse.answer)
+        } else {
+          toast.warn('Answer not found in the response')
+          setContent('') // Set to empty string or handle as needed
+        }
+
         setIsLoading(false)
+        toast.info('Loading state set to false')
       } catch (err) {
-        setError('Failed to fetch QnA detail')
+        toast.error(`Error during fetch:${err}`)
+        setError(
+          err instanceof Error ? err.message : 'An unknown error occurred',
+        )
         setIsLoading(false)
       }
     }
@@ -39,11 +61,10 @@ export default function AnswerClient() {
     if (!id) return
     try {
       await updateQnaAnswer(Number(id), answer)
-      alert('답변이 성공적으로 저장되었습니다.')
-      // 필요한 경우, 추가적인 동작을 수행할 수 있습니다.
+      toast.info('답변이 성공적으로 저장되었습니다.')
       router.push('/admin/qna')
     } catch (error) {
-      alert('답변 저장에 실패했습니다.')
+      toast.info('답변 저장에 실패했습니다.')
     }
   }
 
@@ -73,6 +94,7 @@ export default function AnswerClient() {
                 sessionStorage.setItem('editorContent', content) // 내용이 변경될 때마다 세션 스토리지에 저장
               }}
               enableImageUpload={false}
+              initialContent={answer !== '' ? answer : undefined}
             />
           </div>
         </div>

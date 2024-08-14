@@ -3,7 +3,8 @@
 import { KeyboardEvent, Fragment } from 'react'
 import { useRouter } from 'next/navigation'
 import cn from '@/util/cn'
-import { QnaItem } from '@/components/qna/api'
+import { QnaItem } from '@/components/qna'
+import { FaLock, FaLockOpen } from 'react-icons/fa'
 
 interface QnaListProps {
   paginatedNotices: QnaItem[]
@@ -53,6 +54,14 @@ export default function QnaList({ paginatedNotices }: QnaListProps) {
                 {item.answer ? '[답변완료]' : '[문의중]'}{' '}
               </span>
               <span className="">{item.title}</span>
+              <span className="ml-15 text-[#565656] text-12">
+                {item.isVisibility === '1' ? (
+                  <FaLockOpen className="mr-2 inline-block" />
+                ) : (
+                  <FaLock className="mr-2 inline-block" />
+                )}
+                {item.isVisibility === '1' ? '공개' : '비공개'}
+              </span>
             </div>
             <div className="mt-11 ml-21 w-[150px] h-[14px] text-[#828282] text-10">
               <span className="w-[53px]">{item.createdAt}</span>

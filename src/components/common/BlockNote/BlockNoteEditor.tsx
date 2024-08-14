@@ -2,8 +2,9 @@ import '@blocknote/core/style.css'
 import '@blocknote/react/style.css'
 import '@blocknote/mantine/style.css'
 import { BlockNoteView } from '@blocknote/mantine'
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
+import { toast } from 'react-toastify'
 import { uploadImage } from './UploadImage'
 
 interface BlockNoteEditorProps {
@@ -11,6 +12,7 @@ interface BlockNoteEditorProps {
   setUploadedImageUrls?: (urls: string[]) => void
   setContent: (content: string) => void
   enableImageUpload?: boolean
+  initialContent?: string
 }
 
 export default function Editor({
@@ -18,6 +20,7 @@ export default function Editor({
   setUploadedImageUrls,
   setContent,
   enableImageUpload = true,
+  initialContent,
 }: BlockNoteEditorProps) {
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const handleUpload = useCallback(
@@ -31,7 +34,7 @@ export default function Editor({
         setUploadedImageUrls([...imageUrls, url])
         return url
       } catch (error) {
-        console.error('Failed to upload image:', error)
+        toast.error(`Failed to upload image:${error}`)
         throw error
       }
     },
@@ -41,6 +44,18 @@ export default function Editor({
   const editor = useCreateBlockNote({
     uploadFile: enableImageUpload ? handleUpload : undefined,
   })
+
+  useEffect(() => {
+    if (editor && initialContent) {
+      try {
+        const blocks = JSON.parse(initialContent)
+        editor.replaceBlocks(editor.topLevelBlocks, blocks)
+      } catch (error) {
+        toast.error(`Failed to parse initial content: ${error}`)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor])
 
   const handleChange = useCallback(() => {
     if (editor) {

@@ -1,31 +1,15 @@
 import { http } from '@/api'
 import { BaseResponse } from '@/api/types'
 
-export interface QnaItem {
-  qnaId: number
-  title: string
-  question: string
-  answer: string | null
-  isVisibility: string
-  writerName: string
-  createdAt: string
-}
-
-interface QnaResponse {
-  content: QnaItem[]
-  totalPage: number
-  totalElements: number
-  size: number
-  currPage: number
-  hasNext: boolean
-  isFirst: boolean
-  isLast: boolean
-}
-
-interface CreateQnaResponse {
-  id: number
-  createdAt: string
-}
+import { toast } from 'react-toastify'
+import {
+  QnaAnswerResponse,
+  QnaItem,
+  QnaResponse,
+  CreateQnaResponse,
+  DeleteQnaResponse,
+  UpdateQnaAnswerResponse,
+} from './types'
 
 export const fetchQnas = async (
   page: number = 0,
@@ -61,12 +45,12 @@ export const createQna = async (
   title: string,
   question: string,
   isVisibility: string,
-  uploadedImageUrls: string[],
+  imageUrls: string[],
 ): Promise<BaseResponse<CreateQnaResponse>> => {
   try {
     const response = await http.post<CreateQnaResponse>({
       url: '/api/qnas',
-      data: { title, question, isVisibility, uploadedImageUrls },
+      data: { title, question, isVisibility, imageUrls },
     })
     return response
   } catch (error) {
@@ -77,27 +61,49 @@ export const createQna = async (
 export const updateQnaAnswer = async (
   qnaId: number,
   answer: string,
-): Promise<BaseResponse<void>> => {
+): Promise<UpdateQnaAnswerResponse> => {
   try {
-    const response = await http.patch<void>({
-      url: `/api/qnas/admin/${qnaId}`,
+    const response = await http.patch<UpdateQnaAnswerResponse>({
+      url: `/api/admin/qnas/${qnaId}/answer`,
       data: { answer },
     })
-    return response
+
+    if (response.code.toString() === 'COMMON200') {
+      return response.result
+    }
+    throw new Error(`API Error: ${response.message}`)
   } catch (error) {
-    throw new Error(`Failed to update Q&A answer: ${error}`)
+    toast.error(`Error in updateQnaAnswer:${error}`)
+    throw error
   }
 }
 
 export const getQnaAnswer = async (
   qnaId: number,
-): Promise<BaseResponse<void>> => {
+): Promise<QnaAnswerResponse> => {
   try {
-    const response = await http.get<void>({
-      url: `/api/qnas/admin/${qnaId}`,
+    const response = await http.get<QnaAnswerResponse>({
+      url: `/api/admin/qnas/${qnaId}/answer`,
     })
-    return response
+
+    if (response.code.toString() === 'COMMON200') {
+      return response.result
+    }
+    throw new Error(`API Error: ${response.message}`)
   } catch (error) {
-    throw new Error(`Failed to get Q&A answer: ${error}`)
+    toast.error(`Error in getQnaAnswer:${error}`)
+    throw error
+  }
+}
+
+export const deleteQna = async (qnaId: number): Promise<DeleteQnaResponse> => {
+  try {
+    const response = await http.delete<DeleteQnaResponse>({
+      url: `/api/qnas/${qnaId}`,
+      params: { qnaId },
+    })
+    return response.result
+  } catch (error) {
+    throw new Error(`Failed to delete Q&A: ${error}`)
   }
 }

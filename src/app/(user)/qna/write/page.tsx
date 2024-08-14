@@ -15,7 +15,7 @@ export default function Page() {
   const [isVisibility, setIsVisibility] = useState<boolean>(true)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [saveError, setSaveError] = useState<string | null>(null)
-  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([])
+  const [imageUrls, setImageUrls] = useState<string[]>([])
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [initialEditorContent, setInitialEditorContent] = useState<
     PartialBlock[] | undefined
@@ -54,13 +54,13 @@ export default function Page() {
         title,
         question,
         isVisibility ? '1' : '0',
-        uploadedImageUrls || [{}],
+        imageUrls || [{}],
       )
 
-      if (response.code === 200) {
+      if (response.code.toString() === 'COMMON200') {
         moveBack()
       } else {
-        setSaveError('저장 중 오류가 발생했습니다.')
+        setSaveError(`저장 중 오류가 발생했습니다. : ${response.code}`)
       }
     } catch (error) {
       setSaveError('저장 중 오류가 발생했습니다.')
@@ -85,7 +85,7 @@ export default function Page() {
         <div className="mt-[17px] ml-21 w-[746px] h-[435px] flex-grow overflow-y-auto border-1 border-solid border-[#00000014] rounded-xl shadow-md">
           <DynamicBlockNoteEditor
             domainName={domainName}
-            setUploadedImageUrls={setUploadedImageUrls}
+            imageUrls={setImageUrls}
             setContent={(content) => {
               setContent(content)
               sessionStorage.setItem('editorContent', content) // 내용이 변경될 때마다 세션 스토리지에 저장

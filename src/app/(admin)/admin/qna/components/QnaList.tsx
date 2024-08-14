@@ -3,8 +3,10 @@
 import { KeyboardEvent, Fragment } from 'react'
 import { useRouter } from 'next/navigation'
 import cn from '@/util/cn'
-import { QnaItem } from '@/components/qna/api'
+import { QnaItem, deleteQna } from '@/components/qna'
 import Link from 'next/link'
+import { FaLock, FaLockOpen } from 'react-icons/fa'
+import { toast } from 'react-toastify'
 
 interface QnaListProps {
   paginatedNotices: QnaItem[]
@@ -33,6 +35,15 @@ export default function QnaList({ paginatedNotices }: QnaListProps) {
     )
   }
 
+  async function deleteQuestion(id: number) {
+    try {
+      await deleteQna(id)
+      window.location.reload() // Refresh the page
+    } catch (error) {
+      toast.error('Failed to delete question')
+    }
+  }
+
   return (
     <div className="mt-6 w-[742px] h-[472px]">
       {paginatedNotices.map((item) => (
@@ -55,6 +66,14 @@ export default function QnaList({ paginatedNotices }: QnaListProps) {
                   {item.answer ? '[답변완료]' : '[문의중]'}{' '}
                 </span>
                 <span className="">{item.title}</span>
+                <span className="ml-15 text-[#565656] text-12">
+                  {item.isVisibility === '1' ? (
+                    <FaLockOpen className="mr-2 inline-block" />
+                  ) : (
+                    <FaLock className="mr-2 inline-block" />
+                  )}
+                  {item.isVisibility === '1' ? '공개' : '비공개'}
+                </span>
               </div>
               <div className="mt-11 ml-21 w-[150px] h-[14px] text-[#828282] text-10">
                 <span className="w-[53px]">{item.createdAt}</span>
@@ -76,6 +95,7 @@ export default function QnaList({ paginatedNotices }: QnaListProps) {
               <button
                 className="mt-11 bg-[#FF7E6D] w-101 h-31 text-16 text-[#ffffff] rounded-16"
                 type="button"
+                onClick={() => deleteQuestion(item.qnaId)}
               >
                 질문삭제
               </button>

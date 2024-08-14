@@ -5,7 +5,7 @@ import { Button } from '@nextui-org/react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import cn from '@/util/cn'
-import { fetchQnaDetail, QnaItem } from '@/components/qna/api'
+import { fetchQnaDetail, QnaItem } from '@/components/qna'
 import QnaDetailFetcher from './components/QnaDetailFetcher'
 
 export default function QnaDetailPage() {

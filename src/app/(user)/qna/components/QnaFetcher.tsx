@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { fetchQnas, QnaItem as ApiQnaItem } from '@/components/qna/api'
+import { fetchQnas, QnaItem as ApiQnaItem } from '@/components/qna'
 import QnaList from './QnaList'
 
 interface QnaFetcherProps {
