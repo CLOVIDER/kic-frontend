@@ -2,18 +2,17 @@
 
 'use client'
 
-import {
-  ApplicationPayload,
-  Child,
-  RecruitInfo,
-  DropdownOptions,
-} from '@/type/application'
+import { ApplicationPayload, Child, DropdownOptions } from '@/type/application'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { getRecruitData } from '@/components/common/Application/api/getRecruitData'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
-import { saveApplicationTemp, submitApplication } from '../api/api'
+import {
+  saveApplicationTemp,
+  submitApplication,
+  RecruitInfo,
+  getRecruitData,
+} from '../api'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
 
@@ -43,7 +42,7 @@ export default function ApplicationForm() {
   ])
 
   const [recruitData, setRecruitData] = useState<
-    { kindergartenNm: string; recruitIds: number[]; aggClasses: string[] }[]
+    { kindergartenNm: string; recruitIds: number[]; ageClasses: string[] }[]
   >([])
 
   useEffect(() => {
@@ -218,7 +217,7 @@ export default function ApplicationForm() {
     (acc: DropdownOptions, item) => {
       acc[item.kindergartenNm] = item.recruitIds.map((id, index) => ({
         key: id.toString(),
-        label: item.aggClasses[index],
+        label: item.ageClasses[index],
       }))
       return acc
     },

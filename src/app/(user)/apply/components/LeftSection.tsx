@@ -2,10 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
-import {
-  EmployeeInfo,
-  getEmployeeData,
-} from '@/components/common/Application/api/getRecruitData'
+import { EmployeeInfo, getEmployeeData } from '../api'
 
 export default function LeftSection() {
   const [employeeData, setEmployeeData] = useState<EmployeeInfo | undefined>(

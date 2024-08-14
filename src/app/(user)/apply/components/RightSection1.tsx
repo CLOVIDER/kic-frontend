@@ -1,13 +1,12 @@
 import React, { useCallback } from 'react'
-import Image from 'next/image'
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Button,
-} from '@nextui-org/react'
-import { RightSection1Props, ApplicationPayload } from '@/type/application'
+  RightSection1Props,
+  ApplicationPayload,
+  Child,
+} from '@/type/application'
+import FormSection from './common/FormSection'
+import ChildInput from './common/ChildInput'
+import DropdownSelect from './common/DropdownSelect'
 
 export default function RightSection1({
   kindergartenName,
@@ -40,7 +39,7 @@ export default function RightSection1({
             if (field === 'class' && kindergarten) {
               return {
                 ...child,
-                classes: { ...child.classes, [kindergarten]: value }, // value 대신 recruitId 사용
+                classes: { ...child.classes, [kindergarten]: value },
               }
             }
             return { ...child, [field]: value }
@@ -71,89 +70,32 @@ export default function RightSection1({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="w-[470px] h-[547px] mr-110 mt-69 overflow-y-auto">
-        <div className="ml-4 mt-40 text-20">
-          <span className="">어린이집을 선택해주세요.</span>
-          <span className="text-[#e86565]">*</span>
-        </div>
-        <div className="ml-4 mt-5 text-12 text-[#e86565]">
+      <FormSection title="어린이집을 선택해주세요.">
+        <p className="mt-5 text-12 text-[#e86565]">
           + 버튼을 누르면 아이 추가가 가능해요.
-        </div>
-        {children.map((child) => (
+        </p>
+        {children.map((child: Child) => (
           <div key={child.id} className="mb-6">
-            <div className="flex ml-4 mt-36 w-[202px] h-[39px]">
-              <input
-                className="p-16 w-[148px] h-[38px] border border-solid rounded-lg border-[#CCCCCC]"
-                value={child.name}
-                onChange={(e) =>
-                  updateChildInfo(child.id, 'name', e.target.value)
-                }
-                placeholder="아이 이름"
-              />
-              <button
-                type="button"
-                className="ml-15"
-                onClick={() => removeChild(child.id)}
-                aria-label="Remove Child"
-              >
-                <Image
-                  alt=""
-                  src="/images/x-circle-1.svg"
-                  width={32.5}
-                  height={32.5}
-                />
-              </button>
-            </div>
+            <ChildInput
+              name={child.name}
+              onChange={(value) => updateChildInfo(child.id, 'name', value)}
+              onRemove={() => removeChild(child.id)}
+            />
             <div className="mt-12 ml-7 w-[425px]">
               {kindergartenName.map((name) => (
                 <div
                   key={`${child.id}-${name}`}
                   className="flex items-center mb-15"
                 >
-                  <div className="w-[135px] h-[25px] text-[#666666] text-20">
-                    {name}
-                  </div>
-                  <div className="ml-[152px] text-16">
-                    <Dropdown>
-                      <DropdownTrigger>
-                        <Button
-                          className="w-[138px] h-[25px] text-16 bg-[#FFC56E] border-none flex items-center justify-center text-[#ffffff]"
-                          variant="solid"
-                        >
-                          <span className="ml-23">
-                            {child.classes[name]
-                              ? dropdownOptions[name].find(
-                                  (option) =>
-                                    option.key === child.classes[name],
-                                )?.label
-                              : '분반선택'}
-                          </span>
-                          <Image
-                            alt=""
-                            className="ml-25 w-24 h-24"
-                            src="/images/dropdown.svg"
-                            width={24}
-                            height={24}
-                          />
-                        </Button>
-                      </DropdownTrigger>
-                      <DropdownMenu
-                        onAction={(key) => {
-                          const stringKey = String(key)
-                          updateChildInfo(child.id, 'class', stringKey, name)
-                        }}
-                      >
-                        {dropdownOptions[name]?.map((option) => (
-                          <DropdownItem
-                            key={option.key}
-                            className="text-center"
-                          >
-                            {option.label}
-                          </DropdownItem>
-                        ))}
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
+                  <div className="w-[335px] text-[#666666] text-20">{name}</div>
+                  <DropdownSelect
+                    options={dropdownOptions[name]}
+                    selectedOption={child.classes[name] || ''}
+                    onSelect={(key) =>
+                      updateChildInfo(child.id, 'class', key, name)
+                    }
+                    placeholder="분반선택"
+                  />
                 </div>
               ))}
             </div>
@@ -167,7 +109,7 @@ export default function RightSection1({
         >
           +
         </button>
-      </div>
+      </FormSection>
       <button
         type="submit"
         className="ml-364 mt-12 w-[98px] h-[31px] rounded-2xl [background:linear-gradient(180deg,rgb(255,187.22,55.65)_0%,rgb(255,227.03,158.66)_100%)]"

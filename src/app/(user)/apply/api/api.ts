@@ -1,16 +1,42 @@
 import { http } from '@/api'
 import { BaseResponse } from '@/api/types'
 import { ApplicationPayload } from '@/type/application'
+import { toast } from 'react-toastify'
 import {
   ApplicationResponse,
+  EmployeeInfo,
   FileUploadResponse,
+  RecruitInfo,
   RecruitResponse,
 } from './types'
 
+export async function uploadDocument(file: File): Promise<string> {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  try {
+    const response = await http.post<string>({
+      url: `/api/upload/document`,
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+
+    return response.result
+  } catch (error) {
+    toast.error('이미지 업로드에 실패하였습니다. 다시 시도해주세요', {
+      autoClose: 1000,
+      pauseOnHover: false,
+    })
+    throw error
+  }
+}
+
 // 지원서 제출
-export const submitApplication = async (
+export async function submitApplication(
   data: ApplicationPayload,
-): Promise<BaseResponse<ApplicationResponse>> => {
+): Promise<BaseResponse<ApplicationResponse>> {
   return http.post<ApplicationResponse>({
     url: '/api/applications',
     data,
@@ -18,9 +44,9 @@ export const submitApplication = async (
 }
 
 // 임시 저장
-export const saveApplicationTemp = async (
+export async function saveApplicationTemp(
   data: ApplicationPayload,
-): Promise<BaseResponse<ApplicationResponse>> => {
+): Promise<BaseResponse<ApplicationResponse>> {
   return http.post<ApplicationResponse>({
     url: '/api/applications/tmp',
     data,
@@ -28,9 +54,9 @@ export const saveApplicationTemp = async (
 }
 
 // 파일 업로드
-export const uploadFile = async (
+export async function uploadFile(
   file: File,
-): Promise<BaseResponse<FileUploadResponse>> => {
+): Promise<BaseResponse<FileUploadResponse>> {
   const formData = new FormData()
   formData.append('file', file)
 
@@ -44,10 +70,30 @@ export const uploadFile = async (
 }
 
 // 모집 정보 가져오기
-export const getRecruitInfo = async (): Promise<
-  BaseResponse<RecruitResponse>
-> => {
+export async function getRecruitInfo(): Promise<BaseResponse<RecruitResponse>> {
   return http.get<RecruitResponse>({
     url: '/api/recruits',
   })
+}
+
+export async function getEmployeeData(): Promise<EmployeeInfo> {
+  try {
+    const response = await http.get<EmployeeInfo>({ url: '/api/employees' })
+    return response.result
+  } catch (error) {
+    console.error('Error fetching employee data:', error)
+    throw error
+  }
+}
+
+export async function getRecruitData(): Promise<RecruitInfo[]> {
+  try {
+    const response = await http.get<RecruitInfo[]>({
+      url: '/api/recruits',
+    })
+    return response.result
+  } catch (error) {
+    console.error('Error fetching recruit data:', error)
+    throw error
+  }
 }
