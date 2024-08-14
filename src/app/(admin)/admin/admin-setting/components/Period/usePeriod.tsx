@@ -9,22 +9,9 @@ export type PeriodState = {
   endDate: Date | null
 }
 
-export type UsePeriodReturn = {
-  recruitmentPeriod: PeriodState
-  firstRegistrationPeriod: PeriodState
-  secondRegistrationPeriod: PeriodState
-  setRecruitmentPeriod: (startDate: Date | null, endDate: Date | null) => void
-  setFirstRegistrationPeriod: (
-    startDate: Date | null,
-    endDate: Date | null,
-  ) => void
-  setSecondRegistrationPeriod: (
-    startDate: Date | null,
-    endDate: Date | null,
-  ) => void
-}
-
-const getEndKey = (periodType: keyof RecruitDateInfo) => {
+const getEndKey = (
+  periodType: keyof RecruitDateInfo,
+): keyof RecruitDateInfo => {
   switch (periodType) {
     case 'recruitStartDt':
       return 'recruitEndDt'
@@ -33,8 +20,19 @@ const getEndKey = (periodType: keyof RecruitDateInfo) => {
     case 'secondStartDt':
       return 'secondEndDt'
     default:
-      return ''
+      throw new Error('Invalid periodType')
   }
+}
+export type UsePeriodReturn = {
+  recruitmentPeriod: PeriodState
+  firstRegistrationPeriod: PeriodState
+  secondRegistrationPeriod: PeriodState
+  setRecruitmentPeriod: (date: Date | null, type: 'start' | 'end') => void
+  setFirstRegistrationPeriod: (date: Date | null, type: 'start' | 'end') => void
+  setSecondRegistrationPeriod: (
+    date: Date | null,
+    type: 'start' | 'end',
+  ) => void
 }
 
 export const usePeriod = (): UsePeriodReturn => {
@@ -93,36 +91,55 @@ export const usePeriod = (): UsePeriodReturn => {
     })
   }
 
-  const setRecruitmentPeriod = (
-    startDate: Date | null,
-    endDate: Date | null,
+  const setPeriod = (
+    type: 'recruitment' | 'firstRegistration' | 'secondRegistration',
+    date: Date | null,
+    dateType: 'start' | 'end',
   ) => {
-    setRecruitmentPeriodState({ startDate, endDate })
-    updateSettingData('recruitStartDt', startDate, endDate)
-  }
-
-  const setFirstRegistrationPeriod = (
-    startDate: Date | null,
-    endDate: Date | null,
-  ) => {
-    setFirstRegistrationPeriodState({ startDate, endDate })
-    updateSettingData('firstStartDt', startDate, endDate)
-  }
-
-  const setSecondRegistrationPeriod = (
-    startDate: Date | null,
-    endDate: Date | null,
-  ) => {
-    setSecondRegistrationPeriodState({ startDate, endDate })
-    updateSettingData('secondStartDt', startDate, endDate)
+    if (type === 'recruitment') {
+      const newPeriod = {
+        ...recruitmentPeriod,
+        [dateType === 'start' ? 'startDate' : 'endDate']: date,
+      }
+      setRecruitmentPeriodState(newPeriod)
+      updateSettingData(
+        dateType === 'start' ? 'recruitStartDt' : getEndKey('recruitStartDt'),
+        newPeriod.startDate,
+        newPeriod.endDate,
+      )
+    } else if (type === 'firstRegistration') {
+      const newPeriod = {
+        ...firstRegistrationPeriod,
+        [dateType === 'start' ? 'startDate' : 'endDate']: date,
+      }
+      setFirstRegistrationPeriodState(newPeriod)
+      updateSettingData(
+        dateType === 'start' ? 'firstStartDt' : getEndKey('firstStartDt'),
+        newPeriod.startDate,
+        newPeriod.endDate,
+      )
+    } else if (type === 'secondRegistration') {
+      const newPeriod = {
+        ...secondRegistrationPeriod,
+        [dateType === 'start' ? 'startDate' : 'endDate']: date,
+      }
+      setSecondRegistrationPeriodState(newPeriod)
+      updateSettingData(
+        dateType === 'start' ? 'secondStartDt' : getEndKey('secondStartDt'),
+        newPeriod.startDate,
+        newPeriod.endDate,
+      )
+    }
   }
 
   return {
     recruitmentPeriod,
     firstRegistrationPeriod,
     secondRegistrationPeriod,
-    setRecruitmentPeriod,
-    setFirstRegistrationPeriod,
-    setSecondRegistrationPeriod,
+    setRecruitmentPeriod: (date, type) => setPeriod('recruitment', date, type),
+    setFirstRegistrationPeriod: (date, type) =>
+      setPeriod('firstRegistration', date, type),
+    setSecondRegistrationPeriod: (date, type) =>
+      setPeriod('secondRegistration', date, type),
   }
 }

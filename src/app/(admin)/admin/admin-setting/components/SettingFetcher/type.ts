@@ -38,3 +38,7 @@ export interface SettingData {
   recruitDateAndWeightInfo: RecruitDateAndWeightInfo
   isCreated: boolean
 }
+
+export interface SettingResponse {
+  message: string
+}
