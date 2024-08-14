@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 
 export const deleteLottery = (id: number) =>
   http.delete<string>({
-    url: `api/${id}`,
+    url: `api/lotteries/${id}`,
   })
 
 export const useDeleteLottery = () => {
