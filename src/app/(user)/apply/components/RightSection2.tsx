@@ -22,14 +22,9 @@ export default function RightSection2({
   setUploadedFiles,
   onFileUpload,
   onDeleteFile,
+  selectedItems,
+  onCheckboxChange,
 }: RightSection2Props) {
-  const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({
-    isSingleParent: formData.isSingleParent === '1',
-    isDisability: formData.isDisability === '1',
-    isDualIncome: formData.isDualIncome === '1',
-    isEmployeeCouple: formData.isEmployeeCouple === '1',
-    isSibling: formData.isSibling === '1',
-  })
   const [isUploading, setIsUploading] = useState<Record<string, boolean>>({})
   const [items] = useState<Item[]>([
     { id: 'isSingleParent', name: '한부모 가정', isRequired: false },
@@ -136,7 +131,7 @@ export default function RightSection2({
   }, [selectedItems, formData, onTempSave])
 
   return (
-    <div className="w-453 h-507 mt-109 mr-103">
+    <div className="w-453 h-507 mt-100 mr-103">
       <FormSection title="해당되는 항목을 체크해주세요!">
         <p className="mt-1">당첨 시 가점 요인이 됩니다.</p>
         <p className="text-[#E86565] text-12 mt-5">
@@ -150,9 +145,7 @@ export default function RightSection2({
                   id={item.id}
                   label={item.name}
                   isChecked={selectedItems[item.id]}
-                  onChange={(id) =>
-                    setSelectedItems((prev) => ({ ...prev, [id]: !prev[id] }))
-                  }
+                  onChange={(id) => onCheckboxChange(id, !selectedItems[id])}
                   isRequired={item.isRequired}
                 />
                 <FileUploadButton

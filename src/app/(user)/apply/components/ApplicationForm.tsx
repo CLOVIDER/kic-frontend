@@ -2,7 +2,7 @@
 
 'use client'
 
-import { ApplicationPayload, Child, DropdownOptions } from '@/type/application'
+import { ApplicationPayload, Child, DropdownOption, DropdownOptions } from '@/type/application'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
@@ -35,6 +35,9 @@ export default function ApplicationForm() {
     },
   })
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({})
+  const [selectedLabels, setSelectedLabels] = useState<
+    Record<string, Record<string, string>>
+  >({})
 
   const router = useRouter()
   const [children, setChildren] = useState<Child[]>([
@@ -44,6 +47,18 @@ export default function ApplicationForm() {
   const [recruitData, setRecruitData] = useState<
     { kindergartenNm: string; recruitIds: number[]; ageClasses: string[] }[]
   >([])
+  const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({
+    isSingleParent: false,
+    isDisability: false,
+    isDualIncome: false,
+    isEmployeeCouple: false,
+    isSibling: false,
+  })
+
+  const handleCheckboxChange = (id: string, value: boolean) => {
+    setSelectedItems((prev) => ({ ...prev, [id]: value }))
+    setFormData((prev) => ({ ...prev, [id]: value ? '1' : '0' }))
+  }
 
   useEffect(() => {
     const fetchRecruitData = async () => {
@@ -224,6 +239,20 @@ export default function ApplicationForm() {
     {},
   )
 
+  const handleDropdownSelect = (
+    childId: number,
+    kindergarten: string,
+    option: DropdownOption
+  ) => {
+    setSelectedLabels((prev) => ({
+      ...prev,
+      [childId.toString()]: {
+        ...prev[childId.toString()],
+        [kindergarten]: option.label,
+      },
+    }))
+  }
+
   return (
     <div>
       <AnimatePresence mode="wait" custom={currentSection === 1 ? 1 : -1}>
@@ -245,6 +274,8 @@ export default function ApplicationForm() {
               formData={formData}
               setChildren={setChildren}
               setFormData={setFormData}
+              selectedLabels={selectedLabels}
+              handleDropdownSelect={handleDropdownSelect}
             >
               {children}
             </RightSection1>
@@ -259,6 +290,8 @@ export default function ApplicationForm() {
               onDeleteFile={handleDeleteFile}
               formData={formData}
               setFormData={setFormData}
+              selectedItems={selectedItems}
+              onCheckboxChange={handleCheckboxChange}
             />
           )}
         </motion.div>

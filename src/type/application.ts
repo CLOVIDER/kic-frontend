@@ -66,6 +66,12 @@ export interface RightSection1Props {
   setChildren: React.Dispatch<React.SetStateAction<Child[]>>
   setFormData: React.Dispatch<React.SetStateAction<ApplicationPayload>>
   formData: ApplicationPayload
+  selectedLabels: Record<string, Record<string, string>>
+  handleDropdownSelect: (
+    childId: number,
+    kindergarten: string,
+    option: DropdownOption,
+  ) => void
 }
 
 export interface RightSection2Props {
@@ -78,6 +84,8 @@ export interface RightSection2Props {
   setUploadedFiles: React.Dispatch<React.SetStateAction<Record<string, File>>>
   onFileUpload: (id: string, file: File) => void
   onDeleteFile: (id: string) => void
+  selectedItems: Record<string, boolean>
+  onCheckboxChange: (id: string, value: boolean) => void
 }
 
 export interface ApplicationFormProps {
@@ -100,4 +108,11 @@ export interface RecruitInfo {
   kindergartenNm: string
   recruitIds: number[]
   aggClasses: string[]
+}
+
+export interface DropdownSelectProps {
+  options: DropdownOption[]
+  selectedOption: string
+  onSelect: (option: DropdownOption) => void
+  placeholder: string
 }

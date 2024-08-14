@@ -13,10 +13,10 @@ interface DropdownOption {
   label: string
 }
 
-interface DropdownSelectProps {
+export interface DropdownSelectProps {
   options: DropdownOption[]
   selectedOption: string
-  onSelect: (key: string) => void
+  onSelect: (option: DropdownOption) => void
   placeholder: string
 }
 
@@ -43,7 +43,7 @@ export default function DropdownSelect({
           />
         </Button>
       </DropdownTrigger>
-      <DropdownMenu onAction={(key) => onSelect(String(key))}>
+      <DropdownMenu onAction={(key) => onSelect(options.find(option => option.key === key)!)}>
         {options.map((option) => (
           <DropdownItem key={option.key} className="text-center">
             {option.label}

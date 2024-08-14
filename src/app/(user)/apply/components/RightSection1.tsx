@@ -1,12 +1,20 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
   RightSection1Props,
   ApplicationPayload,
   Child,
+  DropdownOption,
 } from '@/type/application'
 import FormSection from './common/FormSection'
 import ChildInput from './common/ChildInput'
 import DropdownSelect from './common/DropdownSelect'
+
+interface DropdownSelectProps {
+  options: DropdownOption[]
+  selectedOption: string
+  onSelect: (key: string, option: DropdownOption) => void
+  placeholder: string
+}
 
 export default function RightSection1({
   kindergartenName,
@@ -14,7 +22,13 @@ export default function RightSection1({
   onSubmit,
   children,
   setChildren,
-}: RightSection1Props) {
+  selectedLabels,
+  handleDropdownSelect,
+}: RightSection1Props & {
+  selectedLabels: Record<string, Record<string, string>>;
+  handleDropdownSelect: (childId: number, kindergarten: string, option: DropdownOption) => void;
+}) {
+
   const addChild = useCallback(() => {
     setChildren((prevChildren) => [
       ...prevChildren,
@@ -69,11 +83,8 @@ export default function RightSection1({
   )
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="mr-103 mt-100">
       <FormSection title="어린이집을 선택해주세요.">
-        <p className="mt-5 text-12 text-[#e86565]">
-          + 버튼을 누르면 아이 추가가 가능해요.
-        </p>
         {children.map((child: Child) => (
           <div key={child.id} className="mb-6">
             <ChildInput
@@ -90,9 +101,9 @@ export default function RightSection1({
                   <div className="w-[335px] text-[#666666] text-20">{name}</div>
                   <DropdownSelect
                     options={dropdownOptions[name]}
-                    selectedOption={child.classes[name] || ''}
-                    onSelect={(key) =>
-                      updateChildInfo(child.id, 'class', key, name)
+                    selectedOption={selectedLabels[child.id.toString()]?.[name] || ''}
+                    onSelect={(option) =>
+                      handleDropdownSelect(child.id, name, option)
                     }
                     placeholder="분반선택"
                   />
