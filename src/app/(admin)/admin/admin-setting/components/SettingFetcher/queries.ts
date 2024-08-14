@@ -37,6 +37,7 @@ export const useUploadSetting = (mode: boolean) => {
           return acc
         }, {} as RecruitWeightInfo)
 
+        // eslint-disable-next-line no-param-reassign
         data.recruitDateAndWeightInfo.recruitWeightInfo =
           cleanedRecruitWeightInfo
       }
