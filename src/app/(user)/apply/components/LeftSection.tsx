@@ -1,16 +1,43 @@
-import React from 'react'
-import Image from 'next/image'
-import { LeftSectionProps } from '@/type/application'
-import { useLeftSection } from '../hooks/useLeftSection'
+'use client'
 
-export default function LeftSection({ name, date, ifCC }: LeftSectionProps) {
-  const { formattedDate, ccStatus } = useLeftSection(date, ifCC)
+import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
+import { EmployeeInfo, getEmployeeData } from '../api'
+
+export default function LeftSection() {
+  const [employeeData, setEmployeeData] = useState<EmployeeInfo | undefined>(
+    undefined,
+  )
+
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const data = await getEmployeeData()
+        setEmployeeData(data)
+      } catch (error) {
+        console.error('Error fetching employee data:', error)
+      }
+    }
+    fetchEmployeeData()
+  }, [setEmployeeData])
+
+  if (!employeeData) {
+    return <div>Loading...</div>
+  }
+
+  const { nameKo, workedAt, isCouple } = employeeData
+  const formattedDate = new Date(workedAt).toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  })
+  const ccStatus = isCouple ? 'O' : 'X'
 
   return (
     <div className="h-[547px] w-[366px] mt-87 ml-123 flex flex-col items-center">
       <div className="font-bold text-[31px]">
         <span className="text-[#202020]">안녕하세요 </span>
-        <span className="text-[#ffaa2c]">{name}</span>
+        <span className="text-[#ffaa2c]">{nameKo}</span>
         <span className="text-[#202020]">님 !</span>
       </div>
       <p className="relative mt-49 left-[16px] font-medium text-[20px] text-center text-[#202020]">
@@ -32,8 +59,8 @@ export default function LeftSection({ name, date, ifCC }: LeftSectionProps) {
             <div>입사일</div>
             <div className="w-93 mt-22">사내 부부 여부</div>
           </div>
-          <div className="w-90 h-72 text-[#666666] text-16 text-center">
-            <div className="w-90 h-24">{formattedDate}</div>
+          <div className="w-100 h-72 text-[#666666] text-16 text-center">
+            <div className="w-100 h-24">{formattedDate}</div>
             <div className="mt-22">{ccStatus}</div>
           </div>
         </div>
