@@ -6,17 +6,17 @@ import useSave from '../useSave'
 export default function Buttons() {
   const { handleSave } = useSave()
   return (
-    <>
-      <Button className="w-98 h-31 bg-white border border-[#fdba74] font-semibold text-[#fb923c] rounded-16 text-sm">
-        이전
+    <div className="flex flex-row justify-end mt-20 gap-20">
+      <Button className="w-150 h-50 bg-white border border-[#fdba74] font-semibold text-[#fb923c] rounded-16 text-lg">
+        돌아가기
       </Button>
       <Button
         type="button"
-        className="w-98 h-31 shadow-md gradient-button text-[#ffffff] font-bold rounded-16 text-sm"
+        className="w-150 h-50 shadow-md gradient-button text-[#ffffff] font-bold rounded-16 text-lg"
         onClick={handleSave}
       >
         저장
       </Button>
-    </>
+    </div>
   )
 }

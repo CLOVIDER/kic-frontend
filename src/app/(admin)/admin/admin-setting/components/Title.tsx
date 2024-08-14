@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils'
+
 export default function Title({
   title,
   subtitle,
@@ -8,9 +10,9 @@ export default function Title({
   className?: string
 }) {
   return (
-    <div className={className}>
-      <p className="text-20  font-semibold">{title}</p>
-      <p className="text-10 text-[#E86565]"> {subtitle}</p>
+    <div>
+      <p className={cn('text-30 font-semibold', className)}>{title}</p>
+      <p className="text-15 text-[#E86565]"> {subtitle}</p>
     </div>
   )
 }
