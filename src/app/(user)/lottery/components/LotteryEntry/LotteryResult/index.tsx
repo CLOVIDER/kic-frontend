@@ -1,7 +1,17 @@
-import { Button } from '@nextui-org/react'
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 import LotteryCard from '../LotteryCard'
+import { useChildrenContext } from '../../../fetcher/ChildrenFetcher'
 
 export default function LotteryResult() {
+  const { childrenInfo } = useChildrenContext()
+  const { push } = useRouter()
+
   return (
     <LotteryCard className="gap-11 text-center z-100">
       <LotteryCard.Title className="flex">
@@ -13,13 +23,21 @@ export default function LotteryResult() {
       </LotteryCard.Description>
 
       <LotteryCard.Content className="flex flex-col gap-20 mt-71">
-        {/* TODO: click event */}
-        <Button className="border-1 p-16 border-[#F90] rounded-16 w-221 h-56 bg-white text-20 text-[#F90]">
-          이주애
-        </Button>
-        <Button className="border-1 p-16 border-[#F90] rounded-16 w-221 h-56 bg-white text-20 text-[#F90]">
-          기모리
-        </Button>
+        {childrenInfo.map(({ childName, className, lotteryId }) => (
+          <Dropdown key={childName}>
+            <DropdownTrigger>{childName}</DropdownTrigger>
+
+            <DropdownMenu>
+              <DropdownItem
+                key={lotteryId}
+                className='className="border-1 p-16 border-[#F90] rounded-16 w-221 h-56 bg-white text-20 text-[#F90]'
+                onClick={() => push(`/lottery/${lotteryId}`)}
+              >
+                {className}
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        ))}
       </LotteryCard.Content>
     </LotteryCard>
   )
