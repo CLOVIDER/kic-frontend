@@ -8,6 +8,7 @@ import {
   FileUploadResponse,
   RecruitInfo,
   RecruitResponse,
+  ApplicationStatus,
 } from './types'
 
 export async function uploadDocument(file: File): Promise<string> {
@@ -34,7 +35,7 @@ export async function uploadDocument(file: File): Promise<string> {
 }
 
 // 지원서 제출
-export async function submitApplication(
+export function submitApplication(
   data: ApplicationPayload,
 ): Promise<BaseResponse<ApplicationResponse>> {
   return http.post<ApplicationResponse>({
@@ -44,7 +45,7 @@ export async function submitApplication(
 }
 
 // 임시 저장
-export async function saveApplicationTemp(
+export function saveApplicationTemp(
   data: ApplicationPayload,
 ): Promise<BaseResponse<ApplicationResponse>> {
   return http.post<ApplicationResponse>({
@@ -54,7 +55,7 @@ export async function saveApplicationTemp(
 }
 
 // 파일 업로드
-export async function uploadFile(
+export function uploadFile(
   file: File,
 ): Promise<BaseResponse<FileUploadResponse>> {
   const formData = new FormData()
@@ -70,7 +71,7 @@ export async function uploadFile(
 }
 
 // 모집 정보 가져오기
-export async function getRecruitInfo(): Promise<BaseResponse<RecruitResponse>> {
+export function getRecruitInfo(): Promise<BaseResponse<RecruitResponse>> {
   return http.get<RecruitResponse>({
     url: '/api/recruits',
   })
@@ -94,6 +95,18 @@ export async function getRecruitData(): Promise<RecruitInfo[]> {
     return response.result
   } catch (error) {
     console.error('Error fetching recruit data:', error)
+    throw error
+  }
+}
+
+export async function getApplicationData(): Promise<ApplicationStatus> {
+  try {
+    const response = await http.get<ApplicationStatus>({
+      url: '/api/applications',
+    })
+    return response.result
+  } catch (error) {
+    console.error('Error fetching application data:', error)
     throw error
   }
 }

@@ -30,3 +30,7 @@ export interface RecruitInfo {
   recruitIds: number[]
   ageClasses: string[]
 }
+
+export interface ApplicationStatus {
+  id: number
+}
