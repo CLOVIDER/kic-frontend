@@ -1,11 +1,5 @@
 import { http } from '@/api'
 
-export const AGE_CLASS_MAP = {
-  INFANT: '영아',
-  TODDLER: '유아',
-  KID: '어린이',
-} as const
-
 export type GetKindergartensResponse = Array<{
   kindergartenId: number
   kindergartenNm: string
