@@ -16,7 +16,7 @@ export interface GetLotteriesResponse extends Pagination {
 export interface GetLotteriesRequest {
   page: number
   size?: number
-  classValue?: 'INFANT' | 'TODDLER' | 'KID' | ''
+  classValue?: number
   accountId?: string
   kindergartenId: number
 }

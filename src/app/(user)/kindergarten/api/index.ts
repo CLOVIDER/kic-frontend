@@ -18,7 +18,8 @@ export type GetKindergartensResponse = Array<{
   kindergartenImageUrls: string[]
   kindergartenClass: Array<{
     className: string
-    ageClass: keyof typeof AGE_CLASS_MAP
+    ageClass: number
+    ageClassString: number
   }>
 }>
 

@@ -10,7 +10,7 @@ import {
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import { useDeferredValue, useState } from 'react'
 import { useKindergartensContext } from '@/app/(user)/kindergarten/fetcher/KindergartensFetcher'
-import { AGE_CLASS_MAP } from '@/app/(user)/kindergarten/api'
+// import { AGE_CLASS_MAP } from '@/app/(user)/kindergarten/api'
 import LotteriesFetcher from './fetcher/ResultApplicationsFetcher'
 import LotteryTable from './LotteryTable'
 
@@ -18,10 +18,8 @@ export default function Page() {
   const { kindergartens } = useKindergartensContext()
   const [page, setPage] = useState<number>(0)
   const [searchInput, setSearchInput] = useState<string>('')
-  const [kindergartenId, setKindergartenId] = useState<number>(0)
-  const [classValue, setClassValue] = useState<'INFANT' | 'TODDLER' | 'KID'>(
-    'INFANT',
-  )
+  const [kindergartenId, setKindergartenId] = useState<number>(1)
+  const [classValue, setClassValue] = useState<number>(1)
   const [className, setClassName] = useState<string>(
     kindergartens[0].kindergartenClass[0].className,
   )
@@ -39,7 +37,7 @@ export default function Page() {
               className="cursor-pointer w-120 h-33 bg-[#FEC46D] uppercase text-[white] flex justify-center items-center rounded-20"
             >
               <div className="flex justify-center items-center px-10">
-                {`${className} ${AGE_CLASS_MAP[classValue]}`.trim()}
+                {`${className} ${classValue}`.trim()}
                 <p />
                 <DropdownIcon />
               </div>
@@ -48,17 +46,17 @@ export default function Page() {
             <DropdownMenu>
               {kindergartens.flatMap((kindergarten) =>
                 kindergarten.kindergartenClass.map(
-                  ({ className: kindergatenClassName, ageClass }) => (
+                  ({ className: kindergartenClassName, ageClass }) => (
                     <DropdownItem
-                      key={`${kindergatenClassName}-${AGE_CLASS_MAP[ageClass]}`}
+                      key={`${kindergartenClassName}`}
                       onClick={() => {
                         setKindergartenId(kindergarten.kindergartenId)
                         setClassValue(ageClass)
-                        setClassName(kindergatenClassName)
+                        setClassName(kindergartenClassName)
                       }}
                       className="text-center text-13"
                     >
-                      {`${kindergatenClassName}-${AGE_CLASS_MAP[ageClass]}`}
+                      {kindergartenClassName}
                     </DropdownItem>
                   ),
                 ),
