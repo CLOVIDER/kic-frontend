@@ -16,7 +16,7 @@ export const usePostLogin = (data: LoginRequest) => {
       Cookies.set(ACCESS_TOKEN, accessToken)
       Cookies.set(ROLE, role)
 
-      if (role === 'admin') {
+      if (role === 'ADMIN') {
         push('/admin')
       } else {
         push('/')
