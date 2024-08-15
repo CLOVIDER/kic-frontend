@@ -6,10 +6,14 @@ import { Application, If } from '@/components/common'
 import Image from 'next/image'
 import './application.css'
 import { cn } from '@/lib/utils'
+import CancelModal from '@/components/common/CancelModal'
+import { useRouter } from 'next/navigation'
+import { getApplicationData } from '../api'
 
 export default function Page() {
   const [showComponents, setShowComponents] = useState(false)
   const [animate, setAnimate] = useState(false)
+  const [applicationId, setApplicationId] = useState<number>(0)
 
   useEffect(() => {
     const timer1 = setTimeout(() => {
@@ -26,6 +30,23 @@ export default function Page() {
     }
   }, [])
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getApplicationData()
+        if (data && data.id) {
+          setApplicationId(data.id)
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Error fetching application data:', error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  const { push } = useRouter()
   return (
     <div className="w-full h-full flex flex-col gap-5 relative p-100">
       <Image
@@ -40,7 +61,7 @@ export default function Page() {
       />
       <h1
         className={cn(
-          'w-full flex justify-center text-30 mb-30 font-sans transition-all duration-1000 ease-in-out text-center',
+          'w-full flex justify-center text-30 mb-30 mt-30 font-sans transition-all duration-1000 ease-in-out text-center',
           animate && 'text-move',
         )}
       >
@@ -54,10 +75,21 @@ export default function Page() {
 
       <If condition={showComponents}>
         <div className="flex flex-row items-center gap-10 justify-end mr-210 fade-in delay-600">
-          <Button className="border-1 p-16 border-orange rounded-[20px] w-120 h-40 bg-white text-[18px] text-orange">
-            신청 취소
-          </Button>
-          <Button className="border-1 p-16 rounded-[20px] w-120 h-40 text-[18px] text-white bg-gradient-to-r from-[#ffbb37] to-[#ffe39e]">
+          <CancelModal id={applicationId}>
+            {(onOpen) => (
+              <Button
+                onClick={onOpen}
+                className="border-1 p-16 border-orange rounded-[20px] w-120 h-40 bg-white text-[18px] text-orange"
+              >
+                신청 취소
+              </Button>
+            )}
+          </CancelModal>
+
+          <Button
+            onClick={() => push('/apply')}
+            className="border-1 p-16 rounded-[20px] w-120 h-40 text-[18px] text-white bg-gradient-to-r from-[#ffbb37] to-[#ffe39e]"
+          >
             수정
           </Button>
         </div>

@@ -70,7 +70,7 @@ export default function ChildResultCard({
                     </Button>
                   </If>
                   <If
-                    condition={statusLabel === '대기' || statusLabel === '등록'}
+                    condition={statusLabel === '대기' || statusLabel === '당첨'}
                   >
                     <CancelModal id={applicationId}>
                       {(onOpen) => (
