@@ -12,8 +12,8 @@ export type GetKindergartensResponse = Array<{
   kindergartenImageUrls: string[]
   kindergartenClass: Array<{
     className: string
-    ageClass: number
-    ageClassString: number
+    ageClass: string
+    ageClassString: string
   }>
 }>
 

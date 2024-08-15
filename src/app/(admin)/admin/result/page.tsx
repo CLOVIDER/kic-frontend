@@ -9,7 +9,7 @@ import {
 } from '@nextui-org/react'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import { useDeferredValue, useState } from 'react'
-import { useKindergartensContext } from '@/app/(user)/kindergarten/fetcher/KindergartensFetcher'
+import { useKindergartensContext } from '@/app/kindergarten/fetcher/KindergartensFetcher'
 import LotteriesFetcher from './fetcher/ResultApplicationsFetcher'
 import LotteryTable from './LotteryTable'
 
@@ -20,7 +20,7 @@ export default function Page() {
   const [kindergartenId, setKindergartenId] = useState<number>(
     kindergartens[0].kindergartenId,
   )
-  const [classValue, setClassValue] = useState<number>(1)
+  const [classValue, setClassValue] = useState<string>('1')
   const [kindergartenName, setKindergartenName] = useState<string>(
     kindergartens[0].kindergartenNm,
   )

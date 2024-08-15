@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import { StrictPropsWithChildren } from '@/type'
-import KindergartensFetcher from '@/app/(user)/kindergarten/fetcher/KindergartensFetcher'
+import KindergartensFetcher from '@/app/kindergarten/fetcher/KindergartensFetcher'
 
 export const metadata: Metadata = {
   title: '관리자 랜딩페이지',
