@@ -25,13 +25,16 @@
     "import/prefer-default-export": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-no-useless-fragment": "off",
-    "prettier/prettier": [ "error",
+    "prettier/prettier": [
+      "error",
       {
-        "endOfLine" : "auto"
+        "endOfLine": "auto"
       }
     ],
     "react/require-default-props": "off",
     "react/no-unused-prop-types": "off",
-    "no-restricted-syntax": "off"
+    "no-restricted-syntax": "off",
+    "no-alert": "off",
+    "jsx-a11y/control-has-associated-label": "off"
   }
 }

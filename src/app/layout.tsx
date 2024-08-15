@@ -30,8 +30,7 @@ export default function RootLayout({
           <Suspense fallback={<>loading..</>}>
             <QueryProvider>
               <NextUIProvider className="h-full">
-                <Header />
-                {children}
+                <Header>{children}</Header>
               </NextUIProvider>
             </QueryProvider>
           </Suspense>

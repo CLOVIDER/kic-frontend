@@ -1,5 +1,4 @@
-import { useRouter } from 'next/navigation'
-import { Dispatch, SetStateAction, useCallback } from 'react'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import {
   Table,
   TableHeader,
@@ -10,7 +9,10 @@ import {
   Chip,
   ChipProps,
   Pagination,
+  useDisclosure,
 } from '@nextui-org/react'
+import ApproveModal from '@/app/(admin)/components/Approve'
+import { If } from '@/components'
 import { useApplicationsContext } from '../fetcher/ApplicationsFetcher'
 import { GetApplicationsResponse } from '../api'
 
@@ -39,7 +41,15 @@ export default function ApplicationTable({
   const {
     applications: { content, totalPage },
   } = useApplicationsContext()
-  const { push } = useRouter()
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const [selectedApplication, setSelectedApplication] =
+    useState<Application | null>(null)
+
+  const handleRowClick = (application: Application) => {
+    setSelectedApplication(application)
+    onOpen()
+  }
 
   const renderCell = useCallback(
     (application: Application, columnKey: React.Key) => {
@@ -95,7 +105,7 @@ export default function ApplicationTable({
           {(item) => (
             <TableRow
               // FIXME: href
-              onClick={() => push('/')}
+              onClick={() => handleRowClick(item)}
               key={item.applicationId}
               className="h-45 cursor-pointer"
             >
@@ -110,6 +120,13 @@ export default function ApplicationTable({
       </Table>
 
       <div className="mt-30" />
+      <If condition={selectedApplication != null}>
+        <ApproveModal
+          application={selectedApplication!}
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+        />
+      </If>
 
       <Pagination
         page={page}

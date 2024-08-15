@@ -1,0 +1,3 @@
+.title {
+  @apply text-20 font-semibold whitespace-nowrap w-170 flex justify-end;
+}

@@ -13,15 +13,15 @@ type UseKindergartenReturn = {
   kindergartens: Kindergarten[]
   classes: ClassInfo[][]
   addClass: (index: number) => void
-  removeClass: (kindergartenIndex: number, classIndex: number) => void
+  removeClass: (kindergartenIndex: number, ageClass: number) => void
   updateClassName: (
     kindergartenIndex: number,
-    classIndex: number,
+    ageClass: number,
     value: string,
   ) => void
   updateClassCapacity: (
     kindergartenIndex: number,
-    classIndex: number,
+    ageClass: number,
     value: number,
   ) => void
 }
@@ -36,10 +36,9 @@ export const useKindergarten = (): UseKindergartenReturn => {
   }))
   const [classes, setClasses] = useState<ClassInfo[][]>(
     kindergartenClassInfoList.map((data) =>
-      data.classInfoList.map((cls, index) => ({
+      data.classInfoList.map((cls) => ({
         ageClass: cls.ageClass,
         recruitCnt: cls.recruitCnt,
-        classIndex: index,
       })),
     ),
   )
@@ -47,8 +46,7 @@ export const useKindergarten = (): UseKindergartenReturn => {
   const addClass = (index: number): void => {
     setClasses((prevClasses) => {
       const newClass = {
-        classIndex: prevClasses[index].length,
-        ageClass: '',
+        ageClass: 0,
         recruitCnt: 0,
       }
       const newClasses = [...prevClasses]
@@ -63,21 +61,17 @@ export const useKindergarten = (): UseKindergartenReturn => {
     })
   }
 
-  const removeClass = (kindergartenIndex: number, classIndex: number): void => {
+  const removeClass = (kindergartenIndex: number, ageClass: number): void => {
     setClasses((prevClasses) => {
       const newClasses = [...prevClasses]
       if (newClasses[kindergartenIndex].length > 1) {
         newClasses[kindergartenIndex] = newClasses[kindergartenIndex].filter(
-          (_, cIndex) => cIndex !== classIndex,
+          (cls) => cls.ageClass !== ageClass,
         )
 
         const updatedData = { ...settingData }
-
         updatedData.kindergartenClassInfoList[kindergartenIndex].classInfoList =
-          newClasses[kindergartenIndex].map(({ ageClass, recruitCnt }) => ({
-            ageClass,
-            recruitCnt,
-          }))
+          newClasses[kindergartenIndex]
         setSettingData(updatedData)
       }
       return newClasses
@@ -86,17 +80,21 @@ export const useKindergarten = (): UseKindergartenReturn => {
 
   const updateClassName = (
     kindergartenIndex: number,
-    classIndex: number,
+    ageClass: number,
     value: string,
   ): void => {
     setClasses((prevClasses) => {
       const newClasses = [...prevClasses]
-      newClasses[kindergartenIndex][classIndex].ageClass = value
+      const classToUpdate = newClasses[kindergartenIndex].find(
+        (cls) => cls.ageClass === ageClass,
+      )
+      if (classToUpdate) {
+        classToUpdate.ageClass = Number(value)
+      }
 
       const updatedData = { ...settingData }
-      updatedData.kindergartenClassInfoList[kindergartenIndex].classInfoList[
-        classIndex
-      ].ageClass = value
+      updatedData.kindergartenClassInfoList[kindergartenIndex].classInfoList =
+        newClasses[kindergartenIndex]
       setSettingData(updatedData)
 
       return newClasses
@@ -105,17 +103,24 @@ export const useKindergarten = (): UseKindergartenReturn => {
 
   const updateClassCapacity = (
     kindergartenIndex: number,
-    classIndex: number,
+    ageClass: number,
     value: number,
   ): void => {
     setClasses((prevClasses) => {
       const newClasses = [...prevClasses]
-      newClasses[kindergartenIndex][classIndex].recruitCnt = value
+      const classIndex = newClasses[kindergartenIndex].findIndex(
+        (cls) => cls.ageClass === ageClass,
+      )
+
+      if (classIndex !== -1) {
+        newClasses[kindergartenIndex][classIndex].recruitCnt = value
+      } else {
+        newClasses[kindergartenIndex].push({ ageClass, recruitCnt: value })
+      }
 
       const updatedData = { ...settingData }
-      updatedData.kindergartenClassInfoList[kindergartenIndex].classInfoList[
-        classIndex
-      ].recruitCnt = value
+      updatedData.kindergartenClassInfoList[kindergartenIndex].classInfoList =
+        newClasses[kindergartenIndex]
       setSettingData(updatedData)
 
       return newClasses

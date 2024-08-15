@@ -1,3 +1,5 @@
+'use client'
+
 import { generateContext } from '@/react-utils'
 import { Dispatch, SetStateAction } from 'react'
 import { SettingData } from './type'

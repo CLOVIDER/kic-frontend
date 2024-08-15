@@ -1,5 +1,5 @@
 export interface ClassInfo {
-  ageClass: string
+  ageClass: number
   recruitCnt: number
 }
 
@@ -37,4 +37,8 @@ export interface SettingData {
   kindergartenClassInfoList: KindergartenClassInfo[]
   recruitDateAndWeightInfo: RecruitDateAndWeightInfo
   isCreated: boolean
+}
+
+export interface SettingResponse {
+  message: string
 }
