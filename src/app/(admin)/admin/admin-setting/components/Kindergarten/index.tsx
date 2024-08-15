@@ -12,19 +12,10 @@ import Title from '../Title'
 import { useKindergarten } from './useKindergarten'
 import '../setting.css'
 
-enum AgeClass {
-  ZERO = '0세',
-  ONE = '1세',
-  TWO = '2세',
-  THREE = '3세',
-  FOUR = '4세',
-  FIVE = '5세',
-}
-
 export default function Kindergarten() {
   const { kindergartens, classes, updateClassCapacity } = useKindergarten()
 
-  const defaultClasses = Object.values(AgeClass).map((ageClass) => ({
+  const defaultClasses = [0, 1, 2, 3, 4, 5].map((ageClass) => ({
     ageClass,
     recruitCnt: 0,
   }))
@@ -74,7 +65,7 @@ export default function Kindergarten() {
                   key={ageClass}
                   className="flex flex-row gap-10 mb-10 px-5 border-b-1 border-[#ccc2c2] items-center"
                 >
-                  <p className="w-250">{ageClass}</p>
+                  <p className="w-250">{ageClass}세</p>
 
                   <Input
                     type="number"

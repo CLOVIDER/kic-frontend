@@ -1,5 +1,5 @@
 export interface ClassInfo {
-  ageClass: string
+  ageClass: number
   recruitCnt: number
 }
 
