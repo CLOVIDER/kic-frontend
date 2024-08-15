@@ -19,6 +19,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
     kindergartenScale,
     kindergartenCapacity,
     kindergartenTime,
+    kindergartenClass,
   } = kindergartens[Number(id) - 1]
 
   return (
@@ -126,6 +127,17 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
             >
               {kindergartenInfo}
             </motion.p>
+
+            <div className="px-51 pt-40 flex flex-col gap-10">
+              <h2 className="text-20">분반</h2>
+
+              {kindergartenClass.map(({ className, ageClass }) => (
+                <div key={className} className="flex gap-40 items-center">
+                  <div>{className}</div>
+                  <div>{ageClass}세</div>
+                </div>
+              ))}
+            </div>
           </CardBody>
         </Card>
       </section>
