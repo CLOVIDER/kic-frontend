@@ -33,7 +33,7 @@ export default function WritePage() {
     return () => {
       document.removeEventListener('keydown', handleEscapeKey)
     }
-  }, [moveBack])
+  }, [])
 
   const handleSave = () => {
     setIsSaving(true)

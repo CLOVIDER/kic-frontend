@@ -6,7 +6,9 @@ import axios, {
   Method,
   AxiosRequestConfig,
 } from 'axios'
+// eslint-disable-next-line
 import { ACCESS_TOKEN, HTTP_METHODS } from '@/constants'
+// eslint-disable-next-line
 import Cookies from 'js-cookie'
 import { BaseResponse } from './types'
 
@@ -26,7 +28,8 @@ axiosInstance.interceptors.request.use(
     }
 
     // eslint-disable-next-line
-    config.headers.set('Authorization', `Bearer ${accessToken}`);
+    config.headers.Authorization = `Bearer ${accessToken}`
+
     return config
   },
   (error: AxiosError) => {

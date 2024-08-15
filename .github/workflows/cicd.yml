@@ -30,7 +30,7 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Docker 이미지 빌드중...
+      - name: Docker 이미지 빌드중..
         uses: docker/build-push-action@v4
         with:
           file: Dockerfile
