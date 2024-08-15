@@ -22,7 +22,7 @@ export default function LoginInput() {
         onValueChange={setEmail}
         value={email}
         wrapperClassName="w-242 bg-[#EAF0F7] rounded-10 px-17 py-9"
-        className="border-none"
+        className="border-none bg-[#EAF0F7]"
         placeholder="이메일 입력"
       />
 
@@ -31,7 +31,7 @@ export default function LoginInput() {
         onValueChange={setPassword}
         type={isPassword ? 'password' : 'text'}
         wrapperClassName="w-242 bg-[#EAF0F7] rounded-10 px-17 py-9 flex justify-between"
-        className="border-none"
+        className="border-none bg-[#EAF0F7]"
         placeholder="비밀번호 입력"
         endContent={
           <PasswordHidden
