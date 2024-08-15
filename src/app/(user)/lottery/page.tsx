@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import { If } from '@/components'
