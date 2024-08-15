@@ -1,22 +1,20 @@
-'use client'
-
 import Image from 'next/image'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
-import { motion } from 'framer-motion'
 import { If } from '@/components'
-import LotteryProcessing from './components/LotteryEntry/LotteryProcessing'
-import LotteryResult from './components/LotteryEntry/LotteryResult'
-import { ChildrenFetcher } from './fetcher/ChildrenFetcher'
-import { useRecruitStatusContext } from './fetcher/RecruitStatusFetcher'
+import { motion } from 'framer-motion'
 import LotteryEnd from './components/LotteryEntry/LotteryEnd'
+import LotteryProcessing from './components/LotteryEntry/LotteryProcessing'
+import LotteryPending from './components/LotteryEntry/LotteryPending'
+import LotteryResult from './components/LotteryEntry/LotteryResult'
+import { useRecruitStatusContext } from './fetcher/RecruitStatusFetcher'
+import { ChildrenFetcher } from './fetcher/ChildrenFetcher'
 
-export default function LotteryEntry() {
+export default function Page() {
   const { recruitStatus } = useRecruitStatusContext()
 
   return (
     <section className="flex">
       <motion.div
-        layoutId="image"
         initial={{ y: 0 }}
         animate={{ y: [0, -20, 0] }}
         transition={{
@@ -35,23 +33,32 @@ export default function LotteryEntry() {
         />
       </motion.div>
 
-      <If
-        condition={recruitStatus === '모집예정' || recruitStatus === '모집없음'}
-      >
-        <LotteryEnd />
-      </If>
+      {recruitStatus === '모집예정' && <LotteryEnd />}
+      {recruitStatus === '모집없음' && <LotteryEnd />}
 
       <If
-        condition={['모집기간', '1차등록기간', '2차등록기간'].includes(
-          recruitStatus,
-        )}
+        condition={
+          recruitStatus === '모집기간' ||
+          recruitStatus === '1차등록기간' ||
+          recruitStatus === '2차등록기간'
+        }
       >
         <AsyncBoundaryWithQuery>
           <ChildrenFetcher>
-            {recruitStatus === '모집기간' && <LotteryProcessing />}
+            <LotteryPending>
+              <If condition={recruitStatus === '모집기간'}>
+                <LotteryProcessing />
+              </If>
 
-            {(recruitStatus === '1차등록기간' ||
-              recruitStatus === '2차등록기간') && <LotteryResult />}
+              <If
+                condition={
+                  recruitStatus === '1차등록기간' ||
+                  recruitStatus === '2차등록기간'
+                }
+              >
+                <LotteryResult />
+              </If>
+            </LotteryPending>
           </ChildrenFetcher>
         </AsyncBoundaryWithQuery>
       </If>
