@@ -15,7 +15,6 @@ export default function Logo() {
     setIsLoggedIn(!!accessToken)
   }, [pathname])
 
-
   const handleLogout = () => {
     Cookies.remove(ACCESS_TOKEN)
     Cookies.remove(ROLE)
