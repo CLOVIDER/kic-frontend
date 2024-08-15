@@ -19,14 +19,14 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    // const accessToken = Cookies.get(ACCESS_TOKEN) as string
+    const accessToken = Cookies.get(ACCESS_TOKEN) as string
 
-    // if (!accessToken) {
-    //   return config
-    // }
+    if (!accessToken) {
+      return config
+    }
 
     // eslint-disable-next-line
-    config.headers.Authorization = `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}`
+    config.headers.Authorization = `Bearer ${accessToken}`
 
     return config
   },
