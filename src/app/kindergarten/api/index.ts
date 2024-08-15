@@ -13,6 +13,7 @@ export type GetKindergartensResponse = Array<{
   kindergartenClass: Array<{
     className: string
     ageClass: string
+    ageClassString: string
   }>
 }>
 

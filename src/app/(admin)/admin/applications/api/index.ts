@@ -1,4 +1,5 @@
 import { http } from '@/api'
+import { Pagination } from '@/type'
 
 export type GetKindergartensResponse = Array<{
   kindergartenId: number
@@ -11,7 +12,7 @@ export type GetKindergartensResponse = Array<{
   kindergartenImageUrl: string
 }>
 
-export interface GetApplicationsResponse {
+export interface GetApplicationsResponse extends Pagination {
   content: [
     {
       createdAt: string
@@ -21,13 +22,6 @@ export interface GetApplicationsResponse {
       isAccept: string
     },
   ]
-  totalPage: number
-  totalElements: number
-  size: number
-  currPage: number
-  hasNext: boolean
-  isFirst: boolean
-  isLast: boolean
 }
 
 export interface GetApplicationsRequest {
