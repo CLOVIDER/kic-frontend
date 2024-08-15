@@ -10,12 +10,10 @@ export type GetKindergartensResponse = Array<{
   kindergartenTime: string
   kindergartenInfo: string
   kindergartenImageUrls: string[]
-  kindergartenClass: Array<
-    Array<{
-      className: string
-      ageClass: string
-    }>
-  >
+  kindergartenClass: Array<{
+    className: string
+    ageClass: string
+  }>
 }>
 
 export const getKindergartens = () =>

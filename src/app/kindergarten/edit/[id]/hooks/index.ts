@@ -33,7 +33,7 @@ export default function useEdit(id: number) {
       className: string
       ageClass: string
     }>
-  >(kindergartenClass.flat())
+  >(kindergartenClass)
   const { mutateAsync: postImage } = usePostImage('kindergarten')
 
   const handleImages = useCallback(
