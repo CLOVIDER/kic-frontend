@@ -1,10 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 'use client'
 
 import { JSX, useMemo } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/util'
-import { Boxes, Home, Lightning, Person, Talk } from '@/components/common/Icons'
+import {
+  Boxes,
+  Graph,
+  Home,
+  Lightning,
+  Person,
+  Talk,
+} from '@/components/common/Icons'
 import { getApplicationData } from '@/app/(user)/apply/api'
 
 export default function Navigator() {
@@ -21,6 +30,7 @@ export default function Navigator() {
         router.push('/apply/application')
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error checking application status:', error)
     }
   }
@@ -45,7 +55,7 @@ export default function Navigator() {
     return [
       createRoute('어린이집 정보', '/kindergarten', <Home />),
       createRoute('신청하기', '#', <Lightning />, handleApplyClick),
-      createRoute('신청결과', '/lottery', <Lightning />),
+      createRoute('신청결과', '/lottery', <Graph />),
       createRoute('신청내역', '/history', <Person />),
       createRoute('공지사항', '/notice', <Boxes />),
       createRoute('1:1 문의', '/q', <Talk />),
@@ -58,7 +68,7 @@ export default function Navigator() {
       createRoute('모집설정', '/admin/admin-setting', <Lightning />),
       createRoute('신청현황', '/admin/applications', <Person />),
       createRoute('추첨결과', '/admin/', <Boxes />),
-      createRoute('공지사항', '/admin/notice', <Talk />),
+      createRoute('공지사항', '/admin/notice', <Graph />),
       createRoute('1:1 문의', '/admin/q', <Talk />),
     ]
   }, [pathname])
@@ -87,7 +97,7 @@ export default function Navigator() {
 
       <Link
         key="pwd"
-        href="/"
+        href="/password"
         className="text-14 text-[#717579] underline absolute bottom-30 right-30"
       >
         비밀번호 변경
