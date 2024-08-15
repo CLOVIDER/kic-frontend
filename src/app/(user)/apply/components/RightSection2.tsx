@@ -93,7 +93,7 @@ export default function RightSection2({
   }, [selectedItems, formData, uploadedFiles, items, onSubmit])
 
   return (
-    <div className="w-453 h-507 mt-100 mr-103">
+    <div className="w-453 h-507">
       <FormSection title="해당되는 항목을 체크해주세요!">
         <p className="mt-1">당첨 시 가점 요인이 됩니다.</p>
         <p className="text-[#E86565] text-12 mt-5">

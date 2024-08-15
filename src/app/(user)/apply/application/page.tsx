@@ -52,7 +52,7 @@ export default function Page() {
         </div>
       </If>
 
-      <If condition={!showComponents}>
+      <If condition={showComponents}>
         <div className="flex flex-row items-center gap-10 justify-end mr-210 fade-in delay-600">
           <Button className="border-1 p-16 border-orange rounded-[20px] w-120 h-40 bg-white text-[18px] text-orange">
             신청 취소

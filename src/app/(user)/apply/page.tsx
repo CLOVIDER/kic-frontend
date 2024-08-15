@@ -31,7 +31,7 @@ export default function Page() {
   }
 
   return (
-    <div className="absolute w-[1280px] h-[720px] bg-white flex justify-between">
+    <div className="flex flex-row justify-center gap-220 mt-150 ml-190 w-full">
       <LeftSection />
       <ApplicationForm />
       <ToastContainer />

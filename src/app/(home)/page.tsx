@@ -10,9 +10,12 @@ import {
   StatusBox,
 } from '@/components'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
+import { useRouter } from 'next/navigation'
 import HomeFallback from './components/HomeFallback'
 
 export default function Home() {
+  const { push } = useRouter()
+
   return (
     <main className="flex flex-row bg-[#FBFBFB] h-screen">
       <div className="w-340 h-full pt-250 border-r-1 border-[#EEEEEE] bg-white">
@@ -28,6 +31,7 @@ export default function Home() {
               <Button
                 className="absolute z-10 right-210 top-150 w-auto px-20 h-40 bg-[#000000] !rounded-13 !text-15 text-white whitespace-nowrap"
                 rightIcon={<Right width="20" />}
+                onClick={() => push('/apply')}
               >
                 신청하기
               </Button>

@@ -79,7 +79,7 @@ export default function RightSection1({
   )
 
   return (
-    <form onSubmit={handleSubmit} className="mr-103 mt-100">
+    <form onSubmit={handleSubmit} className="w-450">
       <FormSection title="어린이집을 선택해주세요.">
         {children.map((child: Child) => (
           <div key={child.id} className="mb-6">

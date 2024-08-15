@@ -360,7 +360,7 @@ export default function ApplicationForm() {
   }
 
   return (
-    <div>
+    <div className="overflow-y-auto w-500 h-[550px] pb-100">
       <AnimatePresence mode="wait" custom={currentSection === 1 ? 1 : -1}>
         <motion.div
           key={currentSection}
@@ -370,7 +370,7 @@ export default function ApplicationForm() {
           exit="out"
           variants={pageVariants}
           transition={pageTransition}
-          className="absolute right-0"
+          className=""
         >
           {currentSection === 1 ? (
             <RightSection1

@@ -10,10 +10,12 @@ export interface LotteryResult {
   ageClass: number
   isregistry: '0' | '1'
 }
-export interface ChildLotteryResponse {
+export interface ChildLottery {
   childName: string
   lotteryResults: LotteryResult[]
 }
+
+export type ChildLotteryResponse = ChildLottery[]
 
 export interface History {
   lotteryId: number
@@ -28,7 +30,7 @@ export interface History {
 export type HistoryResponse = History[]
 
 export const getCurrentResult = () =>
-  http.get<ChildLotteryResponse[]>({
+  http.get<ChildLotteryResponse>({
     url: '/api/lotteries/results',
   })
 
