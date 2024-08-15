@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Button, Pagination } from '@nextui-org/react'
-import QnaFetcher from './components/QnaFetcher'
+import { QnaFetcher } from '@/components/common/qna'
 
 const ITEMS_PER_PAGE = 5
 
