@@ -1,10 +1,10 @@
 'use client'
 
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { getSettingData, patchSettingData, postSettingData } from './api'
-import { RecruitWeightInfo, SettingData } from './type'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
+import { getSettingData, patchSettingData, postSettingData } from './api'
+import { RecruitWeightInfo, SettingData } from './type'
 
 export const useSettingData = () =>
   useSuspenseQuery({
@@ -15,8 +15,7 @@ export const useSettingData = () =>
   })
 
 export const useUploadSetting = (mode: boolean) => {
-
-  const {push} = useRouter()
+  const { push } = useRouter()
   return useMutation({
     mutationKey: ['setting'],
     mutationFn: ({ data }: { data: Partial<SettingData> }) => {
