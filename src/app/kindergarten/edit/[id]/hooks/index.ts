@@ -15,6 +15,7 @@ export default function useEdit(id: number) {
     kindergartenScale,
     kindergartenCapacity,
     kindergartenTime,
+    kindergartenClass,
   } = kindergartens[Number(id) - 1]
 
   const [name, setName] = useState<string>(kindergartenNm)
@@ -24,7 +25,15 @@ export default function useEdit(id: number) {
   const [time, setTime] = useState<string>(kindergartenTime)
   const [scale, setScale] = useState<number>(kindergartenScale)
   const [capacity, setCapacity] = useState<number>(kindergartenCapacity)
+  const [newClassName, setNewClassName] = useState<string>('')
+  const [newAgeClass, setNewAgeClass] = useState<string>('')
   const [images, setImages] = useState<string[]>(kindergartenImageUrls)
+  const [classes, setClasses] = useState<
+    Array<{
+      className: string
+      ageClass: string
+    }>
+  >(kindergartenClass.flat())
   const { mutateAsync: postImage } = usePostImage('kindergarten')
 
   const handleImages = useCallback(
@@ -73,9 +82,26 @@ export default function useEdit(id: number) {
       kindergartenScale: scale,
       kindergartenCapacity: capacity,
       kindergartenTime: time,
+      kindergartenClass: [
+        ...classes,
+        { className: newClassName, ageClass: newAgeClass },
+      ],
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, addr, info, name, phone, scale, capacity, time, images])
+  }, [
+    id,
+    addr,
+    info,
+    name,
+    phone,
+    scale,
+    capacity,
+    time,
+    images,
+    classes,
+    newClassName,
+    newAgeClass,
+  ])
 
   return {
     kindergartenId,
@@ -98,5 +124,11 @@ export default function useEdit(id: number) {
     handleSubmit,
     handleImages,
     handleRemoveFile,
+    newClassName,
+    newAgeClass,
+    setNewClassName,
+    setNewAgeClass,
+    classes,
+    setClasses,
   }
 }

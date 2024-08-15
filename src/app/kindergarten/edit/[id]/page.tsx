@@ -36,6 +36,12 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
     images,
     handleImages,
     handleRemoveFile,
+    newClassName,
+    setNewClassName,
+    newAgeClass,
+    setNewAgeClass,
+    classes,
+    setClasses,
   } = useEdit(Number(id))
 
   return (
@@ -145,7 +151,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
             </motion.div>
           </CardHeader>
 
-          <CardBody className="w-full overflow-hidden">
+          <CardBody className="w-full overflow-x-hidden">
             <div className="mt-27 grid grid-cols-3 pl-51 w-fit gap-17">
               <motion.div
                 layoutId={`${kindergartenId} image`}
@@ -165,7 +171,6 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
                 ))}
               </motion.div>
             </div>
-
             <Textarea
               classNames={{
                 base: 'px-51 mt-13 text-15 ',
@@ -176,6 +181,43 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
               value={info}
               onValueChange={setInfo}
             />
+
+            <div className="px-51 mt-10 min-h-100 mb-100">
+              <h1 className="text-30">새 분반 입력</h1>
+              <div className="flex gap-30">
+                <div className="mt-20 flex flex-col gap-10">
+                  <p>분반 이름</p>
+                  <Input value={newClassName} onValueChange={setNewClassName} />
+                </div>
+
+                <div className="mt-20 flex flex-col gap-10">
+                  <p>분반 나이 (숫자만 입력)</p>
+                  <Input value={newAgeClass} onValueChange={setNewAgeClass} />
+                </div>
+              </div>
+
+              <div className="pt-40 flex flex-col gap-10">
+                <h2 className="text-20">기존 분반</h2>
+
+                {classes.map(({ className, ageClass }) => (
+                  <div key={className} className="flex gap-40 items-center">
+                    <div>{className}</div>
+                    <div>{ageClass}세</div>
+
+                    <Button
+                      onClick={() =>
+                        setClasses((prev) =>
+                          prev.filter((value) => value.className !== className),
+                        )
+                      }
+                      className="text-[10px] py-0 px-5 h-30 [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)]"
+                    >
+                      삭제하기
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
           </CardBody>
         </Card>
       </section>
