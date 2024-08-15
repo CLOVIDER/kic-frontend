@@ -1,8 +1,7 @@
 'use client'
 
-import { Button } from '@/components'
+import { Button } from '@nextui-org/react'
 import useSave from '../useSave'
-import { ToastContainer } from 'react-toastify'
 
 export default function Buttons() {
   const { handleSave } = useSave()
@@ -11,6 +10,7 @@ export default function Buttons() {
       <Button className="w-150 h-50 bg-white border border-[#fdba74] font-semibold text-[#fb923c] rounded-16 text-lg">
         돌아가기
       </Button>
+      
       <Button
         type="button"
         className="w-150 h-50 shadow-md gradient-button text-[#ffffff] font-bold rounded-16 text-lg"
