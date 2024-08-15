@@ -1,30 +1,50 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 'use client'
 
 import { JSX, useMemo } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/util'
 import { Boxes, Home, Lightning, Person, Talk } from '@/components/common/Icons'
+import { getApplicationData } from '@/app/(user)/apply/api'
 
 export default function Navigator() {
   const pathname = usePathname()
+  const router = useRouter()
 
-  const createRoute = (label: string, path: string, icon: JSX.Element) => {
+  const handleApplyClick = async () => {
+    try {
+      const applicationStatus = await getApplicationData()
+
+      if (applicationStatus.id === null) {
+        router.push('/apply')
+      } else {
+        router.push('/apply/application')
+      }
+    } catch (error) {
+      console.error('Error checking application status:', error)
+    }
+  }
+
+  const createRoute = (
+    label: string,
+    path: string,
+    icon: JSX.Element,
+    onClick?: () => void,
+  ) => {
     const isActive = pathname === path
     return {
       label,
       href: path,
       isActive,
       icon: <icon.type fill={isActive ? '#FFFFFF' : '#717579'} />,
+      onClick,
     }
   }
 
   const routes = useMemo(() => {
     return [
       createRoute('어린이집 정보', '/kindergarten', <Home />),
-      createRoute('신청하기', '/apply', <Lightning />),
+      createRoute('신청하기', '#', <Lightning />, handleApplyClick),
       createRoute('신청결과', '/lottery', <Lightning />),
       createRoute('신청내역', '/history', <Person />),
       createRoute('공지사항', '/notice', <Boxes />),
@@ -47,9 +67,9 @@ export default function Navigator() {
   const selectedRoutes = isAdmin ? adminRoutes : routes
 
   return (
-    <section className="relative h-full">
+    <section className="relative h-full w-330">
       <div className="flex flex-col p-4 mr-10">
-        {selectedRoutes.map(({ label, href, isActive, icon }) => (
+        {selectedRoutes.map(({ label, href, isActive, icon, onClick }) => (
           <Link
             key={label}
             href={href}
@@ -57,6 +77,7 @@ export default function Navigator() {
               'flex flex-row text-18 text-[#717579] px-25 py-14 ml-25 mr-50 gap-30 rounded-60 mb-20 hover:bg-[#FFF4CC]',
               isActive && 'bg-[#FFEDAE] font-semibold text-[#333333]',
             )}
+            onClick={onClick}
           >
             {icon}
             {label}

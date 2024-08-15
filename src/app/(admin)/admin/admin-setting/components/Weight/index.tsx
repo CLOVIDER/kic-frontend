@@ -22,12 +22,13 @@ export default function Weight() {
   const { handleToggle } = useWeight(switchItems)
 
   return (
-    <section className="pl-20">
+    <section>
       <Title
         title="가중치 설정"
+        className="border-b-1 border-[#ccc2c2]"
         subtitle="활성화된 상태의 가중치만 계산됩니다."
       />
-      <div className="mr-10 space-y-15 mt-20">
+      <div className="space-y-15 mt-80 w-250">
         {switchItems.map((item) => (
           <div key={item.id} className="flex flex-col">
             <div className="flex justify-between items-center">
