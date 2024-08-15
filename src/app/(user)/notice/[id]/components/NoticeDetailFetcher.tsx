@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { NoticeItem } from '@/components/common/notice/api'
-import { formatDate } from '@/util/formatDate'
+import { formatDate } from '@/util/formatDate2'
 
 interface NoticeDetailFetcherProps {
   noticeData: NoticeItem
