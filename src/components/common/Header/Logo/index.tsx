@@ -11,9 +11,7 @@ export default function Logo() {
 
   useEffect(() => {
     const accessToken = Cookies.get(ACCESS_TOKEN) as string
-    if (accessToken) {
-      setIsLoggedIn(true)
-    }
+    setIsLoggedIn(!!accessToken)
   }, [])
 
   const handleLogout = () => {
