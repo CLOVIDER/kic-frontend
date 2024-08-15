@@ -1,23 +1,25 @@
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
-import { ACCESS_TOKEN } from '@/constants'
+import { ACCESS_TOKEN, ROLE } from '@/constants'
 import Button from '../../Button'
 
 export default function Logo() {
   const { push } = useRouter()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const pathname = usePathname()
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
 
   useEffect(() => {
     const accessToken = Cookies.get(ACCESS_TOKEN) as string
     setIsLoggedIn(!!accessToken)
-  }, [isLoggedIn])
+  }, [pathname])
 
   const handleLogout = () => {
     Cookies.remove(ACCESS_TOKEN)
+    Cookies.remove(ROLE)
     setIsLoggedIn(false)
-    push('/')
+    push('/login')
   }
 
   return (
