@@ -14,27 +14,29 @@ export default function Page() {
   return (
     <AsyncBoundaryWithQuery>
       <SettingFetcher>
-        <form className="flex flex-col z-10 gap-120 px-150 py-100 justify-center relative bg-white/50 rounded-10 mx-100">
-          <div className="flex flex-row items-center gap-10">
-            <Image
-              src="/images/bg-setting.svg"
-              alt="bg"
-              width={100}
-              height={100}
-            />
+        <div className="mx-100">
+          <form className="flex flex-col z-10 gap-120 px-150 py-100 justify-center relative bg-white/50 rounded-10">
+            <div className="flex flex-row items-center gap-10">
+              <Image
+                src="/images/bg-setting.svg"
+                alt="bg"
+                width={100}
+                height={100}
+              />
 
-            <Title title="회사명" className="mr-10" />
-            <Input placeholder="DK Techin" />
-          </div>
+              <Title title="회사명" className="mr-10" />
+              <Input placeholder="DK Techin" />
+            </div>
 
-          <Kindergarten />
+            <Kindergarten />
 
-          <Period />
+            <Period />
 
-          <Weight />
-        </form>
+            <Weight />
+          </form>
 
-        <Buttons />
+          <Buttons />
+        </div>
         <ToastContainer />
       </SettingFetcher>
     </AsyncBoundaryWithQuery>
