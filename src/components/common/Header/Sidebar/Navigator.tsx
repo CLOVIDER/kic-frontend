@@ -58,7 +58,7 @@ export default function Navigator() {
       createRoute('신청결과', '/lottery', <Graph />),
       createRoute('신청내역', '/history', <Person />),
       createRoute('공지사항', '/notice', <Boxes />),
-      createRoute('1:1 문의', '/q', <Talk />),
+      createRoute('1:1 문의', '/qna', <Talk />),
     ]
   }, [pathname])
 
@@ -67,9 +67,9 @@ export default function Navigator() {
       createRoute('어린이집 설정', '/kindergarten', <Home />),
       createRoute('모집설정', '/admin/admin-setting', <Lightning />),
       createRoute('신청현황', '/admin/applications', <Person />),
-      createRoute('추첨결과', '/admin/', <Boxes />),
+      createRoute('추첨결과', '/admin/result', <Boxes />),
       createRoute('공지사항', '/admin/notice', <Graph />),
-      createRoute('1:1 문의', '/admin/q', <Talk />),
+      createRoute('1:1 문의', '/admin/qna', <Talk />),
     ]
   }, [pathname])
 
