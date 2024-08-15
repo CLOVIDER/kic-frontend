@@ -24,7 +24,7 @@ export default function Home() {
 
       <div className="mt-40 ml-40">
         <CompanyLogo />
-        <div className="relative ml-110 mt-150">
+        <div className="relative pl-110 pt-150">
           <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
             <StatusBox>
               <CompetitionRate />
@@ -37,16 +37,16 @@ export default function Home() {
               </Button>
             </StatusBox>
           </AsyncBoundaryWithQuery>
+          <Image
+            src="/images/landing.svg"
+            alt="landing"
+            width={460}
+            height={428}
+            className="absolute bottom-0 right-0"
+            priority
+          />
         </div>
       </div>
-      <Image
-        src="/images/landing.svg"
-        alt="landing"
-        width={460}
-        height={428}
-        className="absolute bottom-110 right-30"
-        priority
-      />
     </main>
   )
 }

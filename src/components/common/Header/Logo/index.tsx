@@ -23,26 +23,26 @@ export default function Logo() {
   }
 
   return (
-    <div className="text-12 w-full flex flex-row justify-between">
+    <div className="w-full flex flex-row justify-between">
       <Button
-        className="w-15 h-15 text-[12px] bg-transparent text-[#333333]"
+        className="w-15 h-15 text-15 bg-transparent text-[#333333]"
         onClick={() => push('/')}
       >
-        <div className="flex flex-row items-center gap-5 whitespace-nowrap">
+        <div className="flex flex-row items-center gap-5 whitespace-nowrap text-15">
           <Image src="/images/logo.png" alt="logo" width={18} height={13} />
           <p>kids in company</p>
         </div>
       </Button>
       {isLoggedIn ? (
         <Button
-          className="w-15 h-15 text-[12px] bg-transparent text-[#333333]"
+          className="w-15 h-15 text-[14px] bg-transparent text-[#333333]"
           onClick={handleLogout}
         >
           logout
         </Button>
       ) : (
         <Button
-          className="w-15 h-15 text-[12px] bg-transparent text-[#333333]"
+          className="w-15 h-15 text-[15px] bg-transparent text-[#333333]"
           onClick={() => push('/login')}
         >
           login
