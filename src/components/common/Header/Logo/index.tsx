@@ -12,7 +12,7 @@ export default function Logo() {
   useEffect(() => {
     const accessToken = Cookies.get(ACCESS_TOKEN) as string
     setIsLoggedIn(!!accessToken)
-  }, [])
+  }, [isLoggedIn])
 
   const handleLogout = () => {
     Cookies.remove(ACCESS_TOKEN)
