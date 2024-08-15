@@ -7,6 +7,8 @@ import Period from './components/Period'
 import Weight from './components/Weight'
 import SettingFetcher from './components/SettingFetcher'
 import Buttons from './components/Buttons'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Page() {
   return (
@@ -33,6 +35,7 @@ export default function Page() {
         </form>
 
         <Buttons />
+        <ToastContainer />
       </SettingFetcher>
     </AsyncBoundaryWithQuery>
   )

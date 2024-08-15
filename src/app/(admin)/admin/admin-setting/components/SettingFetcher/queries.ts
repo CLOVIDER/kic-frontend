@@ -3,6 +3,8 @@
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { getSettingData, patchSettingData, postSettingData } from './api'
 import { RecruitWeightInfo, SettingData } from './type'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 
 export const useSettingData = () =>
   useSuspenseQuery({
@@ -13,6 +15,8 @@ export const useSettingData = () =>
   })
 
 export const useUploadSetting = (mode: boolean) => {
+
+  const {push} = useRouter()
   return useMutation({
     mutationKey: ['setting'],
     mutationFn: ({ data }: { data: Partial<SettingData> }) => {
@@ -47,6 +51,12 @@ export const useUploadSetting = (mode: boolean) => {
       }
       return postSettingData(data)
     },
-    onSuccess: () => {},
+    onSuccess: () => {
+      toast.success('저장되었습니다!', {
+        autoClose: 1000,
+        onClose: () => push('/admin'),
+        pauseOnHover: false,
+      })
+    },
   })
 }

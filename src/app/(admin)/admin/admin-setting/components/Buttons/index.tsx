@@ -2,6 +2,7 @@
 
 import { Button } from '@/components'
 import useSave from '../useSave'
+import { ToastContainer } from 'react-toastify'
 
 export default function Buttons() {
   const { handleSave } = useSave()
@@ -17,6 +18,7 @@ export default function Buttons() {
       >
         저장
       </Button>
+  
     </div>
   )
 }
