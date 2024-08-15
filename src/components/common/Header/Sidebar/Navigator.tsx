@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 'use client'
 
-import { useMemo } from 'react'
+import { JSX, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/util'
@@ -9,70 +11,66 @@ import { Boxes, Home, Lightning, Person, Talk } from '@/components/common/Icons'
 export default function Navigator() {
   const pathname = usePathname()
 
+  const createRoute = (label: string, path: string, icon: JSX.Element) => {
+    const isActive = pathname === path
+    return {
+      label,
+      href: path,
+      isActive,
+      icon: <icon.type fill={isActive ? '#FFFFFF' : '#717579'} />,
+    }
+  }
+
   const routes = useMemo(() => {
     return [
-      {
-        label: '어린이집 정보',
-        isActive: pathname === '/kindergarten',
-        href: '/kindergarten',
-        icon: <Home fill={pathname === '/info' ? '#FFFFFF' : '#717579'} />,
-      },
-      {
-        label: '신청하기',
-        isActive: pathname === '/apply',
-        href: '/apply',
-        icon: (
-          <Lightning fill={pathname === '/apply' ? '#FFFFFF' : '#717579'} />
-        ),
-      },
-      {
-        label: '신청내역',
-        isActive: pathname === '/history',
-        href: '/history',
-        icon: <Person fill={pathname === '/history' ? '#FFFFFF' : '#717579'} />,
-      },
-      {
-        label: '공지사항',
-        isActive: pathname === '/notice',
-        href: '/notice',
-        icon: <Boxes fill={pathname === '/notice' ? '#FFFFFF' : '#717579'} />,
-      },
-      {
-        label: '1:1 문의',
-        isActive: pathname === '/q',
-        href: '/',
-        icon: <Talk fill={pathname === 'q' ? '#FFFFFF' : '#717579'} />,
-      },
+      createRoute('어린이집 정보', '/kindergarten', <Home />),
+      createRoute('신청하기', '/apply', <Lightning />),
+      createRoute('신청결과', '/lottery', <Lightning />),
+      createRoute('신청내역', '/history', <Person />),
+      createRoute('공지사항', '/notice', <Boxes />),
+      createRoute('1:1 문의', '/q', <Talk />),
     ]
   }, [pathname])
+
+  const adminRoutes = useMemo(() => {
+    return [
+      createRoute('어린이집 설정', '/kindergarten', <Home />),
+      createRoute('모집설정', '/admin/admin-setting', <Lightning />),
+      createRoute('신청현황', '/admin/applications', <Person />),
+      createRoute('추첨결과', '/admin/', <Boxes />),
+      createRoute('공지사항', '/admin/notice', <Talk />),
+      createRoute('1:1 문의', '/admin/q', <Talk />),
+    ]
+  }, [pathname])
+
+  const isAdmin = pathname.startsWith('/admin')
+  const selectedRoutes = isAdmin ? adminRoutes : routes
+
   return (
-    <section>
+    <section className="relative h-full w-330">
       <div className="flex flex-col p-4 mr-10">
-        {routes.map(({ label, href, isActive, icon }) => {
-          return (
-            <Link
-              key={label}
-              href={href}
-              className={cn(
-                'flex flex-row text-18 text-[#717579] px-25 py-14 ml-25 mr-50 gap-30 rounded-60 mb-20 hover:bg-[#FFF4CC]',
-                isActive && 'bg-[#FFEDAE] font-semibold text-[#333333]',
-              )}
-            >
-              {icon}
-              {label}
-            </Link>
-          )
-        })}
+        {selectedRoutes.map(({ label, href, isActive, icon }) => (
+          <Link
+            key={label}
+            href={href}
+            className={cn(
+              'flex flex-row text-18 text-[#717579] px-25 py-14 ml-25 mr-50 gap-30 rounded-60 mb-20 hover:bg-[#FFF4CC]',
+              isActive && 'bg-[#FFEDAE] font-semibold text-[#333333]',
+            )}
+          >
+            {icon}
+            {label}
+          </Link>
+        ))}
       </div>
-      <div className="mt-180">
-        <Link
-          key="pwd"
-          href="/"
-          className="text-14 text-[#717579] underline ml-200"
-        >
-          비밀번호 변경
-        </Link>
-      </div>
+
+      <Link
+        key="pwd"
+        href="/"
+        className="text-14 text-[#717579] underline absolute bottom-30 right-30"
+      >
+        비밀번호 변경
+      </Link>
     </section>
   )
 }

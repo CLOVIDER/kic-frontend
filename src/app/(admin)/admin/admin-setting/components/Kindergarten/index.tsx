@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  Button,
   Input,
   Setting,
   Tooltip,
@@ -9,31 +8,35 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components'
-import Image from 'next/image'
 import Title from '../Title'
 import { useKindergarten } from './useKindergarten'
+import '../setting.css'
 
 export default function Kindergarten() {
-  const {
-    kindergartens,
-    classes,
-    addClass,
-    removeClass,
-    updateClassName,
-    updateClassCapacity,
-  } = useKindergarten()
+  const { kindergartens, classes, updateClassCapacity } = useKindergarten()
+
+  const defaultClasses = [0, 1, 2, 3, 4, 5].map((ageClass) => ({
+    ageClass,
+    recruitCnt: 0,
+  }))
+
+  const mergedClasses = (kIndex: number) =>
+    defaultClasses.map((defaultClass) => {
+      const existingClass = classes[kIndex].find(
+        (cls) => cls.ageClass === defaultClass.ageClass,
+      )
+      return existingClass || defaultClass
+    })
 
   return (
     <section className="mt-20 px-20">
-      <div className="flex flex-row items-start mb-15">
-        <Title
-          title="어린이집별 모집"
-          subtitle="+ 버튼을 눌러 반을 생성하세요."
-        />
+      <div className="flex flex-row items-start relative border-b-1 border-[#ccc2c2]">
+        <Title title="모집 인원" />
+
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Setting width={15} height={20} />
+              <Setting width={30} height={20} />
             </TooltipTrigger>
             <TooltipContent className="text-9 border-[#a6a5a5] py-0">
               어린이집 수정 페이지로 이동합니다.
@@ -41,70 +44,49 @@ export default function Kindergarten() {
           </Tooltip>
         </TooltipProvider>
       </div>
+      <p className="text-15 text-[#E86565] mb-50">
+        0명으로 설정하면 모집이 열리지 않아요 !
+      </p>
 
-      {kindergartens.map((kindergarten, kIndex) => (
-        <div key={kindergarten.kindergartenId} className="mb-40">
-          <div className="flex flex-row justify-between items-center mb-2">
-            <p>{kindergarten.kindergartenNm}</p>
-            <Button
-              onClick={() => addClass(kIndex)}
-              className="items-center justify-center p-13 w-15 h-18 bg-[#FFE4A3] font-bold text-[20px] text-[#ffffff] shadow-md"
-            >
-              +
-            </Button>
-          </div>
-          <div className="bg-[#ccc2c2] h-1 w-full mb-4" />
-          <div className="flex flex-row px-5 mb-4 text-14 text-[#666666]">
-            <p className="w-160">분반 이름</p>
-            <p>모집인원</p>
-          </div>
-          <div className="mt-4">
-            {classes[kIndex].map((classInfo, cIndex) => (
-              <div
-                key={classInfo.classIndex}
-                className="flex flex-row gap-10 mb-2"
-              >
-                <Input
-                  type="text"
-                  value={classInfo.className}
-                  onChange={(e) =>
-                    updateClassName(kIndex, cIndex, e.target.value)
-                  }
-                  className="w-150"
-                  placeholder="분반 이름"
-                />
-                <Input
-                  type="number"
-                  value={classInfo.capacity}
-                  onChange={(e) =>
-                    updateClassCapacity(
-                      kIndex,
-                      cIndex,
-                      parseInt(e.target.value, 10),
-                    )
-                  }
-                  className="appearance-none w-60 text-center"
-                  placeholder="모집인원"
-                  min="0"
-                />
-                <Button
-                  type="button"
-                  className="p-0 ml-40 w-30"
-                  onClick={() => removeClass(kIndex, cIndex)}
-                  aria-label="Remove Class"
+      <div className="grid grid-cols-2 gap-50">
+        {kindergartens.map((kindergarten, kIndex) => (
+          <div key={kindergarten.kindergartenId} className="mb-40">
+            <div className="w-350 shadow-md bg-[#ffe4a2] mb-2 px-20 py-10">
+              <p className="">{kindergarten.kindergartenNm}</p>
+            </div>
+
+            <div className="flex flex-row px-10 my-10 text-14 text-[#666666]">
+              <p className="w-260">분반 이름</p>
+              <p>모집인원</p>
+            </div>
+            <div className="p-5">
+              {mergedClasses(kIndex).map(({ ageClass, recruitCnt }) => (
+                <div
+                  key={ageClass}
+                  className="flex flex-row gap-10 mb-10 px-5 border-b-1 border-[#ccc2c2] items-center"
                 >
-                  <Image
-                    alt="분반 삭제하기"
-                    src="/images/x-circle-1.svg"
-                    width={30}
-                    height={30}
+                  <p className="w-250">{ageClass}세</p>
+
+                  <Input
+                    type="number"
+                    value={recruitCnt}
+                    onChange={(e) =>
+                      updateClassCapacity(
+                        kIndex,
+                        ageClass,
+                        parseInt(e.target.value, 10),
+                      )
+                    }
+                    className="appearance-none w-100 text-center"
+                    placeholder="모집인원"
+                    min="0"
                   />
-                </Button>
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </section>
   )
 }

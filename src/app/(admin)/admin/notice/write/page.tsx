@@ -33,7 +33,6 @@ export default function WritePage() {
     return () => {
       document.removeEventListener('keydown', handleEscapeKey)
     }
-    // eslint-disable-next-line
   }, [])
 
   const handleSave = () => {

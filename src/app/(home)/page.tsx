@@ -10,25 +10,28 @@ import {
   StatusBox,
 } from '@/components'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
+import { useRouter } from 'next/navigation'
 import HomeFallback from './components/HomeFallback'
 
 export default function Home() {
+  const { push } = useRouter()
+
   return (
     <main className="flex flex-row bg-[#FBFBFB] h-screen">
-      <div className="w-356 h-full pt-90 border-r-1 border-[#EEEEEE] bg-white">
-        <p className="py-50 px-55 text-20 text-[#D7D7D7]">menu</p>
+      <div className="w-340 h-full pt-250 border-r-1 border-[#EEEEEE] bg-white">
         <Navigator />
       </div>
 
-      <div className="mt-40 ml-60">
+      <div className="mt-40 ml-40">
         <CompanyLogo />
         <div className="relative ml-110 mt-150">
           <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
             <StatusBox>
               <CompetitionRate />
               <Button
-                className="absolute z-10 right-165 top-125 w-auto px-20 h-40 bg-[#000000] !rounded-16 !text-15 text-white whitespace-nowrap"
+                className="absolute z-10 right-210 top-150 w-auto px-20 h-40 bg-[#000000] !rounded-13 !text-15 text-white whitespace-nowrap"
                 rightIcon={<Right width="20" />}
+                onClick={() => push('/apply')}
               >
                 신청하기
               </Button>
@@ -41,7 +44,7 @@ export default function Home() {
         alt="landing"
         width={460}
         height={428}
-        className="absolute bottom-150 right-120"
+        className="absolute bottom-110 right-30"
         priority
       />
     </main>

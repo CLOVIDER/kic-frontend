@@ -1,29 +1,39 @@
-import React from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 import LeftSection from './components/LeftSection'
 import ApplicationForm from './components/ApplicationForm'
 import 'react-toastify/dist/ReactToastify.css'
+import { getApplicationData } from './api'
 
 export default function Page() {
-  const name = '김재하'
-  const date = '2013.10.12'
-  const ifCC = false
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
-  const kindergartenName = ['샛별어린이집', '한마음어린이집', '미르어린이집']
+  useEffect(() => {
+    async function checkApplicationStatus() {
+      const applicationStatus = await getApplicationData()
 
-  const dropdownOptions = [
-    { key: 'option1', label: '햇님반' },
-    { key: 'option2', label: '달님반' },
-    { key: 'option3', label: '별님반' },
-  ]
+      if (applicationStatus.id === null) {
+        setLoading(false)
+      } else {
+        router.push('/apply/application')
+      }
+    }
+
+    checkApplicationStatus()
+  }, [router])
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   return (
-    <div className="absolute w-[1280px] h-[720px] bg-white flex justify-between">
-      <LeftSection name={name} date={date} ifCC={ifCC} />
-      <ApplicationForm
-        kindergartenName={kindergartenName}
-        dropdownOptions={dropdownOptions}
-      />
+    <div className="flex flex-row justify-center gap-220 mt-150 ml-190 w-full">
+      <LeftSection />
+      <ApplicationForm />
       <ToastContainer />
     </div>
   )

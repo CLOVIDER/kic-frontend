@@ -1,5 +1,16 @@
 import { http } from '@/api'
 
+export type GetKindergartensResponse = Array<{
+  kindergartenId: number
+  kindergartenNm: string
+  kindergartenAddr: string
+  kindergartenScale: string
+  kindergartenNo: string
+  kindergartenTime: string
+  kindergartenInfo: string
+  kindergartenImageUrl: string
+}>
+
 export interface GetApplicationsResponse {
   content: [
     {
@@ -25,6 +36,9 @@ export interface GetApplicationsRequest {
   filter?: 'ALL' | 'ACCEPT' | 'UNACCEPT' | 'WAIT'
   q?: string
 }
+
+export const getKindergartens = () =>
+  http.get<GetKindergartensResponse>({ url: '/api/admin/kindergartens' })
 
 export const getApplications = ({
   page,
