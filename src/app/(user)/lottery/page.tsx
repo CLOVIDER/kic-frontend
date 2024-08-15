@@ -6,8 +6,8 @@ import LotteryEnd from './components/LotteryEntry/LotteryEnd'
 import LotteryProcessing from './components/LotteryEntry/LotteryProcessing'
 import LotteryPending from './components/LotteryEntry/LotteryPending'
 import LotteryResult from './components/LotteryEntry/LotteryResult'
-import { useRecruitStatusContext } from './fetcher/RecruitStatusFetcher'
 import { ChildrenFetcher } from './fetcher/ChildrenFetcher'
+import { useRecruitStatusContext } from './fetcher/RecruitStatusFetcher'
 
 export default function Page() {
   const { recruitStatus } = useRecruitStatusContext()
