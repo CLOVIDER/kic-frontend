@@ -41,7 +41,12 @@ body {
 
 @layer utilities {
   .bg-gradient-01 {
-    background: linear-gradient(245deg, #D6DCD1 57.34%, #FFDDB4 81.64%, #C7B4FF 105.59%);
+    background: linear-gradient(
+      245deg,
+      #d6dcd1 57.34%,
+      #ffddb4 81.64%,
+      #c7b4ff 105.59%
+    );
   }
 }
 

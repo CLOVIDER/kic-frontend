@@ -5,14 +5,17 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
 import { CallIcon, ClockIcon, HomeIcon } from '@/components/common'
-import { useKindergartensContext } from '../../fetcher/KindergartensFetcher'
+import { useKindergartensContext } from './fetcher/KindergartensFetcher'
 
-export default function KindergartenList() {
+export default function Page() {
   const { kindergartens } = useKindergartensContext()
 
   return (
     <AnimatePresence mode="wait">
-      <section className="flex gap-58">
+      <section
+        style={{ scrollbarWidth: 'none' }}
+        className="flex gap-58 w-[1000px] p-30 overflow-x-scroll"
+      >
         {kindergartens.map(
           ({
             kindergartenId,
@@ -27,8 +30,8 @@ export default function KindergartenList() {
           }) => (
             <Link
               key={kindergartenId}
-              href={`?kdgId=${kindergartenId}`}
-              className="hover:translate-y-[-10px] transition-all duration-[250ms]"
+              href={`/kindergarten/${kindergartenId}`}
+              className="relative hover:translate-y-[-10px] transition-all duration-[250ms]"
             >
               <motion.div
                 layoutId={String(kindergartenId)}
@@ -61,7 +64,10 @@ export default function KindergartenList() {
                 </CardHeader>
 
                 <CardBody className="mt-7 overflow-hidden">
-                  <motion.div layoutId={`${kindergartenId} image`}>
+                  <motion.div
+                    layoutId={`${kindergartenId} image`}
+                    className="flex gap-10 w-268 h-153"
+                  >
                     <Image
                       className="rounded-20"
                       src={kindergartenImageUrls[0]}
