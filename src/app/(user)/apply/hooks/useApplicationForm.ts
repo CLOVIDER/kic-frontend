@@ -33,11 +33,6 @@ export const useApplicationForm = () => {
       selectedItems,
     }))
     // 로직 추가할 부분. 테스트 위해 console.log 로 임시 대체.
-    console.log('Final form data:', {
-      ...formData,
-      uploadedFiles,
-      selectedItems,
-    })
   }
 
   return {

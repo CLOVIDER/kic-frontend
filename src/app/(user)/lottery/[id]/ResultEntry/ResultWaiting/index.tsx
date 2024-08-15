@@ -6,7 +6,6 @@ import { useLotteryDetailContext } from '../../../fetcher/ResultFetcher'
 
 export default function ResultWaiting({ id }: { id: number }) {
   const { mutate } = useDeleteLottery(id)
-
   const { waitingNum } = useLotteryDetailContext()
 
   return (

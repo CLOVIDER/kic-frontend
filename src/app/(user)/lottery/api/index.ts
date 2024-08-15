@@ -4,6 +4,7 @@ export type GetLotteriesEmployeeResponse = Array<{
   childName: string
   className: string
   lotteryId: number
+  isAccept: string
 }>
 
 export type GetLotteriesDetailResponse = {

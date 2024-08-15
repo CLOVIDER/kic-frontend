@@ -15,6 +15,7 @@ export default function useIdInput(id: string) {
       })
       return
     }
+    // eslint-disable-next-line
     alert('아이디를 입력해주세요.')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
