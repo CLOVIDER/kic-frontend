@@ -43,7 +43,7 @@ export default function ApplicationForm({
           exit="out"
           variants={pageVariants}
           transition={pageTransition}
-          className="absolute right-0"
+          className=""
         >
           {currentSection === 1 ? (
             <RightSection1

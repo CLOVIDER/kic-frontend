@@ -6,7 +6,7 @@ import { ChildLotteryResponse, HistoryResponse } from './api'
 import { useChildResult, useHistory } from './queries'
 
 export const [ChildResultProvider, useChildResultContext] = generateContext<{
-  childResult: ChildLotteryResponse[]
+  childResult: ChildLotteryResponse
 }>({
   name: 'child-result-context',
 })

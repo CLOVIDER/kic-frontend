@@ -47,7 +47,7 @@ export default function Navigator() {
   const selectedRoutes = isAdmin ? adminRoutes : routes
 
   return (
-    <section className="relative h-full">
+    <section className="relative h-full w-330">
       <div className="flex flex-col p-4 mr-10">
         {selectedRoutes.map(({ label, href, isActive, icon }) => (
           <Link

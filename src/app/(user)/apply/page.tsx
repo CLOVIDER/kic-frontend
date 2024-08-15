@@ -18,7 +18,7 @@ export default function Page() {
   ]
 
   return (
-    <div className="absolute w-[1280px] h-[720px] bg-white flex justify-between">
+    <div className="bg-[#FDFDFD] flex flex-row justify-center pl-250 gap-260 items-center w-full h-screen">
       <LeftSection name={name} date={date} ifCC={ifCC} />
       <ApplicationForm
         kindergartenName={kindergartenName}

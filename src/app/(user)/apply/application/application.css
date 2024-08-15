@@ -18,6 +18,7 @@
 .text-move {
   opacity: 1;
   transform: translateY(0);
+  font-size: 25px;
 }
 
 .fade-in {

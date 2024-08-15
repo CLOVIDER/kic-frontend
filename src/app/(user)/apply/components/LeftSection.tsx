@@ -7,7 +7,7 @@ export default function LeftSection({ name, date, ifCC }: LeftSectionProps) {
   const { formattedDate, ccStatus } = useLeftSection(date, ifCC)
 
   return (
-    <div className="h-[547px] w-[366px] mt-87 ml-123 flex flex-col items-center">
+    <div className="h-screen flex flex-col items-center mt-300">
       <div className="font-bold text-[31px]">
         <span className="text-[#202020]">안녕하세요 </span>
         <span className="text-[#ffaa2c]">{name}</span>
@@ -26,7 +26,7 @@ export default function LeftSection({ name, date, ifCC }: LeftSectionProps) {
         height={249.85}
         priority
       />
-      <div className="w-342 h-110 rounded-2xl border border-solid border-[#ffaa2c]">
+      <div className="w-342 h-110 rounded-2xl border-2 border-[#ffaa2c] mt-30">
         <div className="flex w-194 h-72 mt-19 ml-74 ">
           <div className="w-93 h-70 mr-20 text-16 text-center text-[#FFAB2D]">
             <div>입사일</div>

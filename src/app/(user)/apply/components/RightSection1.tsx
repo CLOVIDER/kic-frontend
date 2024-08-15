@@ -71,8 +71,8 @@ export default function RightSection1({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="w-[470px] h-[547px] mr-110 mt-69 overflow-y-auto">
-        <div className="ml-4 mt-40 text-20">
+      <div className="w-[470px] h-[547px] overflow-y-auto">
+        <div className="ml-4 text-20">
           <span className="">어린이집을 선택해주세요.</span>
           <span className="text-[#e86565]">*</span>
         </div>

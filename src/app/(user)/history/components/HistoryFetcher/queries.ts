@@ -3,7 +3,7 @@ import { getCurrentResult, getHistory } from './api'
 
 export const useChildResult = () =>
   useSuspenseQuery({
-    queryKey: ['childresult'],
+    queryKey: ['child-result'],
     queryFn: () => getCurrentResult(),
     refetchOnMount: false,
     select: (data) => data.result,

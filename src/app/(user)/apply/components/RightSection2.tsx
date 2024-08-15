@@ -24,7 +24,7 @@ export default function RightSection2({
   const renderItem = useCallback(
     (item: Item) => (
       <div key={item.id} className="w-full mb-10">
-        <div className="flex items-center justify-between">
+        <div className="flex justify-between">
           <div className="flex items-center">
             <button
               onClick={() => handleCheckboxChange(item.id)}
@@ -94,20 +94,19 @@ export default function RightSection2({
   )
 
   return (
-    <div className="w-453 h-507 mt-109 mr-103">
-      <div className="ml-4 mt-26">
-        <div className="text-20 text-[#434343] flex flex-col">
-          <div>해당되는 항목을 체크해주세요!</div>
-          <div className="mt-1">당첨 시 가점 요인이 됩니다.</div>
-        </div>
+    <div className="w-470 h-507">
+      <div className="text-20 text-[#434343] flex flex-col">
+        <div>해당되는 항목을 체크해주세요!</div>
+        <div className="mt-1">당첨 시 가점 요인이 됩니다.</div>
       </div>
+
       <div className="ml-4 mt-5">
         <div className="text-[#E86565] text-12">
           체크한 항목을 증빙할 수 있는 서류를 각각 첨부해주세요.
         </div>
       </div>
       <div className="ml-7 mt-65 w-[444px]">{memoizedItems}</div>
-      <div className="mt-114 w-[449px] h-[33px] flex items-center">
+      <div className="mt-200 w-[449px] h-[33px] flex items-center">
         <button
           type="button"
           onClick={onPrevious}
