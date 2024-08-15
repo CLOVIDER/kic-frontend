@@ -22,11 +22,17 @@ export default function Logo() {
     push('/login')
   }
 
+  const handleLanding = () => {
+    const role = Cookies.get(ROLE) as string
+    if (role === 'ADMIN') push('/admin')
+    else push('/')
+  }
+
   return (
     <div className="w-full flex flex-row justify-between">
       <Button
         className="w-15 h-15 text-15 bg-transparent text-[#333333]"
-        onClick={() => push('/')}
+        onClick={handleLanding}
       >
         <div className="flex flex-row items-center gap-5 whitespace-nowrap text-15">
           <Image src="/images/logo.png" alt="logo" width={18} height={13} />
