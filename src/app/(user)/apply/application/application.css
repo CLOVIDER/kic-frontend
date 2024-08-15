@@ -10,14 +10,9 @@
   transform: none;
 }
 
-.text-center {
-  opacity: 1;
-  transform: translateY(100%);
-}
-
 .text-move {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(-50%);
   font-size: 25px;
 }
 
