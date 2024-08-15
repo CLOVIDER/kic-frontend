@@ -74,7 +74,7 @@ export default function Page() {
       </If>
 
       <If condition={showComponents}>
-        <div className="flex flex-row items-center gap-10 justify-end mr-210 fade-in delay-600">
+        <div className="flex flex-row items-center gap-10 ml-800 fade-in delay-600">
           <CancelModal id={applicationId}>
             {(onOpen) => (
               <Button
