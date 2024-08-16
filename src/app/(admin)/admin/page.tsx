@@ -1,60 +1,72 @@
+'use client'
+
 import HomeFallback from '@/app/(home)/components/HomeFallback'
 import {
   Button,
   CompanyLogo,
   StatusBox,
-  NumberDisplay,
   LandingLower,
-  CompetitionRate,
-  Plus,
-  Chart,
   Right,
+  Chart,
+  CompetitionRate,
 } from '@/components'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import RecruitStatus from '../components/RecruitStatus'
+import {
+  AdminKinderStatusFetcher,
+  AdminRecruitFetcher,
+} from '../components/adminFetcher'
 
 export default function Page() {
+  const { push } = useRouter()
   return (
-    <div className="w-full h-full px-20 flex flex-col justify-center items-center">
-      <div className="absolute top-10 left-140 w-full mb-100">
-        <CompanyLogo />
-      </div>
-      <div className="flex flex-row gap-100 px-110 mt-150 relative">
-        <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
+    <>
+      <div className="w-full flex flex-col justify-center items-center">
+        <div className="absolute top-10 left-140 w-full">
+          <CompanyLogo />
+        </div>
+        <div className="flex flex-row gap-70 px-110 mt-220 relative">
           <div className="flex flex-col gap-30">
-            <StatusBox className="relative w-[590px] h-300">
-              <div className="flex flex-row bg-white w-450 px-50 pt-15 pb-30 rounded-32 shadow-md gap-50">
-                <NumberDisplay title="총 신청자" number={670} />
-                <NumberDisplay title="승인 대기" number={100} />
-              </div>
-              <Button
-                className="absolute z-10 right-130 top-125 w-auto px-20 h-35 bg-[#000000] rounded-full !text-15 whitespace-nowrap"
-                rightIcon={<Right width="20" />}
-              >
-                신청하기
-              </Button>
-            </StatusBox>
+            <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
+              <StatusBox className="w-680">
+                <AdminRecruitFetcher>
+                  <RecruitStatus />
+                </AdminRecruitFetcher>
+                <Button
+                  onClick={() => push('/admin/applications')}
+                  className="absolute z-10 left-460 top-180 w-auto px-20 h-40 bg-[#000000] rounded-15 !text-15 whitespace-nowrap hover:bg-[#2d2c2c]"
+                  rightIcon={<Right width="20" />}
+                >
+                  모집 현황
+                </Button>
+              </StatusBox>
+            </AsyncBoundaryWithQuery>
             <Image
               src="/images/landing.svg"
               alt="landing"
               width={400}
               height={367}
-              className="absolute bottom-117 left-475"
+              className="absolute bottom-185 left-500"
               priority
             />
+
             <LandingLower />
           </div>
           <div className="flex flex-col gap-30">
-            <div className="relative">
+            <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
               <CompetitionRate className="w-370" />
-              <div className="flex items-center justify-center w-23 h-23 right-13 top-15 absolute bg-[#ffa5a5] rounded-50">
-                <Plus width={10} />
-              </div>
-            </div>
-            <Chart />
+            </AsyncBoundaryWithQuery>
+
+            <AsyncBoundaryWithQuery>
+              <AdminKinderStatusFetcher>
+                <Chart />
+              </AdminKinderStatusFetcher>
+            </AsyncBoundaryWithQuery>
           </div>
-        </AsyncBoundaryWithQuery>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

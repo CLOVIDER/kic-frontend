@@ -10,40 +10,43 @@ import {
   StatusBox,
 } from '@/components'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
+import { useRouter } from 'next/navigation'
 import HomeFallback from './components/HomeFallback'
 
 export default function Home() {
+  const { push } = useRouter()
+
   return (
     <main className="flex flex-row bg-[#FBFBFB] h-screen">
-      <div className="w-356 h-full pt-90 border-r-1 border-[#EEEEEE] bg-white">
-        <p className="py-50 px-55 text-20 text-[#D7D7D7]">menu</p>
+      <div className="w-340 h-full pt-250 border-r-1 border-[#EEEEEE] bg-white">
         <Navigator />
       </div>
 
-      <div className="mt-40 ml-60">
+      <div className="mt-40 ml-40 w-1100">
         <CompanyLogo />
-        <div className="relative ml-110 mt-150">
+        <div className="relative pl-110 pt-150 h-600">
           <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
             <StatusBox>
               <CompetitionRate />
               <Button
-                className="absolute z-10 right-160 top-120 w-auto px-20 h-35 bg-[#000000] rounded-full !text-15 whitespace-nowrap"
+                className="absolute z-10 left-570 top-300 w-auto px-20 h-40 bg-[#000000] !rounded-13 !text-15 text-white whitespace-nowrap"
                 rightIcon={<Right width="20" />}
+                onClick={() => push('/apply')}
               >
                 신청하기
               </Button>
             </StatusBox>
           </AsyncBoundaryWithQuery>
+          <Image
+            src="/images/landing.svg"
+            alt="landing"
+            width={460}
+            height={428}
+            className="absolute bottom-30 left-600"
+            priority
+          />
         </div>
       </div>
-      <Image
-        src="/images/landing.svg"
-        alt="landing"
-        width={460}
-        height={428}
-        className="absolute bottom-150 right-120"
-        priority
-      />
     </main>
   )
 }

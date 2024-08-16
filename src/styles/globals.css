@@ -8,6 +8,14 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+.rdp-root {
+  --rdp-day-height: 30px;
+  --rdp-day-width: 30px;
+  --rdp-nav_button-height	:15px;
+  --rdp-nav_button-width	: 15px;
+  --rdp-nav-height : 15px;
+}
+
 html {
   @apply h-full;
 }
@@ -33,7 +41,12 @@ body {
 
 @layer utilities {
   .bg-gradient-01 {
-    background: linear-gradient(245deg, #D6DCD1 57.34%, #FFDDB4 81.64%, #C7B4FF 105.59%);
+    background: linear-gradient(
+      245deg,
+      #d6dcd1 57.34%,
+      #ffddb4 81.64%,
+      #c7b4ff 105.59%
+    );
   }
 }
 
@@ -49,4 +62,8 @@ input[type='number'] {
 
 .gradient-button {
   background: linear-gradient(90deg, #ffbb38 0%, #ffe39f 100%);
+}
+
+.custom-box-shadow {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }

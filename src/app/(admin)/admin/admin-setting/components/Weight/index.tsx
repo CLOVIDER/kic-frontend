@@ -3,34 +3,39 @@
 import { Toggle } from '@/components'
 import { useWeight } from './useWeight'
 import Title from '../Title'
+import { useSettingContext } from '../SettingFetcher/SettingContext'
 
 const switchItems = [
-  { label: '근속년수', id: 'seniority' },
-  { label: '사내부부', id: 'internalCouple' },
-  { label: '형제자매 재원', id: 'siblingsEnrolled' },
-  { label: '한부모가정', id: 'singleParent' },
-  { label: '장애부모', id: 'disabledParent' },
-  { label: '다자녀가정', id: 'multiChildFamily' },
-  { label: '맞벌이', id: 'dualIncome' },
+  { label: '근속년수', id: 'workYearsUsage' },
+  { label: '사내부부', id: 'isEmployeeCoupleUsage' },
+  { label: '형제자매 재원', id: 'isSiblingUsage' },
+  { label: '한부모가정', id: 'isSingleParentUsage' },
+  { label: '장애부모', id: 'isDisabilityUsage' },
+  { label: '다자녀가정', id: 'childrenCntUsage' },
+  { label: '맞벌이', id: 'isDualIncomeUsage' },
 ]
 
 export default function Weight() {
-  const { switchStates, handleToggle } = useWeight(switchItems)
+  const { recruitWeightInfo } =
+    useSettingContext().settingData.recruitDateAndWeightInfo
+
+  const { handleToggle } = useWeight(switchItems)
 
   return (
-    <section className="pl-20">
+    <section>
       <Title
         title="가중치 설정"
+        className="border-b-1 border-[#ccc2c2]"
         subtitle="활성화된 상태의 가중치만 계산됩니다."
       />
-      <div className="mr-10 space-y-15 mt-20">
+      <div className="space-y-15 mt-80 w-250">
         {switchItems.map((item) => (
           <div key={item.id} className="flex flex-col">
             <div className="flex justify-between items-center">
               <p>{item.label}</p>
               <Toggle
                 id={item.id}
-                checked={switchStates[item.id]}
+                checked={recruitWeightInfo[item.id] === '1'}
                 onChange={() => handleToggle(item.id)}
               />
             </div>

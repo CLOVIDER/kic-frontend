@@ -1,12 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-
-type ClassInfo = {
-  classIndex: number
-  className: string
-  capacity: number
-}
+import { useSettingContext } from '../SettingFetcher/SettingContext'
+import { ClassInfo } from '../SettingFetcher/type'
 
 type Kindergarten = {
   kindergartenId: number
@@ -17,65 +13,66 @@ type UseKindergartenReturn = {
   kindergartens: Kindergarten[]
   classes: ClassInfo[][]
   addClass: (index: number) => void
-  removeClass: (kindergartenIndex: number, classIndex: number) => void
+  removeClass: (kindergartenIndex: number, ageClass: number) => void
   updateClassName: (
     kindergartenIndex: number,
-    classIndex: number,
+    ageClass: number,
     value: string,
   ) => void
   updateClassCapacity: (
     kindergartenIndex: number,
-    classIndex: number,
+    ageClass: number,
     value: number,
   ) => void
 }
 
 export const useKindergarten = (): UseKindergartenReturn => {
-  const initialKindergartens: Kindergarten[] = [
-    {
-      kindergartenId: 0,
-      kindergartenNm: '새빛 어린이집',
-    },
-    {
-      kindergartenId: 1,
-      kindergartenNm: '햇빛 어린이집',
-    },
-  ]
+  const { settingData, setSettingData } = useSettingContext()
+  const { kindergartenClassInfoList } = settingData
 
-  const initialClasses: ClassInfo[][] = [
-    [
-      { classIndex: 0, className: '3세반', capacity: 100 },
-      { classIndex: 1, className: '4세반', capacity: 55 },
-    ],
-    [
-      { classIndex: 0, className: '3세반', capacity: 70 },
-      { classIndex: 1, className: '4세반', capacity: 60 },
-    ],
-  ]
-
-  const [kindergartens] = useState<Kindergarten[]>(initialKindergartens)
-  const [classes, setClasses] = useState<ClassInfo[][]>(initialClasses)
+  const kindergartens = kindergartenClassInfoList.map((info, index) => ({
+    kindergartenId: index,
+    kindergartenNm: info.kindergartenName,
+  }))
+  const [classes, setClasses] = useState<ClassInfo[][]>(
+    kindergartenClassInfoList.map((data) =>
+      data.classInfoList.map((cls) => ({
+        ageClass: cls.ageClass,
+        recruitCnt: cls.recruitCnt,
+      })),
+    ),
+  )
 
   const addClass = (index: number): void => {
     setClasses((prevClasses) => {
       const newClass = {
-        classIndex: prevClasses[index].length,
-        className: '',
-        capacity: 0,
+        ageClass: 0,
+        recruitCnt: 0,
       }
       const newClasses = [...prevClasses]
       newClasses[index] = [...newClasses[index], newClass]
+
+      const updatedData = { ...settingData }
+      updatedData.kindergartenClassInfoList[index].classInfoList =
+        newClasses[index]
+      setSettingData(updatedData)
+
       return newClasses
     })
   }
 
-  const removeClass = (kindergartenIndex: number, classIndex: number): void => {
+  const removeClass = (kindergartenIndex: number, ageClass: number): void => {
     setClasses((prevClasses) => {
       const newClasses = [...prevClasses]
       if (newClasses[kindergartenIndex].length > 1) {
         newClasses[kindergartenIndex] = newClasses[kindergartenIndex].filter(
-          (cls) => cls.classIndex !== classIndex,
+          (cls) => cls.ageClass !== ageClass,
         )
+
+        const updatedData = { ...settingData }
+        updatedData.kindergartenClassInfoList[kindergartenIndex].classInfoList =
+          newClasses[kindergartenIndex]
+        setSettingData(updatedData)
       }
       return newClasses
     })
@@ -83,24 +80,49 @@ export const useKindergarten = (): UseKindergartenReturn => {
 
   const updateClassName = (
     kindergartenIndex: number,
-    classIndex: number,
+    ageClass: number,
     value: string,
   ): void => {
     setClasses((prevClasses) => {
       const newClasses = [...prevClasses]
-      newClasses[kindergartenIndex][classIndex].className = value
+      const classToUpdate = newClasses[kindergartenIndex].find(
+        (cls) => cls.ageClass === ageClass,
+      )
+      if (classToUpdate) {
+        classToUpdate.ageClass = Number(value)
+      }
+
+      const updatedData = { ...settingData }
+      updatedData.kindergartenClassInfoList[kindergartenIndex].classInfoList =
+        newClasses[kindergartenIndex]
+      setSettingData(updatedData)
+
       return newClasses
     })
   }
 
   const updateClassCapacity = (
     kindergartenIndex: number,
-    classIndex: number,
+    ageClass: number,
     value: number,
   ): void => {
     setClasses((prevClasses) => {
       const newClasses = [...prevClasses]
-      newClasses[kindergartenIndex][classIndex].capacity = value
+      const classIndex = newClasses[kindergartenIndex].findIndex(
+        (cls) => cls.ageClass === ageClass,
+      )
+
+      if (classIndex !== -1) {
+        newClasses[kindergartenIndex][classIndex].recruitCnt = value
+      } else {
+        newClasses[kindergartenIndex].push({ ageClass, recruitCnt: value })
+      }
+
+      const updatedData = { ...settingData }
+      updatedData.kindergartenClassInfoList[kindergartenIndex].classInfoList =
+        newClasses[kindergartenIndex]
+      setSettingData(updatedData)
+
       return newClasses
     })
   }

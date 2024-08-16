@@ -8,9 +8,9 @@ export const metadata: Metadata = {
 
 export default function layout({ children }: StrictPropsWithChildren) {
   return (
-    <main className="relative h-full w-full flex justify-center items-center font-sans">
-      <div className="absolute top-200 left-100 w-226 h-226 rounded-full bg-[#DDA82A] blur-[158.5px]" />
-      <div className="absolute bottom-100 right-100 w-226 h-226 rounded-full bg-[#FFAB2D] blur-[158.5px]" />
+    <main className="relative font-sans overflow-scroll h-screen w-screen p-100">
+      <div className="fixed top-200 left-100 w-226 h-226 rounded-full bg-[#DDA82A] blur-[158.5px]" />
+      <div className="fixed bottom-100 right-100 w-226 h-226 rounded-full bg-[#FFAB2D] blur-[158.5px]" />
       {children}
     </main>
   )
