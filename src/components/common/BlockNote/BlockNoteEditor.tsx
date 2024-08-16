@@ -71,6 +71,7 @@ export default function BlockNoteViewer({
       const jsonBlocks = editor.document
       const contentString = JSON.stringify(jsonBlocks)
       setContent(contentString)
+      console.log('Content changed:', contentString)
     }
   }, [editor, setContent])
 

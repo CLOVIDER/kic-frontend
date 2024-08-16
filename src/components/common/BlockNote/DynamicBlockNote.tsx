@@ -59,7 +59,11 @@ export default function DynamicBlockNote({
       <BlockNoteViewer
         domainName={domainName}
         setUploadedImageUrls={imageUrls}
-        setContent={setContent}
+        setContent={(content: string) => {
+          if (setContent) {
+            setContent(content) // Answer state 업데이트
+          }
+        }}
         enableImageUpload={enableImageUpload}
         initialContent={initialContent}
         data={data}
