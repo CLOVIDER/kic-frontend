@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { ACCESS_TOKEN, ROLE } from '@/constants'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
 import { postLogin } from '.'
 import { LoginRequest } from './type'
 
@@ -21,6 +22,10 @@ export const usePostLogin = (data: LoginRequest) => {
       } else {
         push('/')
       }
+    },
+    onError: () => {
+      const message = '로그인에 실패했습니다.'
+      toast.error(message)
     },
   })
 }
