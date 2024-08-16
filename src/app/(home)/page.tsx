@@ -22,14 +22,14 @@ export default function Home() {
         <Navigator />
       </div>
 
-      <div className="mt-40 ml-40">
+      <div className="mt-40 ml-40 w-1100">
         <CompanyLogo />
-        <div className="relative ml-110 mt-150">
+        <div className="relative pl-110 pt-150 h-600">
           <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
             <StatusBox>
               <CompetitionRate />
               <Button
-                className="absolute z-10 right-210 top-150 w-auto px-20 h-40 bg-[#000000] !rounded-13 !text-15 text-white whitespace-nowrap"
+                className="absolute z-10 left-570 top-300 w-auto px-20 h-40 bg-[#000000] !rounded-13 !text-15 text-white whitespace-nowrap"
                 rightIcon={<Right width="20" />}
                 onClick={() => push('/apply')}
               >
@@ -37,16 +37,16 @@ export default function Home() {
               </Button>
             </StatusBox>
           </AsyncBoundaryWithQuery>
+          <Image
+            src="/images/landing.svg"
+            alt="landing"
+            width={460}
+            height={428}
+            className="absolute bottom-30 left-600"
+            priority
+          />
         </div>
       </div>
-      <Image
-        src="/images/landing.svg"
-        alt="landing"
-        width={460}
-        height={428}
-        className="absolute bottom-110 right-30"
-        priority
-      />
     </main>
   )
 }

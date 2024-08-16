@@ -1,5 +1,3 @@
-// src/app/(user)/apply/components/ApplicationForm.tsx
-
 'use client'
 
 import {

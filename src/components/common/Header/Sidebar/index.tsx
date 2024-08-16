@@ -10,7 +10,10 @@ export default function Sidebar({ children }: { children: ReactNode }) {
   return (
     <Drawer direction="left" open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger>{children}</DrawerTrigger>
-      <DrawerContent className="w-330 h-full pt-250">
+      <DrawerContent
+        onClick={() => setIsOpen(false)}
+        className="w-330 h-full pt-250"
+      >
         <Navigator />
       </DrawerContent>
     </Drawer>

@@ -22,7 +22,11 @@ const options: ChartOptions<'doughnut'> = {
       display: false,
     },
     datalabels: {
-      color: '#000',
+      color: '#333333',
+      font: {
+        weight: 'bolder',
+        size: 16,
+      },
       formatter: (value: number) => `${value}`,
     },
   },
@@ -46,14 +50,14 @@ export default function KindergartenChart({
   ChartJS.register(ArcElement, Tooltip, ChartLegend, ChartDataLabels)
 
   const data = {
-    labels: ['승인', '미승인', '승인 대기'],
+    labels: ['승인', '승인대기', '미승인'],
     datasets: [
       {
         label: 'Dataset',
-        data: [acceptCnt, unAcceptCnt, waitCnt],
+        data: [acceptCnt, waitCnt, unAcceptCnt],
         borderWidth: 0,
         hoverBorderWidth: 0,
-        backgroundColor: ['#E1E1E1', '#DA7164', '#3FDD78'],
+        backgroundColor: ['#3FDD78', '#DA7164', '#E1E1E1'],
         fill: false,
       },
     ],

@@ -64,7 +64,8 @@ export default function HistoryTable() {
   const { history } = useHistoryContext()
 
   return (
-    <>
+    <div className="">
+      <h1 className="text-20 mt-50 pl-5">▼ 지난 추첨 내역</h1>
       <Table
         classNames={{
           wrapper: 'shadow-sm rounded py-30',
@@ -98,6 +99,6 @@ export default function HistoryTable() {
           )}
         </TableBody>
       </Table>
-    </>
+    </div>
   )
 }

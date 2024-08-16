@@ -2,6 +2,7 @@
 
 import { Plus } from '@/components/common'
 import { useAdminQnAContext } from '@/app/(admin)/components/adminFetcher/adminContext'
+import Link from 'next/link'
 import NumberDisplay from '../NumberDisplay'
 
 export default function QnA() {
@@ -14,7 +15,9 @@ export default function QnA() {
         <NumberDisplay title="답변대기" number={num} />
       </div>
       <div className="bg-[#FFC5BD] h-30 w-30 p-10 shadow-sm rounded-2 flex items-center justify-center mt-6">
-        <Plus width={10} />
+        <Link href="/admin/qna">
+          <Plus width={10} />
+        </Link>
       </div>
     </div>
   )

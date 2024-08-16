@@ -1,46 +1,54 @@
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
-import { ACCESS_TOKEN } from '@/constants'
+import { ACCESS_TOKEN, ROLE } from '@/constants'
 import Button from '../../Button'
 
 export default function Logo() {
   const { push } = useRouter()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const pathname = usePathname()
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
 
   useEffect(() => {
     const accessToken = Cookies.get(ACCESS_TOKEN) as string
     setIsLoggedIn(!!accessToken)
-  }, [isLoggedIn])
+  }, [pathname])
 
   const handleLogout = () => {
     Cookies.remove(ACCESS_TOKEN)
+    Cookies.remove(ROLE)
     setIsLoggedIn(false)
-    push('/')
+    push('/login')
+  }
+
+  const handleLanding = () => {
+    const role = Cookies.get(ROLE) as string
+    if (role === 'ADMIN') push('/admin')
+    else push('/')
   }
 
   return (
-    <div className="text-12 w-full flex flex-row justify-between">
+    <div className="w-full flex flex-row justify-between">
       <Button
-        className="w-15 h-15 text-[12px] bg-transparent text-[#333333]"
-        onClick={() => push('/')}
+        className="w-15 h-15 text-15 bg-transparent text-[#333333]"
+        onClick={handleLanding}
       >
-        <div className="flex flex-row items-center gap-5 whitespace-nowrap">
+        <div className="flex flex-row items-center gap-5 whitespace-nowrap text-15">
           <Image src="/images/logo.png" alt="logo" width={18} height={13} />
           <p>kids in company</p>
         </div>
       </Button>
       {isLoggedIn ? (
         <Button
-          className="w-15 h-15 text-[12px] bg-transparent text-[#333333]"
+          className="w-15 h-15 text-[14px] bg-transparent text-[#333333]"
           onClick={handleLogout}
         >
           logout
         </Button>
       ) : (
         <Button
-          className="w-15 h-15 text-[12px] bg-transparent text-[#333333]"
+          className="w-15 h-15 text-[15px] bg-transparent text-[#333333]"
           onClick={() => push('/login')}
         >
           login
