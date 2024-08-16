@@ -55,7 +55,6 @@ export default function WritePage() {
             value={title}
             onChange={(e) => {
               setTitle(e.target.value)
-              setIsEdited(true)
             }}
           />
         </div>

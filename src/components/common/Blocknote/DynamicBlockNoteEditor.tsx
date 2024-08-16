@@ -16,12 +16,18 @@ const BlockNoteEditor = dynamic(() => import('./BlockNoteEditor'), {
 
 interface DynamicBlockNoteEditorProps {
   domainName: string
-  setUploadedImageUrls: (urls: string[]) => void
+  imageUrls?: (urls: string[]) => void
+  setContent: (content: string) => void
+  enableImageUpload?: boolean
+  initialContent?: string
 }
 
 export default function DynamicBlockNoteEditor({
   domainName,
-  setUploadedImageUrls,
+  imageUrls,
+  setContent,
+  enableImageUpload = true,
+  initialContent,
 }: DynamicBlockNoteEditorProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
@@ -49,7 +55,10 @@ export default function DynamicBlockNoteEditor({
     <Suspense fallback={<LoadingSpinner />}>
       <BlockNoteEditor
         domainName={domainName}
-        setUploadedImageUrls={setUploadedImageUrls}
+        setUploadedImageUrls={imageUrls}
+        setContent={setContent}
+        enableImageUpload={enableImageUpload}
+        initialContent={initialContent}
       />
     </Suspense>
   )

@@ -1,45 +1,76 @@
 import '@blocknote/core/style.css'
 import '@blocknote/react/style.css'
 import '@blocknote/mantine/style.css'
-import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/mantine'
-import { useEffect, useCallback, useState } from 'react'
-import { uploadImage } from './UploadImage'
+import { useCallback, useState, useEffect } from 'react'
+import { useCreateBlockNote } from '@blocknote/react'
+import { toast } from 'react-toastify'
+import { UploadImage } from './UploadImage'
 
 interface BlockNoteEditorProps {
   domainName: string
-  setUploadedImageUrls: (urls: string[]) => void
+  setUploadedImageUrls?: (urls: string[]) => void
+  setContent: (content: string) => void
+  enableImageUpload?: boolean
+  initialContent?: string
 }
 
 export default function BlockNoteEditor({
   domainName,
   setUploadedImageUrls,
+  setContent,
+  enableImageUpload = true,
+  initialContent,
 }: BlockNoteEditorProps) {
   const [imageUrls, setImageUrls] = useState<string[]>([])
+
+  // 이미지 업로드 핸들러
   const handleUpload = useCallback(
     async (file: File): Promise<string> => {
+      if (!enableImageUpload || !domainName || !setUploadedImageUrls) {
+        throw new Error('Image upload is not enabled or missing required props')
+      }
       try {
-        const url = await uploadImage(file, domainName)
+        const url = await UploadImage(file, domainName)
         setImageUrls((prevUrls) => [...prevUrls, url])
         setUploadedImageUrls([...imageUrls, url])
         return url
       } catch (error) {
-        console.error('Failed to upload image:', error)
+        toast.error(`Failed to upload image: ${error}`)
         throw error
       }
     },
-    [domainName, imageUrls, setUploadedImageUrls],
+    [domainName, enableImageUpload, imageUrls, setUploadedImageUrls],
   )
 
+  // 에디터 초기화 및 변경사항 감지
   const editor = useCreateBlockNote({
-    uploadFile: handleUpload,
+    uploadFile: enableImageUpload ? handleUpload : undefined,
   })
 
   useEffect(() => {
-    if (editor) {
-      // console.log('Editor initialized')
+    if (editor && initialContent) {
+      try {
+        const blocks = JSON.parse(initialContent)
+        editor.replaceBlocks(editor.topLevelBlocks, blocks)
+      } catch (error) {
+        toast.error(`Failed to parse initial content: ${error}`)
+      }
     }
-  }, [editor])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor, initialContent])
 
-  return <BlockNoteView editor={editor} theme="light" />
+  const handleChange = useCallback(() => {
+    if (editor) {
+      const jsonBlocks = editor.document
+      const contentString = JSON.stringify(jsonBlocks)
+      setContent(contentString)
+    }
+  }, [editor, setContent])
+
+  if (!editor) {
+    return null
+  }
+
+  return <BlockNoteView editor={editor} theme="light" onChange={handleChange} />
 }
