@@ -9,20 +9,6 @@ export type PeriodState = {
   endDate: Date | null
 }
 
-const getEndKey = (
-  periodType: keyof RecruitDateInfo,
-): keyof RecruitDateInfo => {
-  switch (periodType) {
-    case 'recruitStartDt':
-      return 'recruitEndDt'
-    case 'firstStartDt':
-      return 'firstEndDt'
-    case 'secondStartDt':
-      return 'secondEndDt'
-    default:
-      throw new Error('Invalid periodType')
-  }
-}
 export type UsePeriodReturn = {
   recruitmentPeriod: PeriodState
   firstRegistrationPeriod: PeriodState
@@ -77,8 +63,9 @@ export const usePeriod = (): UsePeriodReturn => {
     setSettingData((prevData) => {
       const newRecruitDateInfo = {
         ...prevData.recruitDateAndWeightInfo.recruitDateInfo,
-        [periodType]: startDate ? startDate.toISOString() : '',
-        [getEndKey(periodType)]: endDate ? endDate.toISOString() : '',
+        [periodType]: startDate
+          ? startDate.toISOString()
+          : endDate?.toISOString(),
       }
 
       return {
@@ -103,7 +90,7 @@ export const usePeriod = (): UsePeriodReturn => {
       }
       setRecruitmentPeriodState(newPeriod)
       updateSettingData(
-        dateType === 'start' ? 'recruitStartDt' : getEndKey('recruitStartDt'),
+        dateType === 'start' ? 'recruitStartDt' : 'recruitEndDt',
         newPeriod.startDate,
         newPeriod.endDate,
       )
@@ -114,7 +101,7 @@ export const usePeriod = (): UsePeriodReturn => {
       }
       setFirstRegistrationPeriodState(newPeriod)
       updateSettingData(
-        dateType === 'start' ? 'firstStartDt' : getEndKey('firstStartDt'),
+        dateType === 'start' ? 'firstStartDt' : 'firstEndDt',
         newPeriod.startDate,
         newPeriod.endDate,
       )
@@ -125,7 +112,7 @@ export const usePeriod = (): UsePeriodReturn => {
       }
       setSecondRegistrationPeriodState(newPeriod)
       updateSettingData(
-        dateType === 'start' ? 'secondStartDt' : getEndKey('secondStartDt'),
+        dateType === 'start' ? 'secondStartDt' : 'secondEndDt',
         newPeriod.startDate,
         newPeriod.endDate,
       )
