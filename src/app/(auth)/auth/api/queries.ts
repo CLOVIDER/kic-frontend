@@ -23,9 +23,8 @@ export const usePostLogin = (data: LoginRequest) => {
         push('/')
       }
     },
-    onError: (error) => {
-      console.log(error)
-      const message = error?.message || '로그인에 실패했습니다.'
+    onError: () => {
+      const message = '로그인에 실패했습니다.'
       toast.error(message)
     },
   })
