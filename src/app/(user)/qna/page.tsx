@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button, Pagination } from '@nextui-org/react'
 import Link from 'next/link'
-import QnaFetcher from './components/QnaFetcher'
+import { QnaFetcher } from '@/components/common/qna'
 
 const ITEMS_PER_PAGE = 5
 

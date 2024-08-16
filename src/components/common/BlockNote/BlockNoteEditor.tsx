@@ -15,7 +15,7 @@ interface BlockNoteEditorProps {
   initialContent?: string
 }
 
-export default function Editor({
+export default function BlockNoteEditor({
   domainName,
   setUploadedImageUrls,
   setContent,
@@ -23,6 +23,8 @@ export default function Editor({
   initialContent,
 }: BlockNoteEditorProps) {
   const [imageUrls, setImageUrls] = useState<string[]>([])
+
+  // 이미지 업로드 핸들러
   const handleUpload = useCallback(
     async (file: File): Promise<string> => {
       if (!enableImageUpload || !domainName || !setUploadedImageUrls) {
@@ -34,13 +36,14 @@ export default function Editor({
         setUploadedImageUrls([...imageUrls, url])
         return url
       } catch (error) {
-        toast.error(`Failed to upload image:${error}`)
+        toast.error(`Failed to upload image: ${error}`)
         throw error
       }
     },
     [domainName, enableImageUpload, imageUrls, setUploadedImageUrls],
   )
 
+  // 에디터 초기화 및 변경사항 감지
   const editor = useCreateBlockNote({
     uploadFile: enableImageUpload ? handleUpload : undefined,
   })
@@ -55,7 +58,7 @@ export default function Editor({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editor])
+  }, [editor, initialContent])
 
   const handleChange = useCallback(() => {
     if (editor) {
