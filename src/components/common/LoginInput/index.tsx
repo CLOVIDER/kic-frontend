@@ -23,7 +23,7 @@ export default function LoginInput() {
         value={email}
         wrapperClassName="w-242 bg-[#EAF0F7] rounded-10 px-17 py-9"
         className="border-none bg-[#EAF0F7]"
-        placeholder="이메일 입력"
+        placeholder="이름 입력"
       />
 
       <Input
