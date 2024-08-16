@@ -144,7 +144,6 @@ export default function LotteryTable({
             prev: 'w-28 h-28 !rounded-4',
           }}
           total={totalPage}
-          initialPage={1}
           showShadow
           showControls
         />

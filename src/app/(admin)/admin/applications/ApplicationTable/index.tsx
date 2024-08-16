@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import ApproveModal from '@/app/(admin)/components/Approve'
-import { If } from '@/components'
+import { If } from '@/components/common'
 import { useApplicationsContext } from '../fetcher/ApplicationsFetcher'
 import { GetApplicationsResponse } from '../api'
 
@@ -82,42 +82,52 @@ export default function ApplicationTable({
     [],
   )
 
+  console.log(page)
+
   return (
     <>
-      <Table
-        classNames={{
-          base: 'rounded-20',
-          wrapper: 'shadow-none !rounded-20 h-495',
-          thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
-          th: 'bg-transparent h-full',
-        }}
-        aria-label="table"
-      >
-        <TableHeader columns={columns} className="flex items-center">
-          {(column) => (
-            <TableColumn className="text-center" key={column.uid}>
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
+      <If condition={content.length < 1}>
+        <div className="font-semibold flex justify-center items-center h-full text-24">
+          신청자 목록이 없어요..🤣
+        </div>
+      </If>
 
-        <TableBody items={content}>
-          {(item) => (
-            <TableRow
-              // FIXME: href
-              onClick={() => handleRowClick(item)}
-              key={item.applicationId}
-              className="h-45 cursor-pointer"
-            >
-              {(columnKey) => (
-                <TableCell className="text-center">
-                  {renderCell(item, columnKey)}
-                </TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <If condition={content.length >= 1}>
+        <Table
+          classNames={{
+            base: 'rounded-20',
+            wrapper: 'shadow-none !rounded-20 h-495',
+            thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
+            th: 'bg-transparent h-full',
+          }}
+          aria-label="table"
+        >
+          <TableHeader columns={columns} className="flex items-center">
+            {(column) => (
+              <TableColumn className="text-center" key={column.uid}>
+                {column.name}
+              </TableColumn>
+            )}
+          </TableHeader>
+
+          <TableBody items={content}>
+            {(item) => (
+              <TableRow
+                // FIXME: href
+                onClick={() => handleRowClick(item)}
+                key={item.applicationId}
+                className="h-45 cursor-pointer"
+              >
+                {(columnKey) => (
+                  <TableCell className="text-center">
+                    {renderCell(item, columnKey)}
+                  </TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </If>
 
       <div className="mt-30" />
       <If condition={selectedApplication != null}>
@@ -136,11 +146,10 @@ export default function ApplicationTable({
           wrapper: 'gap-2',
           cursor: 'border-1 w-28 h-28 !rounded-4 bg-[#FF9F00]',
           item: 'w-28 h-28 !rounded-4',
-          next: 'w-28 h-28 !rounded-4',
           prev: 'w-28 h-28 !rounded-4',
+          next: 'w-28 h-28 !rounded-4',
         }}
         total={totalPage}
-        initialPage={1}
         showShadow
         showControls
       />
