@@ -26,7 +26,7 @@ export function middleware(request: NextRequest) {
     return response
   }
 
-  if (role !== 'admin' && pathname.startsWith('/admin')) {
+  if (role !== 'ADMIN' && pathname.startsWith('/admin')) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
   return response
