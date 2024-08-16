@@ -131,10 +131,10 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
             <div className="px-51 pt-40 flex flex-col gap-10">
               <h2 className="text-20">분반</h2>
 
-              {kindergartenClass.map(({ className, ageClass }) => (
+              {kindergartenClass.map(({ className, ageClassString }) => (
                 <div key={className} className="flex gap-40 items-center">
                   <div>{className}</div>
-                  <div>{ageClass}세</div>
+                  <div>{ageClassString}세</div>
                 </div>
               ))}
             </div>
