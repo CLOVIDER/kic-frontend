@@ -1,5 +1,3 @@
-// src/app/(user)/apply/components/ApplicationForm.tsx
-
 'use client'
 
 import {
@@ -17,6 +15,7 @@ import {
   submitApplication,
   RecruitInfo,
   getRecruitData,
+  getApplicationData,
 } from '../api'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
@@ -49,9 +48,7 @@ export default function ApplicationForm() {
     { id: 1, name: '', classes: {} },
   ])
 
-  const [recruitData, setRecruitData] = useState<
-    { kindergartenNm: string; recruitIds: number[]; ageClasses: string[] }[]
-  >([])
+  const [recruitData, setRecruitData] = useState<RecruitInfo[]>([])
   const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({
     isSingleParent: false,
     isDisability: false,
@@ -64,6 +61,78 @@ export default function ApplicationForm() {
     setSelectedItems((prev) => ({ ...prev, [id]: value }))
     setFormData((prev) => ({ ...prev, [id]: value ? '1' : '0' }))
   }
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [fetchedRecruitData, applicationData] = await Promise.all([
+          getRecruitData(),
+          getApplicationData(),
+        ])
+
+        setRecruitData(fetchedRecruitData)
+
+        if (applicationData) {
+          // 기존 지원서 데이터가 있을 경우 상태 업데이트
+          setFormData((prevData) => ({
+            ...prevData,
+            isSingleParent: applicationData.isSingleParent,
+            childrenCnt: applicationData.childrenCnt,
+            isDisability: applicationData.isDisability,
+            isDualIncome: applicationData.isDualIncome,
+            isEmployeeCouple: applicationData.isEmployeeCouple,
+            isSibling: applicationData.isSibling,
+            childrenRecruitList: applicationData.childrenRecruitList,
+            imageUrls: applicationData.imageUrls,
+          }))
+
+          // children 상태 업데이트
+          const updatedChildren = applicationData.childrenRecruitList.map(
+            (
+              child: { childNm: string; recruitIds: number[] },
+              index: number,
+            ) => ({
+              id: index + 1,
+              name: child.childNm,
+              classes: child.recruitIds.reduce(
+                (acc: Record<string, string>, recruitId: number) => {
+                  const kindergarten = fetchedRecruitData.find((k) =>
+                    k.recruitIds.includes(recruitId),
+                  )?.kindergartenNm
+                  if (kindergarten) {
+                    acc[kindergarten] = recruitId.toString()
+                  }
+                  return acc
+                },
+                {},
+              ),
+            }),
+          )
+          setChildren(updatedChildren)
+
+          // selectedItems 상태 업데이트
+          setSelectedItems({
+            isSingleParent: applicationData.isSingleParent === '1',
+            isDisability: applicationData.isDisability === '1',
+            isDualIncome: applicationData.isDualIncome === '1',
+            isEmployeeCouple: applicationData.isEmployeeCouple === '1',
+            isSibling: applicationData.isSibling === '1',
+          })
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error)
+        toast.error('데이터를 불러오는 데 실패했습니다.', {
+          autoClose: 1000,
+          pauseOnHover: false,
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   useEffect(() => {
     const fetchRecruitData = async () => {
@@ -260,6 +329,10 @@ export default function ApplicationForm() {
         [kindergarten]: option.label,
       },
     }))
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
   }
 
   return (

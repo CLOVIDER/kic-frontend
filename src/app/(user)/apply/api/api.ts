@@ -99,7 +99,7 @@ export async function getRecruitData(): Promise<RecruitInfo[]> {
   }
 }
 
-export async function getApplicationData(): Promise<ApplicationStatus> {
+export async function getApplicationData(): Promise<ApplicationStatus | null> {
   try {
     const response = await http.get<ApplicationStatus>({
       url: '/api/applications',
@@ -107,6 +107,6 @@ export async function getApplicationData(): Promise<ApplicationStatus> {
     return response.result
   } catch (error) {
     console.error('Error fetching application data:', error)
-    throw error
+    return null
   }
 }

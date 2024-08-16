@@ -1,3 +1,5 @@
+import { ApplicationPayload } from '@/type/application'
+
 export interface ApplicationResponse {
   id: number
   createdAt: string
@@ -31,6 +33,6 @@ export interface RecruitInfo {
   ageClasses: string[]
 }
 
-export interface ApplicationStatus {
+export interface ApplicationStatus extends ApplicationPayload {
   id: number
 }
