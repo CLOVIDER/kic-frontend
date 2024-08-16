@@ -147,7 +147,7 @@ export default function ApplicationTable({
             prev: 'w-28 h-28 !rounded-4',
           }}
           total={totalPage}
-          initialPage={1}
+          initialPage={0}
           showShadow
           showControls
         />
