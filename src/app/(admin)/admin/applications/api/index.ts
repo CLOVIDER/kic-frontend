@@ -1,6 +1,18 @@
 import { http } from '@/api'
+import { Pagination } from '@/type'
 
-export interface GetApplicationsResponse {
+export type GetKindergartensResponse = Array<{
+  kindergartenId: number
+  kindergartenNm: string
+  kindergartenAddr: string
+  kindergartenScale: string
+  kindergartenNo: string
+  kindergartenTime: string
+  kindergartenInfo: string
+  kindergartenImageUrl: string
+}>
+
+export interface GetApplicationsResponse extends Pagination {
   content: [
     {
       createdAt: string
@@ -10,13 +22,6 @@ export interface GetApplicationsResponse {
       isAccept: string
     },
   ]
-  totalPage: number
-  totalElements: number
-  size: number
-  currPage: number
-  hasNext: boolean
-  isFirst: boolean
-  isLast: boolean
 }
 
 export interface GetApplicationsRequest {
@@ -25,6 +30,9 @@ export interface GetApplicationsRequest {
   filter?: 'ALL' | 'ACCEPT' | 'UNACCEPT' | 'WAIT'
   q?: string
 }
+
+export const getKindergartens = () =>
+  http.get<GetKindergartensResponse>({ url: '/api/admin/kindergartens' })
 
 export const getApplications = ({
   page,

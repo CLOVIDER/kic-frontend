@@ -20,6 +20,7 @@ export const usePostEmailsVerify = (accountId: string) => {
     },
     onError: () => {
       // TODO: Modal
+      // eslint-disable-next-line
       alert('인증 번호가 틀렸습니다.')
     },
   })

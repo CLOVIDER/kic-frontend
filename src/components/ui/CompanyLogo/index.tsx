@@ -25,7 +25,7 @@ export default function CompanyLogo() {
           </div>
           <p
             id={descriptionId}
-            className="px-5 text-[18px] text-[#6C5757] opacity-0 transition-opacity duration-700"
+            className="px-5 text-[18px] text-[#6C5757] opacity-0 transition-opacity duration-1000"
           >
             {descriptionText}
           </p>

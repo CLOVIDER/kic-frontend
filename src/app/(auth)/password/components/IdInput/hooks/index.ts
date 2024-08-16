@@ -8,20 +8,17 @@ export default function useIdInput(id: string) {
 
   const handleNextStep = useCallback(() => {
     if (id) {
-      setStep('mail')
+      mutate(id, {
+        onSuccess: () => {
+          setStep('mail')
+        },
+      })
       return
     }
+    // eslint-disable-next-line
     alert('아이디를 입력해주세요.')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
-  const handlePostEmails = useCallback(
-    () => {
-      mutate(id)
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [id],
-  )
-
-  return { handleNextStep, handlePostEmails }
+  return { handleNextStep }
 }
