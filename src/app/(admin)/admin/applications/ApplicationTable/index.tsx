@@ -82,8 +82,6 @@ export default function ApplicationTable({
     [],
   )
 
-  console.log(page)
-
   return (
     <>
       <If condition={content.length < 1}>

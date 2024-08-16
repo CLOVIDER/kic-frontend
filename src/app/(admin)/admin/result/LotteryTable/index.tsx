@@ -79,7 +79,6 @@ export default function LotteryTable({
   return (
     <>
       <div className="absolute right-70 w-204 flex flex-col justify-center items-center gap-18 font-semibold text-[#EA7465]">
-        {/* TODO: 결과 공지 API */}
         <Button
           onClick={() => mutate()}
           className="w-180 h-45 text-[20px] bg-[#FFFCF6] rounded-16 border-1 border-[#EA7465] font-semibold shadow-lg text-[#EA7465]"
