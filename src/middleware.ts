@@ -19,23 +19,16 @@ export function middleware(request: NextRequest) {
   }
 
   if (!token && protectedRoutes.includes(pathname)) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
   if (token && publicRoutes.includes(pathname)) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
+    return response
   }
 
   if (role !== 'admin' && pathname.startsWith('/admin')) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
+    return NextResponse.redirect(new URL('/login', request.url))
   }
-
   return response
 }
 
