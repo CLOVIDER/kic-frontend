@@ -56,6 +56,7 @@ export default function Page() {
           totalPages={totalPages}
           setTotalPages={setTotalPages}
           keyword={keyword}
+          isAdmin
         />
       </div>
       <div className="w-[787px] ml-256 mt-4">

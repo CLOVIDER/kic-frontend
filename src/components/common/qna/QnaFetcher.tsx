@@ -11,6 +11,7 @@ interface QnaFetcherProps {
   totalPages: number
   setTotalPages: (pages: number) => void
   keyword: string
+  isAdmin?: boolean // 추가된 부분
 }
 
 export default function QnaFetcher({
@@ -18,6 +19,7 @@ export default function QnaFetcher({
   itemsPerPage,
   setTotalPages,
   keyword,
+  isAdmin = false, // 기본값을 false로 설정
 }: QnaFetcherProps) {
   const [qnas, setQnas] = useState<ApiQnaItem[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -56,7 +58,7 @@ export default function QnaFetcher({
   return (
     <div>
       {error && <div>{error}</div>}
-      <QnaList paginatedNotices={qnas} />
+      <QnaList paginatedNotices={qnas} isAdmin={isAdmin} /> {/* isAdmin 전달 */}
     </div>
   )
 }
