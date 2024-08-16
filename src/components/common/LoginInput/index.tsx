@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import Button from '../Button'
 import { PasswordHidden } from '../Icons'
 import Input from '../Input'
@@ -16,6 +17,8 @@ export default function LoginInput() {
     handleLogin,
   } = useLoginInput()
 
+  const { push } = useRouter()
+
   return (
     <div className="flex flex-col gap-16 items-center">
       <Input
@@ -23,7 +26,7 @@ export default function LoginInput() {
         value={email}
         wrapperClassName="w-242 bg-[#EAF0F7] rounded-10 px-17 py-9"
         className="border-none bg-[#EAF0F7]"
-        placeholder="이메일 입력"
+        placeholder="이름 입력"
       />
 
       <Input
@@ -48,7 +51,11 @@ export default function LoginInput() {
         로그인
       </Button>
 
-      <button type="button" className="text-14 font-medium text-[#C7C7C7] mt-5">
+      <button
+        onClick={() => push('/password')}
+        type="button"
+        className="text-14 font-medium text-[#C7C7C7] mt-5"
+      >
         비밀번호 초기화
       </button>
     </div>

@@ -12,7 +12,7 @@ export default function Header({ children }: StrictPropsWithChildren) {
   return (
     <div className="relative">
       <header className="absolute top-0 w-full z-20 bg-transparent">
-        <div className="w-full flex flex-row items-center p-15 pl-20 gap-25">
+        <div className="w-full flex flex-row items-center p-15 pl-20 gap-30">
           <Sidebar>
             <HamburgerMenu className={pathname === '/' ? 'hidden' : ''} />
           </Sidebar>
