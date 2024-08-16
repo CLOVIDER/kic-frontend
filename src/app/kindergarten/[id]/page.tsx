@@ -35,29 +35,29 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
         className="group shadow-medium h-489 absolute bg-[white]"
       />
       <section className="relative">
-        <If condition={isAdmin}>
-          <motion.nav
-            key="header"
-            initial={{ y: 100 }}
-            animate={{ y: 0 }}
-            exit={{ y: 100 }}
-            className="absolute right-5 top-[-50px] flex gap-12"
+        <motion.nav
+          key="header"
+          initial={{ y: 100 }}
+          animate={{ y: 0 }}
+          exit={{ y: 100 }}
+          className="absolute pl-10 justify-between w-full right-5 top-[-50px] flex gap-12"
+        >
+          <Link
+            href="/kindergarten"
+            className="w-81 h-35 py-5 text-[#FFAB2D] bg-white border-[#FFAB2D] border-1 rounded-16 flex justify-center items-center"
           >
-            <Link
-              href="/kindergarten"
-              className="w-81 h-35 py-5 text-[#FFAB2D] bg-white border-[#FFAB2D] border-1 rounded-16 flex justify-center items-center"
-            >
-              돌아가기
-            </Link>
+            돌아가기
+          </Link>
 
+          <If condition={isAdmin}>
             <Link
               href={`/kindergarten/edit/${id}`}
               className="w-81 h-35 py-5 text-white bg-white [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] rounded-16 flex justify-center items-center"
             >
               편집
             </Link>
-          </motion.nav>
-        </If>
+          </If>
+        </motion.nav>
 
         <Card className="w-[940px] h-489 py-27 bg-transparent !shadow-none">
           <CardHeader className="w-full flex justify-between px-51 items-start">
