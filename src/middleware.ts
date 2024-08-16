@@ -5,7 +5,7 @@ const protectedRoutes = ['/apply', '/history', '/password']
 const publicRoutes = ['/login', '/']
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get(ACCESS_TOKEN)
+  const token = request.cookies.get(ACCESS_TOKEN)?.value
   const role = request.cookies.get(ROLE)?.value
   const response = NextResponse.next()
   const { pathname } = request.nextUrl
@@ -19,23 +19,16 @@ export function middleware(request: NextRequest) {
   }
 
   if (!token && protectedRoutes.includes(pathname)) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
   if (token && publicRoutes.includes(pathname)) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
+    return response
   }
 
-  if (role !== 'admin' && pathname.startsWith('/admin')) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
+  if (role !== 'ADMIN' && pathname.startsWith('/admin')) {
+    return NextResponse.redirect(new URL('/login', request.url))
   }
-
   return response
 }
 

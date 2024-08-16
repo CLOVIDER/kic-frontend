@@ -12,7 +12,7 @@ export default function ResultProcessing() {
 
   return (
     <ResultCard className="gap-15">
-      <Image src="/images/face.svg" alt="face" width={177} height={177} />
+      <Image src="/images/Face.svg" alt="face" width={177} height={177} />
 
       <ResultCard.Title>추첨 대기중...</ResultCard.Title>
 
