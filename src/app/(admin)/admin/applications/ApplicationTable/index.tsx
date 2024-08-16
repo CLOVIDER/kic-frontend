@@ -84,13 +84,13 @@ export default function ApplicationTable({
 
   return (
     <>
-      <If condition={content.length >= 1}>
+      <If condition={content.length < 1}>
         <div className="font-semibold flex justify-center items-center h-full text-24">
           신청자 목록이 없어요..🤣
         </div>
       </If>
 
-      <If condition={content.length < 1}>
+      <If condition={content.length >= 1}>
         <Table
           classNames={{
             base: 'rounded-20',
