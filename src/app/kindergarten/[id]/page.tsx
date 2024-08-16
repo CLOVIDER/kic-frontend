@@ -134,7 +134,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
               {kindergartenClass.map(({ className, ageClassString }) => (
                 <div key={className} className="flex gap-40 items-center">
                   <div>{className}</div>
-                  <div>{ageClassString}세</div>
+                  <div>{ageClassString}</div>
                 </div>
               ))}
             </div>
