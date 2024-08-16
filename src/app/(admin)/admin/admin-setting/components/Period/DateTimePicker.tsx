@@ -623,6 +623,8 @@ type DateTimePickerProps = {
   disabled?: boolean
   hourCycle?: 12 | 24
   placeholder?: string
+  minDate?: Date
+  maxDate?: Date
 
   yearRange?: number
 
@@ -650,6 +652,8 @@ const DateTimePicker = forwardRef<DateTimePickerRef, DateTimePickerProps>(
       displayFormat,
       granularity = 'second',
       placeholder = 'Pick a date',
+      minDate,
+      maxDate,
       ...props
     },
     ref,
@@ -720,6 +724,8 @@ const DateTimePicker = forwardRef<DateTimePickerRef, DateTimePickerProps>(
             initialFocus
             yearRange={yearRange}
             locale={locale}
+            fromDate={minDate}
+            toDate={maxDate}
             {...props}
           />
           {granularity !== 'day' && (
