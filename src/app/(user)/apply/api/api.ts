@@ -1,8 +1,8 @@
 import { http } from '@/api'
 import { BaseResponse } from '@/api/types'
-import { ApplicationPayload } from '@/type/application'
 import { toast } from 'react-toastify'
 import {
+  ApplicationPayload,
   ApplicationResponse,
   EmployeeInfo,
   FileUploadResponse,
@@ -104,7 +104,13 @@ export async function getApplicationData(): Promise<ApplicationStatus | null> {
     const response = await http.get<ApplicationStatus>({
       url: '/api/applications',
     })
-    return response.result
+
+    // Ensure the response is in the expected format
+    if (response.code === 200 && response.result) {
+      return response.result
+    }
+
+    return null
   } catch (error) {
     console.error('Error fetching application data:', error)
     return null

@@ -76,8 +76,16 @@ export default function ApplicationForm() {
           setFormData((prevData) => ({
             ...prevData,
             ...applicationData,
+            fileUrls: applicationData.documents.reduce(
+              (acc, document) => {
+                acc[document.documentType] = document.image
+                return acc
+              },
+              {} as Record<string, string>,
+            ),
           }))
 
+          // Process children and selected labels
           const updatedChildren = applicationData.childrenRecruitList.map(
             (child, index) => {
               const classes = child.recruitIds.reduce(
@@ -101,7 +109,7 @@ export default function ApplicationForm() {
           )
           setChildren(updatedChildren)
 
-          // selectedLabels 상태 업데이트
+          // Update selectedLabels state
           const newSelectedLabels = updatedChildren.reduce(
             (acc, child) => {
               Object.keys(child.classes).forEach((kindergarten) => {

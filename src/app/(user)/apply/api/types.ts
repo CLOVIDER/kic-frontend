@@ -33,6 +33,7 @@ export interface RecruitInfo {
 
 export interface ApplicationStatus extends ApplicationPayload {
   id: number
+  documents: Document[]
 }
 
 export interface ApplicationPayload {
@@ -49,6 +50,13 @@ export interface ApplicationPayload {
   fileUrls: {
     [key: string]: File | string
   }
+}
+
+export interface Document {
+  id: number
+  image: string
+  documentType: string
+  isAccept: string
 }
 
 export interface Child {
