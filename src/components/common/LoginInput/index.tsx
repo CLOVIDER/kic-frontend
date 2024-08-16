@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import Button from '../Button'
 import { PasswordHidden } from '../Icons'
 import Input from '../Input'
@@ -15,6 +16,8 @@ export default function LoginInput() {
     setIsPassword,
     handleLogin,
   } = useLoginInput()
+
+  const { push } = useRouter()
 
   return (
     <div className="flex flex-col gap-16 items-center">
@@ -33,6 +36,7 @@ export default function LoginInput() {
         wrapperClassName="w-242 bg-[#EAF0F7] rounded-10 px-17 py-9 flex justify-between"
         className="border-none bg-[#EAF0F7]"
         placeholder="비밀번호 입력"
+        onClick={() => push('/password')}
         endContent={
           <PasswordHidden
             className="cursor-pointer"
