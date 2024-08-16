@@ -2,7 +2,7 @@ import { http } from '@/api'
 
 export const postEmails = ({ accountId }: { accountId: string }) =>
   http.post({
-    url: '/api/emails/verify',
+    url: '/api/emails',
     data: { accountId },
   })
 
