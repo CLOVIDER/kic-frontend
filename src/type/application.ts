@@ -9,22 +9,6 @@ export interface DropdownOptions {
   [kindergartenName: string]: DropdownOption[]
 }
 
-export interface ApplicationPayload {
-  isSingleParent: string
-  childrenCnt: number
-  isDisability: string
-  isDualIncome: string
-  isEmployeeCouple: string
-  isSibling: string
-  childrenRecruitList: {
-    childNm: string
-    recruitIds: number[]
-  }[]
-  imageUrls: {
-    [key: string]: File | string
-  }
-}
-
 export interface Child {
   id: number
   name: string

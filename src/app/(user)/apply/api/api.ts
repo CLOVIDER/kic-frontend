@@ -110,3 +110,13 @@ export async function getApplicationData(): Promise<ApplicationStatus | null> {
     return null
   }
 }
+
+export function editApplication(
+  data: ApplicationPayload,
+  applicationId: number,
+): Promise<BaseResponse<ApplicationResponse>> {
+  return http.patch<ApplicationResponse>({
+    url: `/api/applications/${applicationId}`,
+    data,
+  })
+}

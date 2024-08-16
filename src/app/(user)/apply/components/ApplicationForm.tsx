@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  ApplicationPayload,
-  Child,
-  DropdownOption,
-  DropdownOptions,
-} from '@/type/application'
+import { Child, DropdownOption, DropdownOptions } from '@/type/application'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
@@ -16,6 +11,8 @@ import {
   RecruitInfo,
   getRecruitData,
   getApplicationData,
+  editApplication,
+  ApplicationPayload,
 } from '../api'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
@@ -30,7 +27,7 @@ export default function ApplicationForm() {
     isEmployeeCouple: '0',
     isSibling: '0',
     childrenRecruitList: [],
-    imageUrls: {
+    fileUrls: {
       SINGLE_PARENT: '',
       DISABILITY: '',
       DUAL_INCOME: '',
@@ -62,6 +59,7 @@ export default function ApplicationForm() {
     setFormData((prev) => ({ ...prev, [id]: value ? '1' : '0' }))
   }
   const [isLoading, setIsLoading] = useState(true)
+  const [applicationId, setApplicationId] = useState<number | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,29 +72,16 @@ export default function ApplicationForm() {
         setRecruitData(fetchedRecruitData)
 
         if (applicationData) {
-          // 기존 지원서 데이터가 있을 경우 상태 업데이트
+          setApplicationId(applicationData.id)
           setFormData((prevData) => ({
             ...prevData,
-            isSingleParent: applicationData.isSingleParent,
-            childrenCnt: applicationData.childrenCnt,
-            isDisability: applicationData.isDisability,
-            isDualIncome: applicationData.isDualIncome,
-            isEmployeeCouple: applicationData.isEmployeeCouple,
-            isSibling: applicationData.isSibling,
-            childrenRecruitList: applicationData.childrenRecruitList,
-            imageUrls: applicationData.imageUrls,
+            ...applicationData,
           }))
 
-          // children 상태 업데이트
           const updatedChildren = applicationData.childrenRecruitList.map(
-            (
-              child: { childNm: string; recruitIds: number[] },
-              index: number,
-            ) => ({
-              id: index + 1,
-              name: child.childNm,
-              classes: child.recruitIds.reduce(
-                (acc: Record<string, string>, recruitId: number) => {
+            (child, index) => {
+              const classes = child.recruitIds.reduce(
+                (acc, recruitId) => {
                   const kindergarten = fetchedRecruitData.find((k) =>
                     k.recruitIds.includes(recruitId),
                   )?.kindergartenNm
@@ -105,20 +90,40 @@ export default function ApplicationForm() {
                   }
                   return acc
                 },
-                {},
-              ),
-            }),
+                {} as Record<string, string>,
+              )
+              return {
+                id: index + 1,
+                name: child.childNm,
+                classes,
+              }
+            },
           )
           setChildren(updatedChildren)
 
-          // selectedItems 상태 업데이트
-          setSelectedItems({
-            isSingleParent: applicationData.isSingleParent === '1',
-            isDisability: applicationData.isDisability === '1',
-            isDualIncome: applicationData.isDualIncome === '1',
-            isEmployeeCouple: applicationData.isEmployeeCouple === '1',
-            isSibling: applicationData.isSibling === '1',
-          })
+          // selectedLabels 상태 업데이트
+          const newSelectedLabels = updatedChildren.reduce(
+            (acc, child) => {
+              Object.keys(child.classes).forEach((kindergarten) => {
+                const recruitId = child.classes[kindergarten]
+                const recruitDataItem = fetchedRecruitData.find(
+                  (r) => r.kindergartenNm === kindergarten,
+                )
+                const label = recruitDataItem?.ageClasses.find(
+                  (_, idx) => recruitDataItem.recruitIds[idx] === +recruitId,
+                )
+                if (label) {
+                  if (!acc[child.id.toString()]) {
+                    acc[child.id.toString()] = {}
+                  }
+                  acc[child.id.toString()][kindergarten] = label
+                }
+              })
+              return acc
+            },
+            {} as Record<string, Record<string, string>>,
+          )
+          setSelectedLabels(newSelectedLabels)
         }
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -173,7 +178,7 @@ export default function ApplicationForm() {
         ),
       }))
 
-    const selectedImageUrls = Object.entries(formData.imageUrls).reduce(
+    const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
       (acc, [key, url]) => {
         if (typeof url === 'string' && url) {
           // url이 string인지 확인
@@ -189,11 +194,15 @@ export default function ApplicationForm() {
       ...data,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
-      imageUrls: selectedImageUrls,
+      fileUrls: selectedImageUrls,
     }
 
     try {
-      await submitApplication(finalData)
+      if (applicationId !== null) {
+        await editApplication(finalData, applicationId)
+      } else {
+        await submitApplication(finalData)
+      }
       toast.info('제출되었습니다!', {
         autoClose: 500,
         onClose: () => router.push('/'),
@@ -219,7 +228,7 @@ export default function ApplicationForm() {
         ),
       }))
 
-    const selectedImageUrls = Object.entries(formData.imageUrls).reduce(
+    const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
       (acc, [key, url]) => {
         if (typeof url === 'string' && url) {
           // url이 string인지 확인
@@ -234,7 +243,7 @@ export default function ApplicationForm() {
       ...formData,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
-      imageUrls: selectedImageUrls,
+      fileUrls: selectedImageUrls,
     }
 
     try {
@@ -256,7 +265,7 @@ export default function ApplicationForm() {
     // FormData에 File 객체 직접 저장
     setFormData((prev) => ({
       ...prev,
-      imageUrls: { ...prev.imageUrls, [id]: file },
+      fileUrls: { ...prev.fileUrls, [id]: file },
     }))
   }
 
@@ -268,9 +277,9 @@ export default function ApplicationForm() {
     })
     // FormData에서도 삭제
     setFormData((prev) => {
-      const newImageUrls = { ...prev.imageUrls }
+      const newImageUrls = { ...prev.fileUrls }
       delete newImageUrls[id]
-      return { ...prev, imageUrls: newImageUrls }
+      return { ...prev, fileUrls: newImageUrls }
     })
   }
 
