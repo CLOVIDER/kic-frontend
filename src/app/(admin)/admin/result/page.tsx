@@ -15,7 +15,7 @@ import LotteryTable from './LotteryTable'
 
 export default function Page() {
   const { kindergartens } = useKindergartensContext()
-  const [page, setPage] = useState<number>(0)
+  const [page, setPage] = useState<number>(1)
   const [searchInput, setSearchInput] = useState<string>('')
   const [kindergartenId, setKindergartenId] = useState<number>(
     kindergartens[0].kindergartenId,
@@ -88,7 +88,7 @@ export default function Page() {
         <AsyncBoundaryWithQuery>
           <LotteriesFetcher
             kindergartenId={kindergartenId}
-            page={page}
+            page={page - 1}
             classValue={classValue}
             accountId={deferredSearchInput}
           >
