@@ -5,7 +5,7 @@ const protectedRoutes = ['/apply', '/history', '/password']
 const publicRoutes = ['/login', '/']
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get(ACCESS_TOKEN)
+  const token = request.cookies.get(ACCESS_TOKEN)?.value
   const role = request.cookies.get(ROLE)?.value
   const response = NextResponse.next()
   const { pathname } = request.nextUrl
