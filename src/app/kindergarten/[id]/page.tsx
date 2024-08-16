@@ -29,7 +29,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
         initial={{ width: '940px', opacity: 1 }}
         exit={{ width: '333px', opacity: 0 }}
         style={{ borderRadius: '20px' }}
-        className="group shadow-medium h-489 absolute bg-[white]"
+        className="group shadow-medium h-600 absolute bg-[white]"
       />
       <section className="relative">
         <motion.nav
@@ -37,24 +37,17 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
           initial={{ y: 100 }}
           animate={{ y: 0 }}
           exit={{ y: 100 }}
-          className="absolute right-5 top-[-50px] flex gap-12"
+          className="absolute right-5 top-[-50px] flex"
         >
           <Link
             href="/kindergarten"
-            className="w-81 h-35 py-5 text-[#FFAB2D] bg-white border-[#FFAB2D] border-1 rounded-16 flex justify-center items-center"
+            className="w-81 h-35 text-[#FFAB2D] bg-white border-[#FFAB2D] border-1 rounded-16 flex justify-center items-center"
           >
             돌아가기
           </Link>
-
-          <Link
-            href={`/kindergarten/edit/${id}`}
-            className="w-81 h-35 py-5 text-white bg-white [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] rounded-16 flex justify-center items-center"
-          >
-            편집
-          </Link>
         </motion.nav>
 
-        <Card className="w-[940px] h-489 py-27 bg-transparent !shadow-none">
+        <Card className="w-[940px] py-27 bg-transparent !shadow-none">
           <CardHeader className="w-full flex justify-between px-51 items-start">
             <header className="w-500 relative">
               <motion.h1
@@ -105,7 +98,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
             </motion.div>
           </CardHeader>
 
-          <CardBody className="w-full overflow-hidden">
+          <CardBody className="w-full py-20 overflow-hidden">
             <div className="mt-27 flex mx-auto w-fit gap-17 mb-10">
               <motion.div
                 layoutId={`${kindergartenId} image`}
