@@ -14,6 +14,7 @@ import {
 // import { PartialBlock } from '@blocknote/core'
 import { toast } from 'react-toastify'
 import QnaDetailFetcher from '@/app/(user)/qna/[id]/components/QnaDetailFetcher'
+import BlockNoteViewer from '@/components/common/BlockNote/BlockNoteView'
 
 export default function AnswerClient() {
   const { id } = useParams()
@@ -87,14 +88,8 @@ export default function AnswerClient() {
             />
           </div>
           <div className="mt-6 w-[746px] h-324 rounded-20 shadow-md border-[rgba(0,0,0,0.08)] border-1 border-solid box-border overflow-hidden">
-            <DynamicBlockNoteEditor
-              domainName={domainName}
-              setContent={(content) => {
-                setContent(content)
-                sessionStorage.setItem('editorContent', content) // 내용이 변경될 때마다 세션 스토리지에 저장
-              }}
-              enableImageUpload={false}
-              initialContent={answer !== '' ? answer : undefined}
+            <BlockNoteViewer
+              data={answer}
             />
           </div>
         </div>
