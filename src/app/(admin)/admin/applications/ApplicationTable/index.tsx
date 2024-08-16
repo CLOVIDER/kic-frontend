@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import ApproveModal from '@/app/(admin)/components/Approve'
-import { If } from '@/components'
+import { If } from '@/components/common'
 import { useApplicationsContext } from '../fetcher/ApplicationsFetcher'
 import { GetApplicationsResponse } from '../api'
 
@@ -82,6 +82,8 @@ export default function ApplicationTable({
     [],
   )
 
+  console.log(page)
+
   return (
     <>
       <If condition={content.length < 1}>
@@ -125,33 +127,32 @@ export default function ApplicationTable({
             )}
           </TableBody>
         </Table>
+      </If>
 
-        <div className="mt-30" />
-        <If condition={selectedApplication != null}>
-          <ApproveModal
-            application={selectedApplication!}
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
-          />
-        </If>
-
-        <Pagination
-          page={page}
-          onChange={setPage}
-          classNames={{
-            base: 'flex justify-center',
-            wrapper: 'gap-2',
-            cursor: 'border-1 w-28 h-28 !rounded-4 bg-[#FF9F00]',
-            item: 'w-28 h-28 !rounded-4',
-            next: 'w-28 h-28 !rounded-4',
-            prev: 'w-28 h-28 !rounded-4',
-          }}
-          total={totalPage}
-          initialPage={0}
-          showShadow
-          showControls
+      <div className="mt-30" />
+      <If condition={selectedApplication != null}>
+        <ApproveModal
+          application={selectedApplication!}
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
         />
       </If>
+
+      <Pagination
+        page={page}
+        onChange={setPage}
+        classNames={{
+          base: 'flex justify-center',
+          wrapper: 'gap-2',
+          cursor: 'border-1 w-28 h-28 !rounded-4 bg-[#FF9F00]',
+          item: 'w-28 h-28 !rounded-4',
+          prev: 'w-28 h-28 !rounded-4',
+          next: 'w-28 h-28 !rounded-4',
+        }}
+        total={totalPage}
+        showShadow
+        showControls
+      />
     </>
   )
 }

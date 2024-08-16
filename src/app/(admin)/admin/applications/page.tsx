@@ -21,7 +21,7 @@ const filterMAP = {
 } as const
 
 export default function Page() {
-  const [page, setPage] = useState<number>(0)
+  const [page, setPage] = useState<number>(1)
   const [filter, setFilter] = useState<(typeof filterStatus)[number]>('ALL')
   const [searchInput, setSearchInput] = useState<string>('')
   const deferredSearchInput = useDeferredValue(searchInput)
@@ -70,7 +70,7 @@ export default function Page() {
       <section className="w-full h-[505px] rounded-20 border-1 border-[#BDB6B6]">
         <AsyncBoundaryWithQuery>
           <ApplicationsFetcher
-            page={page}
+            page={page - 1}
             filter={filter}
             q={deferredSearchInput}
           >
