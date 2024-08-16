@@ -10,18 +10,17 @@ function LoadingSpinner() {
 }
 
 // BlockNoteViewer를 동적으로 로드
-const BlockNoteViewer = dynamic(() => import('./BlockNoteViewer'), {
+const BlockNoteViewer = dynamic(() => import('./BlockNoteEditor'), {
   ssr: false,
   loading: () => <LoadingSpinner />,
 })
 
 interface DynamicBlockNoteViewerProps {
-  domainName: string
+  domainName?: string
   imageUrls?: (urls: string[]) => void
-  setContent: (content: string) => void
+  setContent?: (content: string) => void
   enableImageUpload?: boolean
   initialContent?: string
-  editable?: boolean
   data?: string
 }
 
@@ -31,7 +30,6 @@ export default function DynamicBlockNote({
   setContent,
   enableImageUpload = false,
   initialContent,
-  editable = false,
   data,
 }: DynamicBlockNoteViewerProps) {
   const [isLoading, setIsLoading] = useState(true)
@@ -64,7 +62,6 @@ export default function DynamicBlockNote({
         setContent={setContent}
         enableImageUpload={enableImageUpload}
         initialContent={initialContent}
-        editable={editable}
         data={data}
       />
     </Suspense>

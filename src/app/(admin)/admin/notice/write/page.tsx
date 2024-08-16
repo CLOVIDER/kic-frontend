@@ -1,6 +1,6 @@
 'use client'
 
-import DynamicBlockNoteEditor from '@/components/common/BlockNote/DynamicBlockNoteEditor'
+import { DynamicBlockNote } from '@/components/common/BlockNote'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
 import { useRouter } from 'next/navigation'
@@ -57,7 +57,7 @@ export default function WritePage() {
           />
         </div>
         <div className="mt-[17px] ml-21 w-[746px] h-435 flex-grow overflow-y-auto border-1 border-solid border-[#00000014] rounded-xl shadow-md">
-          <DynamicBlockNoteEditor
+          <DynamicBlockNote
             domainName={domainName}
             imageUrls={setUploadedImageUrls}
             setContent={setContent}

@@ -1,6 +1,6 @@
 'use client'
 
-import DynamicBlockNoteEditor from '@/components/common/BlockNote/DynamicBlockNoteEditor'
+import DynamicBlockNote from '@/components/common/BlockNote/DynamicBlockNote'
 import { useParams, useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
@@ -14,7 +14,6 @@ import {
 // import { PartialBlock } from '@blocknote/core'
 import { toast } from 'react-toastify'
 import QnaDetailFetcher from '@/app/(user)/qna/[id]/components/QnaDetailFetcher'
-import BlockNoteViewer from '@/components/common/BlockNote/BlockNoteView'
 
 export default function AnswerClient() {
   const { id } = useParams()
@@ -88,9 +87,7 @@ export default function AnswerClient() {
             />
           </div>
           <div className="mt-6 w-[746px] h-324 rounded-20 shadow-md border-[rgba(0,0,0,0.08)] border-1 border-solid box-border overflow-hidden">
-            <BlockNoteViewer
-              data={answer}
-            />
+            <DynamicBlockNote data={answer} domainName={domainName} />
           </div>
         </div>
         <div className="flex ml-[556px] mt-8 w-211 h-31">

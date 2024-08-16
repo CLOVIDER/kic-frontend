@@ -1,6 +1,6 @@
 import cn from '@/util/cn'
 import { QnaItem } from '@/components/qna'
-import BlockNoteViewer from '@/components/common/BlockNote/BlockNoteView'
+import { BlockNoteViewer } from '@/components/common/BlockNote'
 
 interface QnaDetailFetcherProps {
   qnaData: QnaItem

@@ -1,6 +1,6 @@
 import cn from '@/util/cn'
 import { QnaItem } from '@/components/qna'
-import BlockNoteViewer from '@/components/common/BlockNote/BlockNoteView'
+import blocknote from '@/components/common/BlockNote'
 
 interface QnaDetailFetcherProps {
   qnaData: QnaItem
@@ -42,7 +42,7 @@ export default function QnaDetailFetcher({
       <div className="ml-16 mt-4 w-[712px] relative max-w-full border-solid border-[#D5D1D1] border-[0.3px] overflow-hidden" />
       <div className="ml-20 mt-5 px-5">
         <div className="font-bold mb-2">내용</div>
-        <BlockNoteViewer data={qnaData.question} />
+        <blocknote data={qnaData.question} />
       </div>
     </div>
   )
