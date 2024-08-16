@@ -27,34 +27,37 @@ export default function Page() {
         <div className="absolute top-10 left-140 w-full">
           <CompanyLogo />
         </div>
-        <div className="flex flex-row gap-70 px-110 mt-220 relative">
+        <div className="flex flex-row gap-70 px-110 mt-170 relative">
           <div className="flex flex-col gap-30">
             <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
-              <StatusBox className="w-680">
-                <AdminRecruitFetcher>
-                  <RecruitStatus />
-                </AdminRecruitFetcher>
-                <Button
-                  onClick={() => push('/admin/applications')}
-                  className="absolute z-10 left-460 top-180 w-auto px-20 h-40 bg-[#000000] rounded-15 !text-15 whitespace-nowrap hover:bg-[#2d2c2c]"
-                  rightIcon={<Right width="20" />}
-                >
-                  모집 현황
-                </Button>
-              </StatusBox>
+              <div className="w-auto">
+                <StatusBox className="mt-50 w-680">
+                  <AdminRecruitFetcher>
+                    <RecruitStatus />
+                  </AdminRecruitFetcher>
+                  <Button
+                    onClick={() => push('/admin/applications')}
+                    className="absolute z-10 left-460 top-218 w-auto px-20 h-40 bg-[#000000] rounded-15 !text-15 whitespace-nowrap hover:bg-[#2d2c2c]"
+                    rightIcon={<Right width="20" />}
+                  >
+                    모집 현황
+                  </Button>
+
+                  <Image
+                    src="/images/landing.svg"
+                    alt="landing"
+                    width={400}
+                    height={367}
+                    className="absolute top-0 left-500"
+                    priority
+                  />
+                </StatusBox>
+              </div>
             </AsyncBoundaryWithQuery>
-            <Image
-              src="/images/landing.svg"
-              alt="landing"
-              width={400}
-              height={367}
-              className="absolute bottom-185 left-500"
-              priority
-            />
 
             <LandingLower />
           </div>
-          <div className="flex flex-col gap-30">
+          <div className="flex flex-col gap-30 mt-50">
             <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
               <CompetitionRate className="w-370" />
             </AsyncBoundaryWithQuery>
