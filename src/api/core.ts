@@ -23,7 +23,7 @@ axiosInstance.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const accessToken = Cookies.get(ACCESS_TOKEN) as string
 
-    if (accessToken) {
+    if (!accessToken) {
       return config
     }
 
