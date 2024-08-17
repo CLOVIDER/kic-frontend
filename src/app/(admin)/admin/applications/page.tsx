@@ -18,10 +18,10 @@ const filterMAP = {
   ACCEPT: '승인',
   UNACCEPT: '미승인',
   WAIT: '승인대기',
-}
+} as const
 
 export default function Page() {
-  const [page, setPage] = useState<number>(0)
+  const [page, setPage] = useState<number>(1)
   const [filter, setFilter] = useState<(typeof filterStatus)[number]>('ALL')
   const [searchInput, setSearchInput] = useState<string>('')
   const deferredSearchInput = useDeferredValue(searchInput)
@@ -30,7 +30,7 @@ export default function Page() {
     <section className="w-[738px] flex flex-col gap-12">
       <header className="flex justify-between items-center">
         <div className="flex items-center gap-18">
-          <h1 className="text-20 font-bold">신청자 목록</h1>
+          <h1 className="text-20 font-bold">종료된 신청자 목록</h1>
 
           <Dropdown>
             <DropdownTrigger
@@ -70,7 +70,7 @@ export default function Page() {
       <section className="w-full h-[505px] rounded-20 border-1 border-[#BDB6B6]">
         <AsyncBoundaryWithQuery>
           <ApplicationsFetcher
-            page={page}
+            page={page - 1}
             filter={filter}
             q={deferredSearchInput}
           >

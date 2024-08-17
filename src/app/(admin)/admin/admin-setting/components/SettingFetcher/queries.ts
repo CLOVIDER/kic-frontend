@@ -16,6 +16,7 @@ export const useSettingData = () =>
 
 export const useUploadSetting = (mode: boolean) => {
   const { push } = useRouter()
+
   return useMutation({
     mutationKey: ['setting'],
     mutationFn: ({ data }: { data: Partial<SettingData> }) => {
@@ -50,10 +51,17 @@ export const useUploadSetting = (mode: boolean) => {
       }
       return postSettingData(data)
     },
-    onSuccess: () => {
+    onSuccess: (message) => {
+      console.log(message)
       toast.success('저장되었습니다!', {
         autoClose: 1000,
         onClose: () => push('/admin'),
+        pauseOnHover: false,
+      })
+    },
+    onError: () => {
+      toast.error('저장에 실패했습니다.', {
+        autoClose: 1000,
         pauseOnHover: false,
       })
     },

@@ -36,7 +36,6 @@ export default function LoginInput() {
         wrapperClassName="w-242 bg-[#EAF0F7] rounded-10 px-17 py-9 flex justify-between"
         className="border-none bg-[#EAF0F7]"
         placeholder="비밀번호 입력"
-        onClick={() => push('/password')}
         endContent={
           <PasswordHidden
             className="cursor-pointer"
@@ -52,7 +51,11 @@ export default function LoginInput() {
         로그인
       </Button>
 
-      <button type="button" className="text-14 font-medium text-[#C7C7C7] mt-5">
+      <button
+        onClick={() => push('/password')}
+        type="button"
+        className="text-14 font-medium text-[#C7C7C7] mt-5"
+      >
         비밀번호 초기화
       </button>
     </div>
