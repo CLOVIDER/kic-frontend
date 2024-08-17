@@ -13,10 +13,7 @@ export default function RightSection2({
   onSubmit,
   onTempSave,
   formData,
-  setFormData,
   uploadedFiles,
-  setUploadedFiles,
-  onFileUpload,
   onDeleteFile,
   selectedItems,
   onCheckboxChange,
@@ -30,34 +27,18 @@ export default function RightSection2({
     { id: 'isSibling', name: '형제자매 유무', isRequired: false },
   ])
 
-  const handleFileUpload = useCallback(
-    async (id: string, file: File) => {
-      setIsUploading((prev: Record<string, boolean>) => ({
-        ...prev,
-        [id]: true,
-      }))
-      try {
-        const url = await uploadDocument(file)
-        onFileUpload(id, file)
-        setUploadedFiles((prev) => ({ ...prev, [id]: file }))
-        setFormData((prev) => ({
-          ...prev,
-          imageUrls: { ...prev.fileUrls, [id]: url },
-        }))
-      } catch (error) {
-        toast.error('파일 업로드 에러 발생', {
-          autoClose: 1000,
-          pauseOnHover: false,
-        })
-      } finally {
-        setIsUploading((prev: Record<string, boolean>) => ({
-          ...prev,
-          [id]: false,
-        }))
-      }
-    },
-    [onFileUpload, setFormData, setUploadedFiles],
-  )
+  // RightSection2 내부
+  const handleFileUpload = async (id: string, file: File) => {
+    setIsUploading((prev) => ({ ...prev, [id]: true }))
+    try {
+      const url = await uploadDocument(file)
+      // onFileUploadComplete(id, file, url); // 상위 컴포넌트의 핸들러 호출
+    } catch (error) {
+      toast.error('파일 업로드 에러 발생')
+    } finally {
+      setIsUploading((prev) => ({ ...prev, [id]: false }))
+    }
+  }
 
   const handleSubmit = useCallback(async () => {
     let validationPassed = true

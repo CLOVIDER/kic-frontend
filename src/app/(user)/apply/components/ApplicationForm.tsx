@@ -1,7 +1,12 @@
 'use client'
 
-import { Child, DropdownOption, DropdownOptions } from '@/type/application'
-import React, { useState, useEffect } from 'react'
+import {
+  Child,
+  DropdownOption,
+  DropdownOptions,
+  UploadedFile,
+} from '@/type/application'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
@@ -16,6 +21,7 @@ import {
 } from '../api'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
+import { fetchFileInfo } from './common/FetchFileInfo'
 
 export default function ApplicationForm() {
   const [currentSection, setCurrentSection] = useState(1)
@@ -27,15 +33,11 @@ export default function ApplicationForm() {
     isEmployeeCouple: '0',
     isSibling: '0',
     childrenRecruitList: [],
-    fileUrls: {
-      SINGLE_PARENT: '',
-      DISABILITY: '',
-      DUAL_INCOME: '',
-      EMPLOYEE_COUPLE: '',
-      SIBLING: '',
-    },
+    fileUrls: {}, // 모든 키를 비워 초기화
   })
-  const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({})
+  const [uploadedFiles, setUploadedFiles] = useState<
+    Record<string, UploadedFile>
+  >({})
   const [selectedLabels, setSelectedLabels] = useState<
     Record<string, Record<string, string>>
   >({})
@@ -59,7 +61,27 @@ export default function ApplicationForm() {
     setFormData((prev) => ({ ...prev, [id]: value ? '1' : '0' }))
   }
   const [isLoading, setIsLoading] = useState(true)
-  const [applicationId, setApplicationId] = useState<number | null>(null)
+  const [applicationId] = useState<number | null>(null)
+
+  const handleFileUploadComplete = useCallback(
+    (id: string, file: File, url: string) => {
+      fetchFileInfo(url)
+        .then(({ name, size }) => {
+          setUploadedFiles((prev) => ({
+            ...prev,
+            [id]: { file, url, name, size },
+          }))
+          setFormData((prev) => ({
+            ...prev,
+            fileUrls: { ...prev.fileUrls, [id]: url },
+          }))
+        })
+        .catch((error) => {
+          toast.error(`파일 정보를 가져오는데 실패했습니다: ${error}`)
+        })
+    },
+    [setUploadedFiles, setFormData],
+  )
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,37 +90,11 @@ export default function ApplicationForm() {
           getRecruitData(),
           getApplicationData(),
         ])
-        console.log('Fetched Application Data:', applicationData)
 
         setRecruitData(fetchedRecruitData)
 
         if (applicationData) {
-          setApplicationId(applicationData.id)
-
-          // File URLs and Uploaded Files Setup
-          const fetchedFileUrls = applicationData.documents.reduce(
-            (acc, document) => {
-              acc[document.documentType] = document.image
-              return acc
-            },
-            {} as Record<string, string>,
-          )
-
-          const fetchedUploadedFiles = applicationData.documents.reduce(
-            (acc, document) => {
-              acc[document.documentType] = new File([], document.image) // Here, File creation might need adjustment if you have access to the file metadata.
-              return acc
-            },
-            {} as Record<string, File>,
-          )
-
-          setFormData((prevData) => ({
-            ...prevData,
-            ...applicationData,
-            fileUrls: fetchedFileUrls,
-          }))
-
-          setUploadedFiles(fetchedUploadedFiles)
+          // Other processing...
 
           // Process children and selected labels
           const updatedChildren = applicationData.childrenRecruitList.map(
@@ -160,7 +156,7 @@ export default function ApplicationForm() {
     }
 
     fetchData()
-  }, [])
+  }, [handleFileUploadComplete])
 
   useEffect(() => {
     const fetchRecruitData = async () => {
@@ -283,28 +279,23 @@ export default function ApplicationForm() {
       })
     }
   }
-  const handleFileUpload = (id: string, file: File) => {
-    setUploadedFiles((prev) => ({ ...prev, [id]: file }))
-    // FormData에 File 객체 직접 저장
-    setFormData((prev) => ({
-      ...prev,
-      fileUrls: { ...prev.fileUrls, [id]: file },
-    }))
-  }
 
-  const handleDeleteFile = (id: string) => {
-    setUploadedFiles((prev) => {
-      const newFiles = { ...prev }
-      delete newFiles[id]
-      return newFiles
-    })
-    // FormData에서도 삭제
-    setFormData((prev) => {
-      const newImageUrls = { ...prev.fileUrls }
-      delete newImageUrls[id]
-      return { ...prev, fileUrls: newImageUrls }
-    })
-  }
+  const handleDeleteFile = useCallback(
+    (id: string) => {
+      setUploadedFiles((prev) => {
+        const newFiles = { ...prev }
+        delete newFiles[id]
+        return newFiles
+      })
+      // FormData에서도 삭제
+      setFormData((prev) => {
+        const newImageUrls = { ...prev.fileUrls }
+        delete newImageUrls[id]
+        return { ...prev, fileUrls: newImageUrls }
+      })
+    },
+    [setUploadedFiles, setFormData],
+  )
 
   const pageVariants = {
     initial: (direction: number) => ({
@@ -400,7 +391,7 @@ export default function ApplicationForm() {
               onTempSave={handleTempSave}
               uploadedFiles={uploadedFiles}
               setUploadedFiles={setUploadedFiles}
-              onFileUpload={handleFileUpload}
+              onFileUpload={fetchFileInfo}
               onDeleteFile={handleDeleteFile}
               formData={formData}
               setFormData={setFormData}

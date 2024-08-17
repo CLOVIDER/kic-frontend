@@ -1,4 +1,5 @@
 import { ApplicationPayload } from '@/app/(user)/apply/api'
+import { Dispatch, SetStateAction } from 'react'
 
 // /src/type/application.ts
 
@@ -18,14 +19,6 @@ export interface Child {
     [kindergarten: string]: string
   }
   recruitId?: number
-}
-
-export enum DocumentType {
-  SINGLE_PARENT = 'SINGLE_PARENT',
-  DISABILITY = 'DISABILITY',
-  DUAL_INCOME = 'DUAL_INCOME',
-  EMPLOYEE_COUPLE = 'EMPLOYEE_COUPLE',
-  SIBLING = 'SIBLING',
 }
 
 export interface FormData {
@@ -66,9 +59,10 @@ export interface RightSection2Props {
   onTempSave: () => Promise<void>
   formData: ApplicationPayload
   setFormData: React.Dispatch<React.SetStateAction<ApplicationPayload>>
-  uploadedFiles: Record<string, File>
-  setUploadedFiles: React.Dispatch<React.SetStateAction<Record<string, File>>>
-  onFileUpload: (id: string, file: File) => void
+  uploadedFiles: Record<string, UploadedFile>
+  setUploadedFiles: React.Dispatch<React.SetStateAction<Record<string, UploadedFile>>>
+  onFileUpload: (id: string, size: number, file: string) => void
+  // onFileUploadComplete: (id: string, file: File, url: string) => void;
   onDeleteFile: (id: string) => void
   selectedItems: Record<string, boolean>
   onCheckboxChange: (id: string, value: boolean) => void
@@ -86,8 +80,10 @@ export interface Item {
 }
 
 export interface UploadedFile {
-  file: File
-  name: string
+  file: File;
+  url: string;
+  name: string;
+  size: number;
 }
 
 export interface RecruitInfo {
