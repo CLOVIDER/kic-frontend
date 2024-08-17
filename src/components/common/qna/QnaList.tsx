@@ -3,10 +3,10 @@
 import { KeyboardEvent, Fragment } from 'react'
 import { useRouter } from 'next/navigation'
 import cn from '@/util/cn'
-import { QnaItem, deleteQna } from '@/components/qna'
+import { QnaItem } from '@/components/qna'
 import { FaLock, FaLockOpen } from 'react-icons/fa'
 import Link from 'next/link'
-import { toast } from 'react-toastify'
+import CancelModal from './CancelModal'
 
 interface QnaListProps {
   paginatedNotices: QnaItem[]
@@ -20,7 +20,11 @@ export default function QnaList({
   const router = useRouter()
 
   const handleClick = (id: number) => {
-    router.push(`/qna/${id}`)
+    if (isAdmin) {
+      router.push(`/admin/qna/${id}`)
+    } else {
+      router.push(`/qna/${id}`)
+    }
   }
 
   function handleKeyPress(
@@ -38,15 +42,6 @@ export default function QnaList({
         검색결과가 없습니다
       </div>
     )
-  }
-
-  async function deleteQuestion(id: number) {
-    try {
-      await deleteQna(id)
-      window.location.reload()
-    } catch (error) {
-      toast.error('Failed to delete question')
-    }
   }
 
   return (
@@ -67,10 +62,10 @@ export default function QnaList({
               <div className="ml-24 mt-18 w-[600px] h-29 text-20">
                 <span
                   className={cn(
-                    item.answer ? 'text-[#7dbc72]' : 'text-[#ffab2d]',
+                    item.isAnswerPresent ? 'text-[#7dbc72]' : 'text-[#ffab2d]',
                   )}
                 >
-                  {item.answer ? '[답변완료]' : '[문의중]'}{' '}
+                  {item.isAnswerPresent ? '[답변완료]' : '[문의중]'}{' '}
                 </span>
                 <span className="">{item.title}</span>
                 <span className="ml-15 text-[#565656] text-12">
@@ -93,20 +88,24 @@ export default function QnaList({
                 <Link href={`/admin/qna/answer/${item.qnaId}`}>
                   <button
                     className={`w-101 h-31 text-16 text-[#ffffff] rounded-16 ${
-                      item.answer ? 'bg-[#ffbb38]' : 'bg-[#7DBC72]'
+                      item.isAnswerPresent ? 'bg-[#ffbb38]' : 'bg-[#7DBC72]'
                     }`}
                     type="button"
                   >
-                    {item.answer ? '답변수정' : '답변작성'}
+                    {item.isAnswerPresent ? '답변수정' : '답변작성'}
                   </button>
                 </Link>
-                <button
-                  className="mt-11 bg-[#FF7E6D] w-101 h-31 text-16 text-[#ffffff] rounded-16"
-                  type="button"
-                  onClick={() => deleteQuestion(item.qnaId)}
-                >
-                  질문삭제
-                </button>
+                <CancelModal id={item.qnaId}>
+                  {(onOpen) => (
+                    <button
+                      className="mt-11 bg-[#FF7E6D] w-101 h-31 text-16 text-[#ffffff] rounded-16"
+                      type="button"
+                      onClick={onOpen}
+                    >
+                      질문삭제
+                    </button>
+                  )}
+                </CancelModal>
               </div>
             )}
           </div>

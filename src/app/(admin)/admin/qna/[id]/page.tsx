@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import cn from '@/util/cn'
 import { fetchQnaDetail, QnaItem } from '@/components/qna'
+import CancelModal from '@/components/common/qna/CancelModal'
 import QnaDetailFetcher from './components/QnaDetailFetcher'
 
 export default function QnaDetailPage() {
@@ -57,20 +58,25 @@ export default function QnaDetailPage() {
             <Button
               className={cn(
                 `ml-15 w-98 h-30 text-[16px] text-[#ffffff] rounded-[16px] ${
-                  qnaData.answer ? 'bg-[#ffbb38]' : 'bg-[#7DBC72]'
+                  qnaData.isAnswerPresent ? 'bg-[#ffbb38]' : 'bg-[#7DBC72]'
                 }`,
               )}
               type="button"
             >
-              {qnaData.answer ? '답변수정' : '답변작성'}
+              {qnaData.isAnswerPresent ? '답변수정' : '답변작성'}
             </Button>
           </Link>
-          <Button
-            className="ml-15 w-98 h-30 rounded-[16px] bg-[#FF7E6D] text-[#ffffff] text-[16px]"
-            type="button"
-          >
-            삭제
-          </Button>
+          <CancelModal id={qnaData.qnaId}>
+            {(onOpen) => (
+              <Button
+                className="ml-15 w-98 h-30 rounded-[16px] bg-[#FF7E6D] text-[#ffffff] text-[16px]"
+                type="button"
+                onClick={onOpen}
+              >
+                삭제
+              </Button>
+            )}
+          </CancelModal>
         </div>
       </div>
     </div>

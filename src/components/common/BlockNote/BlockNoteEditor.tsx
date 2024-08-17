@@ -18,7 +18,7 @@ interface BlockNoteViewerProps {
   initialContent?: string
 }
 
-export default function BlockNoteViewer({
+export default function BlockNoteEditor({
   data,
   enableImageUpload = false, // 기본값으로 false로 설정
   domainName,

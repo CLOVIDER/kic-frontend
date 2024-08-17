@@ -2,7 +2,7 @@ export interface QnaItem {
   qnaId: number
   title: string
   question: string
-  answer: string | null
+  isAnswerPresent: string | null
   isVisibility: string
   writerName: string
   createdAt: string
@@ -26,13 +26,6 @@ export interface CreateQnaResponse {
 
 export interface QnaAnswerResponse {
   answer: string
-}
-
-export interface DeleteQnaResponse {
-  isSuccess: boolean
-  code: string
-  message: string
-  result: string
 }
 
 export interface UpdateQnaAnswerResponse {
