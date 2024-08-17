@@ -99,22 +99,12 @@ export async function getRecruitData(): Promise<RecruitInfo[]> {
   }
 }
 
-export async function getApplicationData(): Promise<ApplicationStatus | null> {
-  try {
-    const response = await http.get<ApplicationStatus>({
-      url: '/api/applications',
-    })
+export async function getApplicationData(): Promise<ApplicationStatus> {
+  const response = await http.get<ApplicationStatus>({
+    url: '/api/applications',
+  })
 
-    // Ensure the response is in the expected format
-    if (response.code === 200 && response.result) {
-      return response.result
-    }
-
-    return null
-  } catch (error) {
-    console.error('Error fetching application data:', error)
-    return null
-  }
+  return response.result
 }
 
 export function editApplication(

@@ -1,13 +1,9 @@
 import React, { useCallback } from 'react'
-import {
-  RightSection1Props,
-  ApplicationPayload,
-  Child,
-  DropdownOption,
-} from '@/type/application'
+import { RightSection1Props, Child, DropdownOption } from '@/type/application'
 import FormSection from './common/FormSection'
 import ChildInput from './common/ChildInput'
 import DropdownSelect from './common/DropdownSelect'
+import { ApplicationPayload } from '../api'
 
 export default function RightSection1({
   kindergartenName,

@@ -1,12 +1,8 @@
 import React, { useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
-import {
-  RightSection2Props,
-  ApplicationPayload,
-  Item,
-} from '@/type/application'
+import { RightSection2Props, Item } from '@/type/application'
 import { Button } from '@nextui-org/react'
-import { uploadDocument } from '../api'
+import { ApplicationPayload, uploadDocument } from '../api'
 import FormSection from './common/FormSection'
 import CheckboxWithLabel from './common/CheckboxWithLabel'
 import FileUploadButton from './common/FileUploadButton'
@@ -36,14 +32,17 @@ export default function RightSection2({
 
   const handleFileUpload = useCallback(
     async (id: string, file: File) => {
-      setIsUploading((prev) => ({ ...prev, [id]: true }))
+      setIsUploading((prev: Record<string, boolean>) => ({
+        ...prev,
+        [id]: true,
+      }))
       try {
         const url = await uploadDocument(file)
         onFileUpload(id, file)
         setUploadedFiles((prev) => ({ ...prev, [id]: file }))
         setFormData((prev) => ({
           ...prev,
-          imageUrls: { ...prev.imageUrls, [id]: url },
+          imageUrls: { ...prev.fileUrls, [id]: url },
         }))
       } catch (error) {
         toast.error('파일 업로드 에러 발생', {
@@ -51,7 +50,10 @@ export default function RightSection2({
           pauseOnHover: false,
         })
       } finally {
-        setIsUploading((prev) => ({ ...prev, [id]: false }))
+        setIsUploading((prev: Record<string, boolean>) => ({
+          ...prev,
+          [id]: false,
+        }))
       }
     },
     [onFileUpload, setFormData, setUploadedFiles],
@@ -85,7 +87,7 @@ export default function RightSection2({
         }),
         {},
       ),
-      imageUrls: formData.imageUrls,
+      fileUrls: formData.fileUrls,
     }
 
     // submitApplication 및 saveApplicationTemp 호출 제거

@@ -1,3 +1,5 @@
+import { ApplicationPayload } from '@/app/(user)/apply/api'
+
 // /src/type/application.ts
 
 export interface DropdownOption {

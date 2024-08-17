@@ -68,22 +68,37 @@ export default function ApplicationForm() {
           getRecruitData(),
           getApplicationData(),
         ])
+        console.log('Fetched Application Data:', applicationData)
 
         setRecruitData(fetchedRecruitData)
 
         if (applicationData) {
           setApplicationId(applicationData.id)
+
+          // File URLs and Uploaded Files Setup
+          const fetchedFileUrls = applicationData.documents.reduce(
+            (acc, document) => {
+              acc[document.documentType] = document.image
+              return acc
+            },
+            {} as Record<string, string>,
+          )
+
+          const fetchedUploadedFiles = applicationData.documents.reduce(
+            (acc, document) => {
+              acc[document.documentType] = new File([], document.image) // Here, File creation might need adjustment if you have access to the file metadata.
+              return acc
+            },
+            {} as Record<string, File>,
+          )
+
           setFormData((prevData) => ({
             ...prevData,
             ...applicationData,
-            fileUrls: applicationData.documents.reduce(
-              (acc, document) => {
-                acc[document.documentType] = document.image
-                return acc
-              },
-              {} as Record<string, string>,
-            ),
+            fileUrls: fetchedFileUrls,
           }))
+
+          setUploadedFiles(fetchedUploadedFiles)
 
           // Process children and selected labels
           const updatedChildren = applicationData.childrenRecruitList.map(
