@@ -95,70 +95,72 @@ export default function RightSection2({
   }, [selectedItems, formData, uploadedFiles, items, onSubmit])
 
   return (
-    <div className="w-453 h-507">
-      <FormSection title="해당되는 항목을 체크해주세요!">
-        <p className="mt-1">당첨 시 가점 요인이 됩니다.</p>
-        <p className="text-[#E86565] text-12 mt-5">
-          체크한 항목을 증빙할 수 있는 서류를 각각 첨부해주세요.
-        </p>
-        <div className="ml-7 mt-65 w-[444px]">
-          {items.map((item) => (
-            <div key={item.id} className="w-full mb-6 py-2">
-              <div className="flex items-center justify-between">
-                <CheckboxWithLabel
-                  id={item.id}
-                  label={item.name}
-                  isChecked={selectedItems[item.id]}
-                  onChange={(id) => onCheckboxChange(id, !selectedItems[id])}
-                  isRequired={item.isRequired}
-                />
-                <FileUploadButton
-                  onUpload={() => {
-                    const input = document.createElement('input')
-                    input.type = 'file'
-                    input.onchange = (e) => {
-                      const file = (e.target as HTMLInputElement).files?.[0]
-                      if (file) {
-                        handleFileUpload(item.id, file)
+    <div>
+      <div className="w-453 h-507 overflow-y-auto">
+        <FormSection title="해당되는 항목을 체크해주세요!">
+          <p className="mt-1">당첨 시 가점 요인이 됩니다.</p>
+          <p className="text-[#E86565] text-12 mt-5">
+            체크한 항목을 증빙할 수 있는 서류를 각각 첨부해주세요.
+          </p>
+          <div className="ml-7 mt-65 w-[444px]">
+            {items.map((item) => (
+              <div key={item.id} className="w-full mb-6 py-2">
+                <div className="flex items-center justify-between">
+                  <CheckboxWithLabel
+                    id={item.id}
+                    label={item.name}
+                    isChecked={selectedItems[item.id]}
+                    onChange={(id) => onCheckboxChange(id, !selectedItems[id])}
+                    isRequired={item.isRequired}
+                  />
+                  <FileUploadButton
+                    onUpload={() => {
+                      const input = document.createElement('input')
+                      input.type = 'file'
+                      input.onchange = (e) => {
+                        const file = (e.target as HTMLInputElement).files?.[0]
+                        if (file) {
+                          handleFileUpload(item.id, file)
+                        }
                       }
-                    }
-                    input.click()
-                  }}
-                  buttonText={uploadedFiles[item.id] ? '📎 완료' : '📎 파일'}
-                  isUploading={isUploading[item.id]}
-                />
+                      input.click()
+                    }}
+                    buttonText={uploadedFiles[item.id] ? '📎 완료' : '📎 파일'}
+                    isUploading={isUploading[item.id]}
+                  />
+                </div>
+                <div className="ml-10 mt-2 flex items-center justify-between h-21">
+                  {uploadedFiles[item.id] && (
+                    <>
+                      <div className="flex-1 mr-2 overflow-hidden">
+                        <span className="text-sm truncate block">
+                          {truncateFileName(
+                            uploadedFiles[item.id]?.name || '',
+                            60,
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-sm text-gray-500 mr-2">
+                          {formatFileSize(uploadedFiles[item.id]?.size || 0)}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => onDeleteFile(item.id)}
+                          className="text-[#ef4444] text-sm"
+                        >
+                          X
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-              <div className="ml-10 mt-2 flex items-center justify-between h-21">
-                {uploadedFiles[item.id] && (
-                  <>
-                    <div className="flex-1 mr-2 overflow-hidden">
-                      <span className="text-sm truncate block">
-                        {truncateFileName(
-                          uploadedFiles[item.id]?.name || '',
-                          60,
-                        )}
-                      </span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="text-sm text-gray-500 mr-2">
-                        {formatFileSize(uploadedFiles[item.id]?.size || 0)}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => onDeleteFile(item.id)}
-                        className="text-[#ef4444] text-sm"
-                      >
-                        X
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </FormSection>
-      <div className="mt-85 w-[449px] h-[33px] flex items-center">
+            ))}
+          </div>
+        </FormSection>
+      </div>
+      <div className="w-[460  px] h-[33px] flex items-center">
         <Button
           onClick={onPrevious}
           className="w-[98px] h-[31px] bg-white border border-[#fdba74] font-bold text-[#fb923c] rounded-full text-sm"
@@ -175,7 +177,7 @@ export default function RightSection2({
         <div className="w-[8px]" />
         <Button
           onClick={handleSubmit}
-          className="w-[98px] h-[31px] shadow-md [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] text-[#ffffff] rounded-full text-sm"
+          className="ml-10 w-[98px] h-[31px] shadow-md [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] text-[#ffffff] rounded-full text-sm"
         >
           제출
         </Button>

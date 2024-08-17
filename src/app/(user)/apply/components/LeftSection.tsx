@@ -34,7 +34,7 @@ export default function LeftSection() {
   const ccStatus = isCouple ? 'O' : 'X'
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex w-500 flex-col items-center">
       <div className="font-bold text-[31px]">
         <span className="text-[#202020]">안녕하세요 </span>
         <span className="text-[#ffaa2c]">{nameKo}</span>
