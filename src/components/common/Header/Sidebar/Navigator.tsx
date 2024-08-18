@@ -27,10 +27,9 @@ export default function Navigator() {
       if (applicationStatus.id === null) {
         router.push('/apply')
       } else {
-        router.push('/apply/application')
+        router.push(`/apply/application?isTemp=${applicationStatus.isTemp}`)
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error('Error checking application status:', error)
     }
   }

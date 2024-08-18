@@ -14,12 +14,14 @@ import { useDeleteLottery } from './api/api'
 export default function CancelModal({
   id,
   children,
+  mode,
 }: {
   id: number
   children: (onOpen: () => void) => ReactNode
+  mode: 'application' | 'lottery'
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const { mutate: deleteLottery } = useDeleteLottery()
+  const { mutate: deleteLottery } = useDeleteLottery(mode)
 
   return (
     <>

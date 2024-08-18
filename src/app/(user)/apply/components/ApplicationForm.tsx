@@ -29,7 +29,7 @@ export default function ApplicationForm() {
     isEmployeeCouple: '0',
     isSibling: '0',
     childrenRecruitList: [],
-    imageUrls: {
+    fileUrls: {
       SINGLE_PARENT: '',
       DISABILITY: '',
       DUAL_INCOME: '',
@@ -91,104 +91,6 @@ export default function ApplicationForm() {
     setCurrentSection(1)
   }
 
-  // const handleSubmit = async (data: Partial<ApplicationPayload>) => {
-  //   // 유효성 검사
-  //   const invalidChildren = children.filter(
-  //     (child) =>
-  //       !child.name ||
-  //       Object.keys(child.classes).length === 0 ||
-  //       Object.values(child.classes).some((value) => !value),
-  //   )
-
-  //   if (invalidChildren.length > 0) {
-  //     invalidChildren.forEach((child, index) => {
-  //       if (!child.name) {
-  //         toast.error(`아이 ${index + 1}의 이름을 입력해주세요.`, {
-  //           autoClose: 1000,
-  //           pauseOnHover: false,
-  //         })
-  //       } else if (
-  //         Object.keys(child.classes).length === 0 ||
-  //         Object.values(child.classes).some((value) => !value)
-  //       ) {
-  //         toast.error(
-  //           `아이 ${index + 1}의 모든 어린이집 분반을 선택해주세요.`,
-  //           {
-  //             autoClose: 1000,
-  //             pauseOnHover: false,
-  //           },
-  //         )
-  //       }
-  //     })
-  //     return // 제출 중단
-  //   }
-
-  //   const childrenRecruitList = children
-  //     .filter((child) => child.name && Object.keys(child.classes).length > 0)
-  //     .map((child) => ({
-  //       childNm: child.name,
-  //       recruitIds: Object.values(child.classes).map(
-  //         (recruitId) => parseInt(recruitId, 10), // `recruitId`를 숫자로 변환하여 그대로 사용
-  //       ),
-  //     }))
-
-  //   const finalData: ApplicationPayload = {
-  //     ...formData,
-  //     ...data,
-  //     childrenRecruitList,
-  //     childrenCnt: childrenRecruitList.length,
-  //     imageUrls: uploadedFiles,
-  //   }
-
-  //   try {
-  //     await submitApplication(finalData)
-  //     toast.info('제출되었습니다!', {
-  //       autoClose: 500,
-  //       onClose: () => router.push('/'),
-  //       pauseOnHover: false,
-  //     })
-  //     // 성공 처리 로직
-  //   } catch (error) {
-  //     toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
-  //       autoClose: 1000,
-  //       pauseOnHover: false,
-  //     })
-  //   }
-  // }
-
-  // const handleTempSave = async () => {
-  //   const childrenRecruitList = children
-  //     .filter((child) => child.name && Object.keys(child.classes).length > 0)
-  //     .map((child) => ({
-  //       childNm: child.name,
-  //       recruitIds: Object.values(child.classes).map(
-  //         (recruitId) => parseInt(recruitId, 10), // `recruitId`를 숫자로 변환하여 그대로 사용
-  //       ),
-  //     }))
-
-  //   const finalData: ApplicationPayload = {
-  //     ...formData,
-  //     childrenRecruitList,
-  //     childrenCnt: childrenRecruitList.length,
-  //     imageUrls: uploadedFiles,
-  //   }
-
-  //   try {
-  //     await saveApplicationTemp(finalData)
-  //     toast.info('임시저장 되었습니다!', {
-  //       autoClose: 500,
-  //       onClose: () => router.push('/'),
-  //       pauseOnHover: false,
-  //     })
-  //   } catch (error) {
-  //     toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
-  //       autoClose: 1000,
-  //       pauseOnHover: false,
-  //     })
-  //   }
-  // }
-
-  // 수정된 handleSubmit 함수
   const handleSubmit = async (data: Partial<ApplicationPayload>) => {
     const childrenRecruitList = children
       .filter((child) => child.name && Object.keys(child.classes).length > 0)
@@ -199,7 +101,7 @@ export default function ApplicationForm() {
         ),
       }))
 
-    const selectedImageUrls = Object.entries(formData.imageUrls).reduce(
+    const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
       (acc, [key, url]) => {
         if (typeof url === 'string' && url) {
           // url이 string인지 확인
@@ -215,7 +117,7 @@ export default function ApplicationForm() {
       ...data,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
-      imageUrls: selectedImageUrls,
+      fileUrls: selectedImageUrls,
     }
 
     try {
@@ -245,7 +147,7 @@ export default function ApplicationForm() {
         ),
       }))
 
-    const selectedImageUrls = Object.entries(formData.imageUrls).reduce(
+    const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
       (acc, [key, url]) => {
         if (typeof url === 'string' && url) {
           // url이 string인지 확인
@@ -260,7 +162,7 @@ export default function ApplicationForm() {
       ...formData,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
-      imageUrls: selectedImageUrls,
+      fileUrls: selectedImageUrls,
     }
 
     try {
@@ -282,7 +184,7 @@ export default function ApplicationForm() {
     // FormData에 File 객체 직접 저장
     setFormData((prev) => ({
       ...prev,
-      imageUrls: { ...prev.imageUrls, [id]: file },
+      imageUrls: { ...prev.fileUrls, [id]: file },
     }))
   }
 
@@ -294,9 +196,9 @@ export default function ApplicationForm() {
     })
     // FormData에서도 삭제
     setFormData((prev) => {
-      const newImageUrls = { ...prev.imageUrls }
+      const newImageUrls = { ...prev.fileUrls }
       delete newImageUrls[id]
-      return { ...prev, imageUrls: newImageUrls }
+      return { ...prev, fileUrls: newImageUrls }
     })
   }
 

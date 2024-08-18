@@ -3,7 +3,9 @@
 import { useEffect, useState, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Image from 'next/image'
-import { toast, ToastContainer } from 'react-toastify'
+import { formatDate } from '@/util/formatDate'
+import { useEffect, useRef } from 'react'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { fetchNoticeDetail, NoticeItem } from '@/components/common/notice/api'
 import NoticeDetailFetcher from './components/NoticeDetailFetcher'
@@ -60,7 +62,6 @@ export default function NoticeDetail() {
 
   return (
     <div className="relative">
-      <ToastContainer position="top-center" autoClose={5000} />
 
       {/* NoticeDetailFetcher Component */}
       <div className="mt-83 w-[700px] h-[638px] relative z-10">
