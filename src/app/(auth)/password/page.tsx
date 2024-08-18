@@ -6,9 +6,10 @@ import { useFunnel } from '@/components'
 import { useState } from 'react'
 import MailInput from './components/MailInput'
 import IdInut from './components/IdInput'
+import Change from './components/Change'
 
 export default function Page() {
-  const Funnel = useFunnel(['id', 'mail'], {
+  const Funnel = useFunnel(['id', 'mail', 'change'], {
     stepQueryKey: 'mail',
     initialStep: 'id',
   })
@@ -51,6 +52,10 @@ export default function Page() {
 
         <Funnel.Step name="mail">
           <MailInput id={id} />
+        </Funnel.Step>
+
+        <Funnel.Step name="change">
+          <Change />
         </Funnel.Step>
       </Funnel>
     </>
