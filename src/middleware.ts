@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ACCESS_TOKEN, ROLE } from '@/constants'
 
-const protectedRoutes = ['/apply', '/apply/application']
+const protectedRoutes = ['/apply', '/apply/application', '/history']
 const publicRoutes = ['/login']
 
 export function middleware(request: NextRequest) {

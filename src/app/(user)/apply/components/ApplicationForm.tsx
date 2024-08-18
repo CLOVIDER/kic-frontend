@@ -260,7 +260,7 @@ export default function ApplicationForm() {
   }
 
   return (
-    <div className="overflow-y-auto w-500 h-[550px] pb-100">
+    <div className="overflow-y-auto w-500 h-[600px] pb-100">
       <AnimatePresence mode="wait" custom={currentSection === 1 ? 1 : -1}>
         <motion.div
           key={currentSection}
