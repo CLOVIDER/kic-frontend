@@ -35,7 +35,6 @@ export default function Page() {
 
           <Buttons />
         </div>
-
       </SettingFetcher>
     </AsyncBoundaryWithQuery>
   )

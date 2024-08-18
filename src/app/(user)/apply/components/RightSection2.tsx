@@ -43,7 +43,7 @@ export default function RightSection2({
         setUploadedFiles((prev) => ({ ...prev, [id]: file }))
         setFormData((prev) => ({
           ...prev,
-          imageUrls: { ...prev.imageUrls, [id]: url },
+          imageUrls: { ...prev.fileUrls, [id]: url },
         }))
       } catch (error) {
         toast.error('파일 업로드 에러 발생', {
@@ -85,7 +85,7 @@ export default function RightSection2({
         }),
         {},
       ),
-      imageUrls: formData.imageUrls,
+      fileUrls: formData.fileUrls,
     }
 
     // submitApplication 및 saveApplicationTemp 호출 제거

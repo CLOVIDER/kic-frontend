@@ -6,9 +6,9 @@ import '../styles/globals.css'
 import { Suspense } from 'react'
 import { GlobalErrorBoundary } from '@/react-utils/ErrorBoundary'
 import Fallback from '@/components/common/Fallback'
+import { ToastContainer } from 'react-toastify'
 import QueryProvider from './lib/QueryProvider'
 import 'react-toastify/dist/ReactToastify.css'
-import { ToastContainer } from 'react-toastify'
 
 const Pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',

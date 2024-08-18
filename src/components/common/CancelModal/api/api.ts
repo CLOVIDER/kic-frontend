@@ -34,8 +34,8 @@ export const useDeleteLottery = (mode: 'application' | 'lottery') => {
         })
       }
     },
-    onError : () => {
-      toast.error("다시 시도해주세요.")
-    }
+    onError: () => {
+      toast.error('다시 시도해주세요.')
+    },
   })
 }
