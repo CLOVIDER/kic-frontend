@@ -4,6 +4,7 @@ import {
   RightSection2Props,
   ApplicationPayload,
   Item,
+  documentTypeMap,
 } from '@/type/application'
 import { Button } from '@nextui-org/react'
 import { uploadDocument } from '../api'
@@ -27,6 +28,7 @@ export default function RightSection2({
 }: RightSection2Props) {
   const [isUploading, setIsUploading] = useState<Record<string, boolean>>({})
   const [items] = useState<Item[]>([
+    { id: 'resident', name: '주민등록본', isRequired: true },
     { id: 'isSingleParent', name: '한부모 가정', isRequired: false },
     { id: 'isDisability', name: '장애 유무', isRequired: false },
     { id: 'isDualIncome', name: '맞벌이 여부', isRequired: false },
@@ -36,14 +38,15 @@ export default function RightSection2({
 
   const handleFileUpload = useCallback(
     async (id: string, file: File) => {
-      setIsUploading((prev) => ({ ...prev, [id]: true }))
+      const documentType = documentTypeMap[id]
+      setIsUploading((prev) => ({ ...prev, [documentType]: true }))
       try {
         const url = await uploadDocument(file)
-        onFileUpload(id, file)
-        setUploadedFiles((prev) => ({ ...prev, [id]: file }))
+        onFileUpload(documentType, file)
+        setUploadedFiles((prev) => ({ ...prev, [documentType]: file }))
         setFormData((prev) => ({
           ...prev,
-          imageUrls: { ...prev.imageUrls, [id]: url },
+          fileUrls: { ...prev.fileUrls, [documentType]: url },
         }))
       } catch (error) {
         toast.error('파일 업로드 에러 발생', {
@@ -51,7 +54,7 @@ export default function RightSection2({
           pauseOnHover: false,
         })
       } finally {
-        setIsUploading((prev) => ({ ...prev, [id]: false }))
+        setIsUploading((prev) => ({ ...prev, [documentType]: false }))
       }
     },
     [onFileUpload, setFormData, setUploadedFiles],
@@ -61,7 +64,7 @@ export default function RightSection2({
     let validationPassed = true
 
     for (const [key, value] of Object.entries(selectedItems)) {
-      if (value && !uploadedFiles[key]) {
+      if (value && !uploadedFiles[documentTypeMap[key]]) {
         toast.error(
           `${items.find((item) => item.id === key)?.name}(을)를 위한 파일을 첨부해주세요`,
           {
@@ -77,23 +80,32 @@ export default function RightSection2({
       return
     }
 
+    const { resident, ...filteredSelectedItems } = selectedItems
+    const filteredFileUrls = Object.entries(formData.fileUrls)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .filter(([_, url]) => url !== '')
+      .reduce((acc, [key, url]) => ({ ...acc, [key]: url }), {})
+
     const data: Partial<ApplicationPayload> = {
-      ...Object.entries(selectedItems).reduce<Record<string, '0' | '1'>>(
+      ...Object.entries(filteredSelectedItems).reduce<
+        Record<string, '0' | '1'>
+      >(
         (acc, [key, value]) => ({
           ...acc,
           [key]: value ? '1' : '0',
         }),
         {},
       ),
-      imageUrls: formData.imageUrls,
+      fileUrls: filteredFileUrls,
+      childrenRecruitList: formData.childrenRecruitList,
+      childrenCnt: formData.childrenCnt,
     }
 
-    // submitApplication 및 saveApplicationTemp 호출 제거
     onSubmit(data)
   }, [selectedItems, formData, uploadedFiles, items, onSubmit])
 
   return (
-    <div className="w-453 h-507">
+    <div className="w-453 h-500">
       <FormSection title="해당되는 항목을 체크해주세요!">
         <p className="mt-1">당첨 시 가점 요인이 됩니다.</p>
         <p className="text-[#E86565] text-12 mt-5">
@@ -122,28 +134,34 @@ export default function RightSection2({
                     }
                     input.click()
                   }}
-                  buttonText={uploadedFiles[item.id] ? '📎 완료' : '📎 파일'}
-                  isUploading={isUploading[item.id]}
+                  buttonText={
+                    uploadedFiles[documentTypeMap[item.id]]
+                      ? '📎 완료'
+                      : '📎 파일'
+                  }
+                  isUploading={isUploading[documentTypeMap[item.id]]}
                 />
               </div>
               <div className="ml-10 mt-2 flex items-center justify-between h-21">
-                {uploadedFiles[item.id] && (
+                {uploadedFiles[documentTypeMap[item.id]] && (
                   <>
                     <div className="flex-1 mr-2 overflow-hidden">
                       <span className="text-sm truncate block">
                         {truncateFileName(
-                          uploadedFiles[item.id]?.name || '',
+                          uploadedFiles[documentTypeMap[item.id]]?.name || '',
                           60,
                         )}
                       </span>
                     </div>
                     <div className="flex items-center">
                       <span className="text-sm text-gray-500 mr-2">
-                        {formatFileSize(uploadedFiles[item.id]?.size || 0)}
+                        {formatFileSize(
+                          uploadedFiles[documentTypeMap[item.id]]?.size || 0,
+                        )}
                       </span>
                       <button
                         type="button"
-                        onClick={() => onDeleteFile(item.id)}
+                        onClick={() => onDeleteFile(documentTypeMap[item.id])}
                         className="text-[#ef4444] text-sm"
                       >
                         X

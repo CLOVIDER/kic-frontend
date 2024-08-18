@@ -42,8 +42,8 @@ export default function ChildResultCard({
               statusLabel = '당첨'
               displayText = '당첨'
             } else if (result === 'WAIT') {
-              statusLabel = '대기중'
-              displayText = '대기중'
+              statusLabel = '신청'
+              displayText = '신청 완료'
             } else {
               statusLabel = '대기'
               displayText = `대기 ${waitingNumber}번`
@@ -69,10 +69,22 @@ export default function ChildResultCard({
                       등록/취소
                     </Button>
                   </If>
+                  <If condition={statusLabel === '신청'}>
+                    <CancelModal id={lotteryId} mode="application">
+                      {(onOpen) => (
+                        <Button
+                          onPress={onOpen}
+                          className="h-20 bg-transparent text-[#716F6F] underline text-[12px] ml-10"
+                        >
+                          취소하기
+                        </Button>
+                      )}
+                    </CancelModal>
+                  </If>
                   <If
-                    condition={statusLabel === '대기' || statusLabel === '등록'}
+                    condition={statusLabel === '등록' || statusLabel === '대기'}
                   >
-                    <CancelModal id={lotteryId}>
+                    <CancelModal id={lotteryId} mode="lottery">
                       {(onOpen) => (
                         <Button
                           onPress={onOpen}

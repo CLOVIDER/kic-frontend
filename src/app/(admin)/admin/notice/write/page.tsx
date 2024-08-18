@@ -43,7 +43,7 @@ export default function WritePage() {
   }
 
   return (
-    <div className="absolute w-[1280px] h-[720px] bg-white flex justify-between">
+    <div className="absolute w-[1280px] h-[720px] flex justify-between">
       <div className="w-[787px] h-[602px] mt-39 ml-256 border-1 border-solid border-[#00000014] rounded-xl overflow-hidden shadow-md">
         <div className="mt-22 ml-36 text-32 font-inter font-bold h-39">
           공지사항 작성
@@ -53,7 +53,9 @@ export default function WritePage() {
           <input
             className="ml-20 w-267 border-[#D5D1D1] border border-solid rounded-3"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setTitle(e.target.value)
+            }}
           />
         </div>
         <div className="mt-[17px] ml-21 w-[746px] h-435 flex-grow overflow-y-auto border-1 border-solid border-[#00000014] rounded-xl shadow-md">
@@ -75,8 +77,9 @@ export default function WritePage() {
             type="button"
             className="ml-20 w-98 h-31 shadow-md [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] text-[#ffffff] rounded-full text-sm"
             onClick={handleSave}
+            disabled={isSaving}
           >
-            저장
+            {isSaving ? '저장 중...' : '저장'}
           </button>
         </div>
       </div>

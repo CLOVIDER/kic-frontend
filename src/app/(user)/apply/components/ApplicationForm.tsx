@@ -1,15 +1,16 @@
 'use client'
 
+import React, { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 import {
   ApplicationPayload,
   Child,
   DropdownOption,
   DropdownOptions,
+  DocumentType,
 } from '@/type/application'
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { toast } from 'react-toastify'
-import { useRouter } from 'next/navigation'
 import {
   saveApplicationTemp,
   submitApplication,
@@ -29,28 +30,25 @@ export default function ApplicationForm() {
     isEmployeeCouple: '0',
     isSibling: '0',
     childrenRecruitList: [],
-    imageUrls: {
-      SINGLE_PARENT: '',
-      DISABILITY: '',
-      DUAL_INCOME: '',
-      EMPLOYEE_COUPLE: '',
-      SIBLING: '',
+    fileUrls: {
+      [DocumentType.RESIDENT_REGISTER]: '',
+      [DocumentType.SINGLE_PARENT]: '',
+      [DocumentType.DISABILITY]: '',
+      [DocumentType.DUAL_INCOME]: '',
+      [DocumentType.EMPLOYEE_COUPLE]: '',
+      [DocumentType.SIBLING]: '',
     },
   })
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({})
   const [selectedLabels, setSelectedLabels] = useState<
     Record<string, Record<string, string>>
   >({})
-
-  const router = useRouter()
   const [children, setChildren] = useState<Child[]>([
     { id: 1, name: '', classes: {} },
   ])
-
-  const [recruitData, setRecruitData] = useState<
-    { kindergartenNm: string; recruitIds: number[]; ageClasses: string[] }[]
-  >([])
+  const [recruitData, setRecruitData] = useState<RecruitInfo[]>([])
   const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({
+    resident: true,
     isSingleParent: false,
     isDisability: false,
     isDualIncome: false,
@@ -58,15 +56,12 @@ export default function ApplicationForm() {
     isSibling: false,
   })
 
-  const handleCheckboxChange = (id: string, value: boolean) => {
-    setSelectedItems((prev) => ({ ...prev, [id]: value }))
-    setFormData((prev) => ({ ...prev, [id]: value ? '1' : '0' }))
-  }
+  const router = useRouter()
 
   useEffect(() => {
     const fetchRecruitData = async () => {
       try {
-        const data = (await getRecruitData()) as RecruitInfo[]
+        const data = await getRecruitData()
         setRecruitData(data)
       } catch (error) {
         toast.error('Error fetching recruit data', {
@@ -77,6 +72,14 @@ export default function ApplicationForm() {
     }
     fetchRecruitData()
   }, [])
+
+  const handleCheckboxChange = (id: string, value: boolean) => {
+    setSelectedItems((prev) => ({ ...prev, [id]: value }))
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value ? '1' : '0',
+    }))
+  }
 
   const handleNext = (
     data: Partial<ApplicationPayload>,
@@ -91,131 +94,21 @@ export default function ApplicationForm() {
     setCurrentSection(1)
   }
 
-  // const handleSubmit = async (data: Partial<ApplicationPayload>) => {
-  //   // 유효성 검사
-  //   const invalidChildren = children.filter(
-  //     (child) =>
-  //       !child.name ||
-  //       Object.keys(child.classes).length === 0 ||
-  //       Object.values(child.classes).some((value) => !value),
-  //   )
-
-  //   if (invalidChildren.length > 0) {
-  //     invalidChildren.forEach((child, index) => {
-  //       if (!child.name) {
-  //         toast.error(`아이 ${index + 1}의 이름을 입력해주세요.`, {
-  //           autoClose: 1000,
-  //           pauseOnHover: false,
-  //         })
-  //       } else if (
-  //         Object.keys(child.classes).length === 0 ||
-  //         Object.values(child.classes).some((value) => !value)
-  //       ) {
-  //         toast.error(
-  //           `아이 ${index + 1}의 모든 어린이집 분반을 선택해주세요.`,
-  //           {
-  //             autoClose: 1000,
-  //             pauseOnHover: false,
-  //           },
-  //         )
-  //       }
-  //     })
-  //     return // 제출 중단
-  //   }
-
-  //   const childrenRecruitList = children
-  //     .filter((child) => child.name && Object.keys(child.classes).length > 0)
-  //     .map((child) => ({
-  //       childNm: child.name,
-  //       recruitIds: Object.values(child.classes).map(
-  //         (recruitId) => parseInt(recruitId, 10), // `recruitId`를 숫자로 변환하여 그대로 사용
-  //       ),
-  //     }))
-
-  //   const finalData: ApplicationPayload = {
-  //     ...formData,
-  //     ...data,
-  //     childrenRecruitList,
-  //     childrenCnt: childrenRecruitList.length,
-  //     imageUrls: uploadedFiles,
-  //   }
-
-  //   try {
-  //     await submitApplication(finalData)
-  //     toast.info('제출되었습니다!', {
-  //       autoClose: 500,
-  //       onClose: () => router.push('/'),
-  //       pauseOnHover: false,
-  //     })
-  //     // 성공 처리 로직
-  //   } catch (error) {
-  //     toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
-  //       autoClose: 1000,
-  //       pauseOnHover: false,
-  //     })
-  //   }
-  // }
-
-  // const handleTempSave = async () => {
-  //   const childrenRecruitList = children
-  //     .filter((child) => child.name && Object.keys(child.classes).length > 0)
-  //     .map((child) => ({
-  //       childNm: child.name,
-  //       recruitIds: Object.values(child.classes).map(
-  //         (recruitId) => parseInt(recruitId, 10), // `recruitId`를 숫자로 변환하여 그대로 사용
-  //       ),
-  //     }))
-
-  //   const finalData: ApplicationPayload = {
-  //     ...formData,
-  //     childrenRecruitList,
-  //     childrenCnt: childrenRecruitList.length,
-  //     imageUrls: uploadedFiles,
-  //   }
-
-  //   try {
-  //     await saveApplicationTemp(finalData)
-  //     toast.info('임시저장 되었습니다!', {
-  //       autoClose: 500,
-  //       onClose: () => router.push('/'),
-  //       pauseOnHover: false,
-  //     })
-  //   } catch (error) {
-  //     toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
-  //       autoClose: 1000,
-  //       pauseOnHover: false,
-  //     })
-  //   }
-  // }
-
-  // 수정된 handleSubmit 함수
   const handleSubmit = async (data: Partial<ApplicationPayload>) => {
     const childrenRecruitList = children
       .filter((child) => child.name && Object.keys(child.classes).length > 0)
       .map((child) => ({
         childNm: child.name,
-        recruitIds: Object.values(child.classes).map(
-          (recruitId) => parseInt(recruitId, 10), // recruitId를 숫자로 변환하여 사용
+        recruitIds: Object.values(child.classes).map((recruitId) =>
+          parseInt(recruitId, 10),
         ),
       }))
-
-    const selectedImageUrls = Object.entries(formData.imageUrls).reduce(
-      (acc, [key, url]) => {
-        if (typeof url === 'string' && url) {
-          // url이 string인지 확인
-          acc[key] = url
-        }
-        return acc
-      },
-      {} as Record<string, string>,
-    )
 
     const finalData: ApplicationPayload = {
       ...formData,
       ...data,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
-      imageUrls: selectedImageUrls,
     }
 
     try {
@@ -225,7 +118,6 @@ export default function ApplicationForm() {
         onClose: () => router.push('/'),
         pauseOnHover: false,
       })
-      // 성공 처리 로직
     } catch (error) {
       toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
         autoClose: 1000,
@@ -234,33 +126,20 @@ export default function ApplicationForm() {
     }
   }
 
-  // 수정된 handleTempSave 함수
   const handleTempSave = async () => {
     const childrenRecruitList = children
       .filter((child) => child.name && Object.keys(child.classes).length > 0)
       .map((child) => ({
         childNm: child.name,
-        recruitIds: Object.values(child.classes).map(
-          (recruitId) => parseInt(recruitId, 10), // recruitId를 숫자로 변환하여 사용
+        recruitIds: Object.values(child.classes).map((recruitId) =>
+          parseInt(recruitId, 10),
         ),
       }))
-
-    const selectedImageUrls = Object.entries(formData.imageUrls).reduce(
-      (acc, [key, url]) => {
-        if (typeof url === 'string' && url) {
-          // url이 string인지 확인
-          acc[key] = url
-        }
-        return acc
-      },
-      {} as Record<string, string>,
-    )
 
     const finalData: ApplicationPayload = {
       ...formData,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
-      imageUrls: selectedImageUrls,
     }
 
     try {
@@ -277,27 +156,52 @@ export default function ApplicationForm() {
       })
     }
   }
-  const handleFileUpload = (id: string, file: File) => {
+
+  const handleFileUpload = (id: DocumentType, file: File) => {
     setUploadedFiles((prev) => ({ ...prev, [id]: file }))
-    // FormData에 File 객체 직접 저장
     setFormData((prev) => ({
       ...prev,
-      imageUrls: { ...prev.imageUrls, [id]: file },
+      fileUrls: { ...prev.fileUrls, [id]: file },
     }))
   }
 
-  const handleDeleteFile = (id: string) => {
+  const handleDeleteFile = (id: DocumentType) => {
     setUploadedFiles((prev) => {
       const newFiles = { ...prev }
       delete newFiles[id]
       return newFiles
     })
-    // FormData에서도 삭제
     setFormData((prev) => {
-      const newImageUrls = { ...prev.imageUrls }
-      delete newImageUrls[id]
-      return { ...prev, imageUrls: newImageUrls }
+      const newFileUrls = { ...prev.fileUrls }
+      delete newFileUrls[id]
+      return { ...prev, fileUrls: newFileUrls }
     })
+  }
+
+  const handleDropdownSelect = (
+    childId: number,
+    kindergarten: string,
+    option: DropdownOption,
+  ) => {
+    setChildren((prevChildren) =>
+      prevChildren.map((child) => {
+        if (child.id === childId) {
+          return {
+            ...child,
+            classes: { ...child.classes, [kindergarten]: option.key },
+          }
+        }
+        return child
+      }),
+    )
+
+    setSelectedLabels((prev) => ({
+      ...prev,
+      [childId.toString()]: {
+        ...prev[childId.toString()],
+        [kindergarten]: option.label,
+      },
+    }))
   }
 
   const pageVariants = {
@@ -330,32 +234,6 @@ export default function ApplicationForm() {
     },
     {},
   )
-
-  const handleDropdownSelect = (
-    childId: number,
-    kindergarten: string,
-    option: DropdownOption,
-  ) => {
-    setChildren((prevChildren) =>
-      prevChildren.map((child) => {
-        if (child.id === childId) {
-          return {
-            ...child,
-            classes: { ...child.classes, [kindergarten]: option.key }, // recruitId 저장
-          }
-        }
-        return child
-      }),
-    )
-
-    setSelectedLabels((prev) => ({
-      ...prev,
-      [childId.toString()]: {
-        ...prev[childId.toString()],
-        [kindergarten]: option.label,
-      },
-    }))
-  }
 
   return (
     <div className="overflow-y-auto w-500 h-[550px] pb-100">

@@ -1,7 +1,7 @@
 import { http } from '@/api'
 import { toast } from 'react-toastify'
 
-export const uploadImage = async (
+export const UploadImage = async (
   file: File,
   domainName: string,
 ): Promise<string> => {

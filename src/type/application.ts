@@ -1,5 +1,3 @@
-// /src/type/application.ts
-
 export interface DropdownOption {
   key: string
   label: string
@@ -20,7 +18,7 @@ export interface ApplicationPayload {
     childNm: string
     recruitIds: number[]
   }[]
-  imageUrls: {
+  fileUrls: {
     [key: string]: File | string
   }
 }
@@ -35,11 +33,21 @@ export interface Child {
 }
 
 export enum DocumentType {
+  RESIDENT_REGISTER = 'RESIDENT_REGISTER',
   SINGLE_PARENT = 'SINGLE_PARENT',
   DISABILITY = 'DISABILITY',
   DUAL_INCOME = 'DUAL_INCOME',
   EMPLOYEE_COUPLE = 'EMPLOYEE_COUPLE',
   SIBLING = 'SIBLING',
+}
+
+export const documentTypeMap: Record<string, DocumentType> = {
+  resident: DocumentType.RESIDENT_REGISTER,
+  isSingleParent: DocumentType.SINGLE_PARENT,
+  isDisability: DocumentType.DISABILITY,
+  isDualIncome: DocumentType.DUAL_INCOME,
+  isEmployeeCouple: DocumentType.EMPLOYEE_COUPLE,
+  isSibling: DocumentType.SIBLING,
 }
 
 export interface FormData {
@@ -82,8 +90,8 @@ export interface RightSection2Props {
   setFormData: React.Dispatch<React.SetStateAction<ApplicationPayload>>
   uploadedFiles: Record<string, File>
   setUploadedFiles: React.Dispatch<React.SetStateAction<Record<string, File>>>
-  onFileUpload: (id: string, file: File) => void
-  onDeleteFile: (id: string) => void
+  onFileUpload: (id: DocumentType, file: File) => void
+  onDeleteFile: (id: DocumentType) => void
   selectedItems: Record<string, boolean>
   onCheckboxChange: (id: string, value: boolean) => void
 }
