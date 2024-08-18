@@ -5,7 +5,10 @@ import { Header } from '@/components/common'
 import '../styles/globals.css'
 import { Suspense } from 'react'
 import { GlobalErrorBoundary } from '@/react-utils/ErrorBoundary'
+import Fallback from '@/components/common/Fallback'
+import { ToastContainer } from 'react-toastify'
 import QueryProvider from './lib/QueryProvider'
+import 'react-toastify/dist/ReactToastify.css'
 
 const Pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
@@ -27,10 +30,12 @@ export default function RootLayout({
     <html lang="ko">
       <body className={cn('overflow-hidden', Pretendard.className)}>
         <GlobalErrorBoundary renderFallback={<>로딩이 발생했어요 !</>}>
-          <Suspense fallback={<>loading..</>}>
+          <Suspense fallback={<Fallback />}>
             <QueryProvider>
               <NextUIProvider className="h-full">
-                <Header>{children}</Header>
+                <Header>
+                  {children} <ToastContainer />
+                </Header>
               </NextUIProvider>
             </QueryProvider>
           </Suspense>

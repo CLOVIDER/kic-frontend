@@ -1,5 +1,3 @@
-// /src/type/application.ts
-
 export interface DropdownOption {
   key: string
   label: string
@@ -20,7 +18,7 @@ export interface ApplicationPayload {
     childNm: string
     recruitIds: number[]
   }[]
-  imageUrls: {
+  fileUrls: {
     [key: string]: File | string
   }
 }

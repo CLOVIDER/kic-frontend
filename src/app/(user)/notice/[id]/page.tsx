@@ -5,7 +5,7 @@ import { notices as dummyNotices } from '@/components/data/Notice'
 import Image from 'next/image'
 import { formatDate } from '@/util/formatDate'
 import { useEffect, useRef } from 'react'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 export default function NoticeDetail() {
@@ -55,7 +55,6 @@ export default function NoticeDetail() {
 
   return (
     <div>
-      <ToastContainer position="top-center" autoClose={5000} />
       <div className="mt-83 w-[700px] h-[638px]">
         <div className="flex h-24">
           <Image
