@@ -93,59 +93,67 @@ export default function LotteryTable({
         </p>
       </div>
 
-      <Table
-        classNames={{
-          base: 'rounded-20',
-          wrapper: 'shadow-none !rounded-20 h-495',
-          thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
-          th: 'bg-transparent h-full',
-        }}
-        aria-label="table"
-      >
-        <TableHeader columns={columns} className="flex items-center">
-          {(column) => (
-            <TableColumn className="text-center" key={column.uid}>
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
+      <If condition={content.length < 1}>
+        <div className="font-semibold flex justify-center items-center h-full text-24">
+          추첨 대상자 목록이 없어요..🤣
+        </div>
+      </If>
 
-        <TableBody items={content}>
-          {(item) => (
-            <TableRow
-              key={item.applicationId}
-              // FIXME: href
-              onClick={() => push('/')}
-              className="h-45 cursor-pointer"
-            >
-              {(columnKey) => (
-                <TableCell className="text-center">
-                  {renderCell(item, columnKey)}
-                </TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-
-      <div className="mt-30" />
-
-      <If condition={!!content.length}>
-        <Pagination
-          page={page}
-          onChange={setPage}
+      <If condition={content.length >= 1}>
+        <Table
           classNames={{
-            base: 'flex justify-center',
-            wrapper: 'gap-2',
-            cursor: 'border-1 w-28 h-28 !rounded-4 bg-[#FF9F00]',
-            item: 'w-28 h-28 !rounded-4',
-            next: 'w-28 h-28 !rounded-4',
-            prev: 'w-28 h-28 !rounded-4',
+            base: 'rounded-20',
+            wrapper: 'shadow-none !rounded-20 h-495',
+            thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
+            th: 'bg-transparent h-full',
           }}
-          total={totalPage}
-          showShadow
-          showControls
-        />
+          aria-label="table"
+        >
+          <TableHeader columns={columns} className="flex items-center">
+            {(column) => (
+              <TableColumn className="text-center" key={column.uid}>
+                {column.name}
+              </TableColumn>
+            )}
+          </TableHeader>
+
+          <TableBody items={content}>
+            {(item) => (
+              <TableRow
+                key={item.applicationId}
+                // FIXME: href
+                onClick={() => push('/')}
+                className="h-45 cursor-pointer"
+              >
+                {(columnKey) => (
+                  <TableCell className="text-center">
+                    {renderCell(item, columnKey)}
+                  </TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+
+        <div className="mt-30" />
+
+        <If condition={!!content.length}>
+          <Pagination
+            page={page}
+            onChange={setPage}
+            classNames={{
+              base: 'flex justify-center',
+              wrapper: 'gap-2',
+              cursor: 'border-1 w-28 h-28 !rounded-4 bg-[#FF9F00]',
+              item: 'w-28 h-28 !rounded-4',
+              next: 'w-28 h-28 !rounded-4',
+              prev: 'w-28 h-28 !rounded-4',
+            }}
+            total={totalPage}
+            showShadow
+            showControls
+          />
+        </If>
       </If>
     </>
   )

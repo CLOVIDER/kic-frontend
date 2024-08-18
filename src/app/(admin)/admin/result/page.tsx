@@ -33,7 +33,7 @@ export default function Page() {
     <section className="w-[738px] flex flex-col gap-12">
       <header className="flex justify-between items-center">
         <div className="flex items-center gap-18">
-          <h1 className="text-20 font-bold">신청자 목록</h1>
+          <h1 className="text-20 font-bold">추첨 목록</h1>
 
           <Dropdown>
             <DropdownTrigger
