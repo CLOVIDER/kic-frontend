@@ -33,4 +33,5 @@ export interface RecruitInfo {
 
 export interface ApplicationStatus {
   id: number
+  isTemp: 'APPLIED' | 'TEMP'
 }

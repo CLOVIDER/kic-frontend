@@ -7,13 +7,16 @@ import Image from 'next/image'
 import './application.css'
 import { cn } from '@/lib/utils'
 import CancelModal from '@/components/common/CancelModal'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { getApplicationData } from '../api'
 
 export default function Page() {
   const [showComponents, setShowComponents] = useState(false)
   const [animate, setAnimate] = useState(false)
   const [applicationId, setApplicationId] = useState<number>(0)
+
+  const isTemp = useSearchParams().get('isTemp')
+  const hasItem = isTemp !== null && isTemp !== 'undefined'
 
   useEffect(() => {
     const timer1 = setTimeout(() => {
@@ -47,6 +50,7 @@ export default function Page() {
   }, [])
 
   const { push } = useRouter()
+
   return (
     <div className="w-full h-full flex flex-col items-center gap-5 relative p-100">
       <Image
@@ -65,7 +69,11 @@ export default function Page() {
           animate && 'text-move',
         )}
       >
-        이미 신청하신 내역이 있어요 !
+        <If condition={hasItem}>
+          임시저장된 내역이 있어요.
+          <br /> 기한 전에 꼭 제출해주세요 !
+        </If>
+        <If condition={!hasItem}>이미 신청하신 내역이 있어요 !</If>
       </h1>
 
       <div className="w-800 flex flex-col items-center ml-50">
@@ -84,7 +92,7 @@ export default function Page() {
               돌아가기
             </Button>
             <div className="flex flex-row gap-10">
-              <CancelModal id={applicationId}>
+              <CancelModal id={applicationId} mode="application">
                 {(onOpen) => (
                   <Button
                     onClick={onOpen}
