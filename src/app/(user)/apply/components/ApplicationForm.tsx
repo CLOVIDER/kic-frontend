@@ -1,15 +1,16 @@
 'use client'
 
+import React, { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 import {
   ApplicationPayload,
   Child,
   DropdownOption,
   DropdownOptions,
+  DocumentType,
 } from '@/type/application'
-import React, { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { toast } from 'react-toastify'
-import { useRouter } from 'next/navigation'
 import {
   saveApplicationTemp,
   submitApplication,
@@ -30,27 +31,24 @@ export default function ApplicationForm() {
     isSibling: '0',
     childrenRecruitList: [],
     fileUrls: {
-      SINGLE_PARENT: '',
-      DISABILITY: '',
-      DUAL_INCOME: '',
-      EMPLOYEE_COUPLE: '',
-      SIBLING: '',
+      [DocumentType.RESIDENT_REGISTER]: '',
+      [DocumentType.SINGLE_PARENT]: '',
+      [DocumentType.DISABILITY]: '',
+      [DocumentType.DUAL_INCOME]: '',
+      [DocumentType.EMPLOYEE_COUPLE]: '',
+      [DocumentType.SIBLING]: '',
     },
   })
   const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({})
   const [selectedLabels, setSelectedLabels] = useState<
     Record<string, Record<string, string>>
   >({})
-
-  const router = useRouter()
   const [children, setChildren] = useState<Child[]>([
     { id: 1, name: '', classes: {} },
   ])
-
-  const [recruitData, setRecruitData] = useState<
-    { kindergartenNm: string; recruitIds: number[]; ageClasses: string[] }[]
-  >([])
+  const [recruitData, setRecruitData] = useState<RecruitInfo[]>([])
   const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({
+    resident: true,
     isSingleParent: false,
     isDisability: false,
     isDualIncome: false,
@@ -58,15 +56,12 @@ export default function ApplicationForm() {
     isSibling: false,
   })
 
-  const handleCheckboxChange = (id: string, value: boolean) => {
-    setSelectedItems((prev) => ({ ...prev, [id]: value }))
-    setFormData((prev) => ({ ...prev, [id]: value ? '1' : '0' }))
-  }
+  const router = useRouter()
 
   useEffect(() => {
     const fetchRecruitData = async () => {
       try {
-        const data = (await getRecruitData()) as RecruitInfo[]
+        const data = await getRecruitData()
         setRecruitData(data)
       } catch (error) {
         toast.error('Error fetching recruit data', {
@@ -77,6 +72,14 @@ export default function ApplicationForm() {
     }
     fetchRecruitData()
   }, [])
+
+  const handleCheckboxChange = (id: string, value: boolean) => {
+    setSelectedItems((prev) => ({ ...prev, [id]: value }))
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value ? '1' : '0',
+    }))
+  }
 
   const handleNext = (
     data: Partial<ApplicationPayload>,
@@ -96,28 +99,16 @@ export default function ApplicationForm() {
       .filter((child) => child.name && Object.keys(child.classes).length > 0)
       .map((child) => ({
         childNm: child.name,
-        recruitIds: Object.values(child.classes).map(
-          (recruitId) => parseInt(recruitId, 10), // recruitId를 숫자로 변환하여 사용
+        recruitIds: Object.values(child.classes).map((recruitId) =>
+          parseInt(recruitId, 10),
         ),
       }))
-
-    const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
-      (acc, [key, url]) => {
-        if (typeof url === 'string' && url) {
-          // url이 string인지 확인
-          acc[key] = url
-        }
-        return acc
-      },
-      {} as Record<string, string>,
-    )
 
     const finalData: ApplicationPayload = {
       ...formData,
       ...data,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
-      fileUrls: selectedImageUrls,
     }
 
     try {
@@ -127,7 +118,6 @@ export default function ApplicationForm() {
         onClose: () => router.push('/'),
         pauseOnHover: false,
       })
-      // 성공 처리 로직
     } catch (error) {
       toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
         autoClose: 1000,
@@ -136,33 +126,20 @@ export default function ApplicationForm() {
     }
   }
 
-  // 수정된 handleTempSave 함수
   const handleTempSave = async () => {
     const childrenRecruitList = children
       .filter((child) => child.name && Object.keys(child.classes).length > 0)
       .map((child) => ({
         childNm: child.name,
-        recruitIds: Object.values(child.classes).map(
-          (recruitId) => parseInt(recruitId, 10), // recruitId를 숫자로 변환하여 사용
+        recruitIds: Object.values(child.classes).map((recruitId) =>
+          parseInt(recruitId, 10),
         ),
       }))
-
-    const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
-      (acc, [key, url]) => {
-        if (typeof url === 'string' && url) {
-          // url이 string인지 확인
-          acc[key] = url
-        }
-        return acc
-      },
-      {} as Record<string, string>,
-    )
 
     const finalData: ApplicationPayload = {
       ...formData,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
-      fileUrls: selectedImageUrls,
     }
 
     try {
@@ -179,27 +156,52 @@ export default function ApplicationForm() {
       })
     }
   }
-  const handleFileUpload = (id: string, file: File) => {
+
+  const handleFileUpload = (id: DocumentType, file: File) => {
     setUploadedFiles((prev) => ({ ...prev, [id]: file }))
-    // FormData에 File 객체 직접 저장
     setFormData((prev) => ({
       ...prev,
-      imageUrls: { ...prev.fileUrls, [id]: file },
+      fileUrls: { ...prev.fileUrls, [id]: file },
     }))
   }
 
-  const handleDeleteFile = (id: string) => {
+  const handleDeleteFile = (id: DocumentType) => {
     setUploadedFiles((prev) => {
       const newFiles = { ...prev }
       delete newFiles[id]
       return newFiles
     })
-    // FormData에서도 삭제
     setFormData((prev) => {
-      const newImageUrls = { ...prev.fileUrls }
-      delete newImageUrls[id]
-      return { ...prev, fileUrls: newImageUrls }
+      const newFileUrls = { ...prev.fileUrls }
+      delete newFileUrls[id]
+      return { ...prev, fileUrls: newFileUrls }
     })
+  }
+
+  const handleDropdownSelect = (
+    childId: number,
+    kindergarten: string,
+    option: DropdownOption,
+  ) => {
+    setChildren((prevChildren) =>
+      prevChildren.map((child) => {
+        if (child.id === childId) {
+          return {
+            ...child,
+            classes: { ...child.classes, [kindergarten]: option.key },
+          }
+        }
+        return child
+      }),
+    )
+
+    setSelectedLabels((prev) => ({
+      ...prev,
+      [childId.toString()]: {
+        ...prev[childId.toString()],
+        [kindergarten]: option.label,
+      },
+    }))
   }
 
   const pageVariants = {
@@ -232,32 +234,6 @@ export default function ApplicationForm() {
     },
     {},
   )
-
-  const handleDropdownSelect = (
-    childId: number,
-    kindergarten: string,
-    option: DropdownOption,
-  ) => {
-    setChildren((prevChildren) =>
-      prevChildren.map((child) => {
-        if (child.id === childId) {
-          return {
-            ...child,
-            classes: { ...child.classes, [kindergarten]: option.key }, // recruitId 저장
-          }
-        }
-        return child
-      }),
-    )
-
-    setSelectedLabels((prev) => ({
-      ...prev,
-      [childId.toString()]: {
-        ...prev[childId.toString()],
-        [kindergarten]: option.label,
-      },
-    }))
-  }
 
   return (
     <div className="overflow-y-auto w-500 h-[550px] pb-100">

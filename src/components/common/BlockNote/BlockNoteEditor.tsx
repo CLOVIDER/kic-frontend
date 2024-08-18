@@ -5,7 +5,7 @@ import { BlockNoteView } from '@blocknote/mantine'
 import { useCallback, useState, useEffect } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { toast } from 'react-toastify'
-import { uploadImage } from './UploadImage'
+import { UploadImage } from './UploadImage'
 
 interface BlockNoteEditorProps {
   domainName: string
@@ -31,7 +31,7 @@ export default function BlockNoteEditor({
         throw new Error('Image upload is not enabled or missing required props')
       }
       try {
-        const url = await uploadImage(file, domainName)
+        const url = await UploadImage(file, domainName)
         setImageUrls((prevUrls) => [...prevUrls, url])
         setUploadedImageUrls([...imageUrls, url])
         return url
