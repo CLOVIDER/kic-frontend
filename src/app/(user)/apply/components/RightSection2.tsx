@@ -1,12 +1,21 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { RightSection2Props, Item } from '@/type/application'
 import { Button } from '@nextui-org/react'
-import { ApplicationPayload, uploadDocument } from '../api'
+import { ApplicationPayload, uploadDocument, UploadedFile } from '../api'
 import FormSection from './common/FormSection'
 import CheckboxWithLabel from './common/CheckboxWithLabel'
 import FileUploadButton from './common/FileUploadButton'
 import { formatFileSize, truncateFileName } from './utils'
+
+async function fetchFileInfo(
+  url: string,
+): Promise<{ name: string; size: number }> {
+  const response = await fetch(url)
+  const blob = await response.blob()
+  const fileName = url.split('/').pop() || 'unknown_file'
+  return { name: fileName, size: blob.size }
+}
 
 export default function RightSection2({
   onPrevious,
@@ -14,29 +23,92 @@ export default function RightSection2({
   onTempSave,
   formData,
   uploadedFiles,
+  setFormData,
+  setUploadedFiles,
+  onFileUpload,
   onDeleteFile,
   selectedItems,
   onCheckboxChange,
 }: RightSection2Props) {
   const [isUploading, setIsUploading] = useState<Record<string, boolean>>({})
   const [items] = useState<Item[]>([
-    { id: 'isSingleParent', name: '한부모 가정', isRequired: false },
-    { id: 'isDisability', name: '장애 유무', isRequired: false },
-    { id: 'isDualIncome', name: '맞벌이 여부', isRequired: false },
-    { id: 'isEmployeeCouple', name: '부부 직원', isRequired: false },
-    { id: 'isSibling', name: '형제자매 유무', isRequired: false },
+    {
+      id: 'isSingleParent',
+      key: 'SINGLE_PARENT',
+      name: '한부모 가정',
+      isRequired: false,
+    },
+    {
+      id: 'isDisability',
+      key: 'DISABILITY',
+      name: '장애 유무',
+      isRequired: false,
+    },
+    {
+      id: 'isDualIncome',
+      key: 'DUAL_INCOME',
+      name: '맞벌이 여부',
+      isRequired: false,
+    },
+    {
+      id: 'isMultiChildren',
+      key: 'MULTI_CHILDREN',
+      name: '부부 직원',
+      isRequired: false,
+    },
+    {
+      id: 'isSibling',
+      key: 'SIBLING',
+      name: '형제자매 유무',
+      isRequired: false,
+    },
   ])
 
+  useEffect(() => {
+    // 초기 파일 정보 업데이트
+    const updateFileInfo = async () => {
+      const updatedFiles: Record<string, UploadedFile> = {}
+      for (const [key, url] of Object.entries(formData.fileUrls)) {
+        if (url) {
+          try {
+            // eslint-disable-next-line no-await-in-loop
+            const { name, size } = await fetchFileInfo(url)
+            updatedFiles[key] = { file: null, url, name, size }
+          } catch (error) {
+            console.error(`Error fetching file info for ${key}:`, error)
+          }
+        }
+      }
+      setUploadedFiles((prev) => ({ ...prev, ...updatedFiles }))
+    }
+
+    updateFileInfo()
+  }, [formData.fileUrls, setUploadedFiles])
   // RightSection2 내부
-  const handleFileUpload = async (id: string, file: File) => {
-    setIsUploading((prev) => ({ ...prev, [id]: true }))
+
+  const handleFileUpload = async (key: string, file: File) => {
+    setIsUploading((prev) => ({ ...prev, [key]: true }))
     try {
       const url = await uploadDocument(file)
-      // onFileUploadComplete(id, file, url); // 상위 컴포넌트의 핸들러 호출
+      const fileData: UploadedFile = {
+        file,
+        url,
+        name: file.name,
+        size: file.size,
+      }
+      onFileUpload(key, fileData)
+      setUploadedFiles((prev) => ({
+        ...prev,
+        [key]: fileData,
+      }))
+      setFormData((prev) => ({
+        ...prev,
+        imageUrls: { ...prev.fileUrls, [key]: url },
+      }))
     } catch (error) {
       toast.error('파일 업로드 에러 발생')
     } finally {
-      setIsUploading((prev) => ({ ...prev, [id]: false }))
+      setIsUploading((prev) => ({ ...prev, [key]: false }))
     }
   }
 

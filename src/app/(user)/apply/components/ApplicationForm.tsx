@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  Child,
-  DropdownOption,
-  DropdownOptions,
-  UploadedFile,
-} from '@/type/application'
+import { Child, DropdownOption, DropdownOptions } from '@/type/application'
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
@@ -18,10 +13,11 @@ import {
   getApplicationData,
   editApplication,
   ApplicationPayload,
+  UploadedFile,
 } from '../api'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
-import { fetchFileInfo } from './common/FetchFileInfo'
+import getFile from '../api/getFile'
 
 export default function ApplicationForm() {
   const [currentSection, setCurrentSection] = useState(1)
@@ -63,22 +59,21 @@ export default function ApplicationForm() {
   const [isLoading, setIsLoading] = useState(true)
   const [applicationId] = useState<number | null>(null)
 
-  const handleFileUploadComplete = useCallback(
-    (id: string, file: File, url: string) => {
-      fetchFileInfo(url)
-        .then(({ name, size }) => {
-          setUploadedFiles((prev) => ({
-            ...prev,
-            [id]: { file, url, name, size },
-          }))
-          setFormData((prev) => ({
-            ...prev,
-            fileUrls: { ...prev.fileUrls, [id]: url },
-          }))
-        })
-        .catch((error) => {
-          toast.error(`파일 정보를 가져오는데 실패했습니다: ${error}`)
-        })
+  const handleFileUpload = useCallback(
+    (id: string, fileData: UploadedFile) => {
+      // uploadedFiles 상태를 업데이트
+      setUploadedFiles((prev) => ({
+        ...prev,
+        [id]: fileData,
+      }))
+      // formData 상태도 업데이트하여 fileUrls를 설정
+      setFormData((prev) => ({
+        ...prev,
+        fileUrls: {
+          ...prev.fileUrls,
+          [id]: fileData.url,
+        },
+      }))
     },
     [setUploadedFiles, setFormData],
   )
@@ -94,7 +89,46 @@ export default function ApplicationForm() {
         setRecruitData(fetchedRecruitData)
 
         if (applicationData) {
-          // Other processing...
+          const documents = applicationData.documents || []
+
+          const preloadedFiles: Record<string, UploadedFile> = {}
+          const preloadedFileUrls: Record<string, string> = {}
+          for (const doc of documents) {
+            try {
+              // eslint-disable-next-line no-await-in-loop
+              const fileInfo = await getFile(doc.image)
+              preloadedFiles[doc.documentType] = fileInfo
+              preloadedFileUrls[doc.documentType] = doc.image
+            } catch (fileError) {
+              console.error(
+                `Error fetching file for ${doc.documentType}:`,
+                fileError,
+              )
+              // 파일을 가져오는 데 실패하더라도 기본값 설정
+              preloadedFiles[doc.documentType] = {
+                file: null,
+                url: doc.image,
+                name: 'Unknown File',
+                size: 0,
+              }
+              preloadedFileUrls[doc.documentType] = doc.image
+            }
+          }
+
+          setUploadedFiles(preloadedFiles)
+          setFormData((prev) => ({
+            ...prev,
+            fileUrls: preloadedFileUrls,
+          }))
+
+          // 체크박스 상태 초기화
+          setSelectedItems({
+            isSingleParent: applicationData.isSingleParent === '1',
+            isDisability: applicationData.isDisability === '1',
+            isDualIncome: applicationData.isDualIncome === '1',
+            isEmployeeCouple: applicationData.isEmployeeCouple === '1',
+            isSibling: applicationData.isSibling === '1',
+          })
 
           // Process children and selected labels
           const updatedChildren = applicationData.childrenRecruitList.map(
@@ -156,7 +190,7 @@ export default function ApplicationForm() {
     }
 
     fetchData()
-  }, [handleFileUploadComplete])
+  }, [])
 
   useEffect(() => {
     const fetchRecruitData = async () => {
@@ -391,7 +425,7 @@ export default function ApplicationForm() {
               onTempSave={handleTempSave}
               uploadedFiles={uploadedFiles}
               setUploadedFiles={setUploadedFiles}
-              onFileUpload={fetchFileInfo}
+              onFileUpload={handleFileUpload}
               onDeleteFile={handleDeleteFile}
               formData={formData}
               setFormData={setFormData}

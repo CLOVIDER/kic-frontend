@@ -1,5 +1,4 @@
-import { ApplicationPayload } from '@/app/(user)/apply/api'
-import { Dispatch, SetStateAction } from 'react'
+import { ApplicationPayload, UploadedFile } from '@/app/(user)/apply/api'
 
 // /src/type/application.ts
 
@@ -60,8 +59,10 @@ export interface RightSection2Props {
   formData: ApplicationPayload
   setFormData: React.Dispatch<React.SetStateAction<ApplicationPayload>>
   uploadedFiles: Record<string, UploadedFile>
-  setUploadedFiles: React.Dispatch<React.SetStateAction<Record<string, UploadedFile>>>
-  onFileUpload: (id: string, size: number, file: string) => void
+  setUploadedFiles: React.Dispatch<
+    React.SetStateAction<Record<string, UploadedFile>>
+  >
+  onFileUpload: (id: string, fileData: UploadedFile) => void
   // onFileUploadComplete: (id: string, file: File, url: string) => void;
   onDeleteFile: (id: string) => void
   selectedItems: Record<string, boolean>
@@ -76,14 +77,8 @@ export interface ApplicationFormProps {
 export interface Item {
   id: string
   name: string
+  key: string
   isRequired: boolean
-}
-
-export interface UploadedFile {
-  file: File;
-  url: string;
-  name: string;
-  size: number;
 }
 
 export interface RecruitInfo {
