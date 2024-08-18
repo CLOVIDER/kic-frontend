@@ -42,3 +42,14 @@ export const postEmailsRecruits = () =>
   http.post({
     url: `/api/admin/emails/recruits`,
   })
+
+export type GetKindergartenWithRecruitIdResponse = Array<{
+  kindergartenNm: string
+  recruitIds: Array<number>
+  ageClasses: Array<`${string}세`>
+}>
+
+export const getKindergartenWithRecruitId = () =>
+  http.get<GetKindergartenWithRecruitIdResponse>({
+    url: '/api/recruits/results',
+  })

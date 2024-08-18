@@ -9,23 +9,22 @@ import {
 } from '@nextui-org/react'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import { useDeferredValue, useState } from 'react'
-import { useKindergartensContext } from '@/app/kindergarten/fetcher/KindergartensFetcher'
 import LotteriesFetcher from './fetcher/ResultApplicationsFetcher'
 import LotteryTable from './LotteryTable'
+import { useKindergartenWthRecruitIdContext } from './fetcher/KindergartenWithRecruitIdFetcher'
 
 export default function Page() {
-  const { kindergartens } = useKindergartensContext()
+  const { kindergartens } = useKindergartenWthRecruitIdContext()
   const [page, setPage] = useState<number>(1)
   const [searchInput, setSearchInput] = useState<string>('')
   const [kindergartenId, setKindergartenId] = useState<number>(
-    kindergartens[0].kindergartenId,
+    kindergartens[0].recruitIds[0],
   )
-  const [classValue, setClassValue] = useState<string>('1')
+  const [classValue, setClassValue] = useState<string>(
+    kindergartens[0].ageClasses[0],
+  )
   const [kindergartenName, setKindergartenName] = useState<string>(
     kindergartens[0].kindergartenNm,
-  )
-  const [className, setClassName] = useState<string>(
-    kindergartens[0].kindergartenClass[0].className,
   )
   const deferredSearchInput = useDeferredValue(searchInput)
 
@@ -41,34 +40,29 @@ export default function Page() {
               className="cursor-pointer w-210 h-33 bg-[#FEC46D] uppercase text-[white] flex justify-center items-center rounded-20"
             >
               <div className="flex justify-center items-center px-10">
-                {`${kindergartenName} ${className} ${classValue}세`.trim()}
+                {`${kindergartenName} ${classValue}`.trim()}
                 <p />
                 <DropdownIcon />
               </div>
             </DropdownTrigger>
 
             <DropdownMenu>
-              {kindergartens.flatMap((kindergarten) =>
-                kindergarten.kindergartenClass.map(
-                  ({
-                    className: kindergartenClassName,
-                    ageClass,
-                    ageClassString,
-                  }) => (
+              {kindergartens.flatMap(
+                ({ kindergartenNm, recruitIds, ageClasses }) =>
+                  recruitIds.map((recruitId, index) => (
                     <DropdownItem
-                      key={`${kindergartenClassName}`}
+                      key={`${kindergartenNm} ${recruitId} ${ageClasses[index]}`}
                       onClick={() => {
-                        setKindergartenName(kindergarten.kindergartenNm)
-                        setKindergartenId(kindergarten.kindergartenId)
-                        setClassValue(ageClass)
-                        setClassName(kindergartenClassName)
+                        setKindergartenName(kindergartenNm)
+                        // FIXME: kindergartenId fetch
+                        setKindergartenId(kindergartenId)
+                        setClassValue(ageClasses[index])
                       }}
                       className="text-center text-13"
                     >
-                      {`${kindergarten.kindergartenNm}  ${kindergartenClassName} ${ageClassString}`}
+                      {`${kindergartenNm}  ${ageClasses[index]}`}
                     </DropdownItem>
-                  ),
-                ),
+                  )),
               )}
             </DropdownMenu>
           </Dropdown>
