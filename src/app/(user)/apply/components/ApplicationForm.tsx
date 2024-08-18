@@ -104,11 +104,23 @@ export default function ApplicationForm() {
         ),
       }))
 
+    const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
+      (acc, [key, url]) => {
+        if (typeof url === 'string' && url) {
+          // url이 string인지 확인
+          acc[key] = url
+        }
+        return acc
+      },
+      {} as Record<string, string>,
+    )
+
     const finalData: ApplicationPayload = {
       ...formData,
       ...data,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
+      fileUrls: selectedImageUrls,
     }
 
     try {
@@ -136,10 +148,22 @@ export default function ApplicationForm() {
         ),
       }))
 
+    const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
+      (acc, [key, url]) => {
+        if (typeof url === 'string' && url) {
+          // url이 string인지 확인
+          acc[key] = url
+        }
+        return acc
+      },
+      {} as Record<string, string>,
+    )
+
     const finalData: ApplicationPayload = {
       ...formData,
       childrenRecruitList,
       childrenCnt: childrenRecruitList.length,
+      fileUrls: selectedImageUrls,
     }
 
     try {
@@ -236,7 +260,7 @@ export default function ApplicationForm() {
   )
 
   return (
-    <div className="overflow-y-auto w-500 h-[550px] pb-100">
+    <div className="overflow-y-auto w-500 h-[600px] pb-100">
       <AnimatePresence mode="wait" custom={currentSection === 1 ? 1 : -1}>
         <motion.div
           key={currentSection}
