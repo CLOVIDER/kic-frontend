@@ -1,3 +1,5 @@
+'use client'
+
 import { generateContext } from '@/react-utils'
 import { GetKindergartenWithRecruitIdResponse } from '@/app/(admin)/admin/result/api/index'
 import { StrictPropsWithChildren } from '@/type'

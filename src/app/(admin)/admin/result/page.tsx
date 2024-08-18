@@ -17,7 +17,10 @@ export default function Page() {
   const { kindergartens } = useKindergartenWthRecruitIdContext()
   const [page, setPage] = useState<number>(1)
   const [searchInput, setSearchInput] = useState<string>('')
-  const [kindergartenId, setKindergartenId] = useState<number>(
+  const [kindergartenId, setKindergartenId] = useState<string>(
+    kindergartens[0].kindergartenIds[0],
+  )
+  const [recruitId, setRecruitId] = useState<number>(
     kindergartens[0].recruitIds[0],
   )
   const [classValue, setClassValue] = useState<string>(
@@ -48,14 +51,14 @@ export default function Page() {
 
             <DropdownMenu>
               {kindergartens.flatMap(
-                ({ kindergartenNm, recruitIds, ageClasses }) =>
-                  recruitIds.map((recruitId, index) => (
+                ({ kindergartenNm, recruitIds, ageClasses, kindergartenIds }) =>
+                  recruitIds.map((rId, index) => (
                     <DropdownItem
                       key={`${kindergartenNm} ${recruitId} ${ageClasses[index]}`}
                       onClick={() => {
                         setKindergartenName(kindergartenNm)
-                        // FIXME: kindergartenId fetch
-                        setKindergartenId(kindergartenId)
+                        setRecruitId(recruitIds[index])
+                        setKindergartenId(kindergartenIds[index])
                         setClassValue(ageClasses[index])
                       }}
                       className="text-center text-13"
@@ -84,7 +87,7 @@ export default function Page() {
             kindergartenId={kindergartenId}
             page={page - 1}
             classValue={classValue}
-            accountId={deferredSearchInput}
+            nameKo={deferredSearchInput}
           >
             <LotteryTable page={page} setPage={setPage} />
           </LotteriesFetcher>

@@ -17,26 +17,27 @@ export interface GetLotteriesRequest {
   page: number
   size?: number
   classValue?: string
-  accountId?: string
-  kindergartenId: number
+  nameKo?: string
+  kindergartenId: string
 }
 
 export const getLotteriesResult = ({
   page,
   size = 10,
   classValue,
-  accountId,
+  nameKo,
   kindergartenId,
-}: GetLotteriesRequest) =>
-  http.get<GetLotteriesResponse>({
+}: GetLotteriesRequest) => {
+  return http.get<GetLotteriesResponse>({
     url: `/api/admin/lotteries/result/${kindergartenId}`,
     params: {
       page,
       size,
-      class: classValue || 'INFANT',
-      accountId,
+      class: classValue?.replaceAll(/\D/g, ''),
+      nameKo,
     },
   })
+}
 
 export const postEmailsRecruits = () =>
   http.post({
@@ -47,6 +48,7 @@ export type GetKindergartenWithRecruitIdResponse = Array<{
   kindergartenNm: string
   recruitIds: Array<number>
   ageClasses: Array<`${string}세`>
+  kindergartenIds: string[]
 }>
 
 export const getKindergartenWithRecruitId = () =>
