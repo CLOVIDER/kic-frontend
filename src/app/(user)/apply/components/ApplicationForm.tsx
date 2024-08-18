@@ -97,20 +97,15 @@ export default function ApplicationForm() {
             try {
               // eslint-disable-next-line no-await-in-loop
               const fileInfo = await getFile(doc.image)
-              preloadedFiles[doc.documentType] = fileInfo
-              preloadedFileUrls[doc.documentType] = doc.image
+              if (fileInfo != null) {
+                preloadedFiles[doc.documentType] = fileInfo
+                preloadedFileUrls[doc.documentType] = doc.image
+              }
             } catch (fileError) {
               console.error(
                 `Error fetching file for ${doc.documentType}:`,
                 fileError,
               )
-              // 파일을 가져오는 데 실패하더라도 기본값 설정
-              preloadedFiles[doc.documentType] = {
-                file: null,
-                url: doc.image,
-                name: 'Unknown File',
-                size: 0,
-              }
               preloadedFileUrls[doc.documentType] = doc.image
             }
           }

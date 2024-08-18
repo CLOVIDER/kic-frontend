@@ -1,37 +1,36 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
 import https from 'https'
+import { NextApiRequest, NextApiResponse } from 'next'
 
-export default async function getFile(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  const { url } = req.query
+export default function getFile(req: NextApiRequest, res: NextApiResponse) {
+  const fileUrl = req.query.url
 
-  if (!url || typeof url !== 'string') {
-    res.status(400).json({ error: 'URL이 필요합니다.' })
+  if (typeof fileUrl !== 'string') {
+    res.status(400).json({ error: 'URL is required as a query parameter' })
     return
   }
 
   https
-    .get(url, (response) => {
-      const data: Uint8Array[] = []
+    .get(fileUrl, (response) => {
+      // Assuming the file is a binary, if it's not, the content type needs to be adjusted accordingly.
+      response.setEncoding('binary')
+      let data = ''
+
       response.on('data', (chunk) => {
-        data.push(chunk)
+        data += chunk
       })
 
       response.on('end', () => {
-        const buffer = Buffer.concat(data)
-        const fileName = url.split('/').pop() || 'unknown_file'
-        res.setHeader('Content-Disposition', `attachment; filename=${fileName}`)
+        const filename = fileUrl.split('/').pop() || 'default_filename'
+        res.setHeader('Content-Type', 'application/octet-stream')
         res.setHeader(
-          'Content-Type',
-          response.headers['content-type'] || 'application/octet-stream',
+          'Content-Disposition',
+          `attachment; filename=${encodeURIComponent(filename)}`,
         )
-        res.send(buffer)
+        res.send(Buffer.from(data, 'binary'))
       })
     })
-    .on('error', (error) => {
-      console.error(`Error fetching file from URL ${url}:`, error)
-      res.status(500).json({ error: '파일을 가져오는 데 실패했습니다.' })
+    .on('error', (err) => {
+      console.error('Failed to download file:', err)
+      res.status(500).json({ error: 'Failed to download file' })
     })
 }

@@ -7,7 +7,7 @@ export interface FileUploadResponse {
   result: string
 }
 export interface UploadedFile {
-  file: File | null
+  file: File | Blob
   url: string
   name: string
   size: number

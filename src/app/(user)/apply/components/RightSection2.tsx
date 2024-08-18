@@ -7,15 +7,7 @@ import FormSection from './common/FormSection'
 import CheckboxWithLabel from './common/CheckboxWithLabel'
 import FileUploadButton from './common/FileUploadButton'
 import { formatFileSize, truncateFileName } from './utils'
-
-async function fetchFileInfo(
-  url: string,
-): Promise<{ name: string; size: number }> {
-  const response = await fetch(url)
-  const blob = await response.blob()
-  const fileName = url.split('/').pop() || 'unknown_file'
-  return { name: fileName, size: blob.size }
-}
+import { getFile } from '../api/getFile'
 
 export default function RightSection2({
   onPrevious,
@@ -72,8 +64,10 @@ export default function RightSection2({
         if (url) {
           try {
             // eslint-disable-next-line no-await-in-loop
-            const { name, size } = await fetchFileInfo(url)
-            updatedFiles[key] = { file: null, url, name, size }
+            const fileInfo = await getFile(url)
+            if (fileInfo != null) {
+              updatedFiles[key] = fileInfo
+            }
           } catch (error) {
             console.error(`Error fetching file info for ${key}:`, error)
           }
