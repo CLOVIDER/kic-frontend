@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { toast } from 'react-toastify'
 import { useKindergartensContext } from '../../../fetcher/KindergartensFetcher'
 import { usePostImage, usePatchKindergartenDetails } from '../api/queries'
 
@@ -72,21 +73,31 @@ export default function useEdit(id: number) {
       return
     }
 
-    patchKindergartensDetail({
-      kindergartenId: id,
-      kindergartenAddr: addr,
-      kindergartenImageUrls: images,
-      kindergartenInfo: info,
-      kindergartenNm: name,
-      kindergartenNo: phone,
-      kindergartenScale: scale,
-      kindergartenCapacity: capacity,
-      kindergartenTime: time,
-      kindergartenClass: [
-        ...classes,
-        { className: newClassName, ageClass: newAgeClass },
-      ],
-    })
+    patchKindergartensDetail(
+      {
+        kindergartenId: id,
+        kindergartenAddr: addr,
+        kindergartenImageUrls: images,
+        kindergartenInfo: info,
+        kindergartenNm: name,
+        kindergartenNo: phone,
+        kindergartenScale: scale,
+        kindergartenCapacity: capacity,
+        kindergartenTime: time,
+        kindergartenClass: [
+          ...classes,
+          { className: newClassName, ageClass: newAgeClass },
+        ],
+      },
+      {
+        onSuccess: () => {
+          toast.success('성공했어요.')
+        },
+        onError: () => {
+          toast.error('잠시 후 다시 시도해주세요.')
+        },
+      },
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     id,
