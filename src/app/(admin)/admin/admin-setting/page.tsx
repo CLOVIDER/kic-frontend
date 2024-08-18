@@ -1,14 +1,12 @@
 import { Input } from '@/components'
 import Image from 'next/image'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
-import { ToastContainer } from 'react-toastify'
 import Kindergarten from './components/Kindergarten'
 import Title from './components/Title'
 import Period from './components/Period'
 import Weight from './components/Weight'
 import SettingFetcher from './components/SettingFetcher'
 import Buttons from './components/Buttons'
-import 'react-toastify/dist/ReactToastify.css'
 
 export default function Page() {
   return (
@@ -37,7 +35,7 @@ export default function Page() {
 
           <Buttons />
         </div>
-        <ToastContainer />
+
       </SettingFetcher>
     </AsyncBoundaryWithQuery>
   )

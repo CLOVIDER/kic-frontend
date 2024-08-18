@@ -3,7 +3,6 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { LoginInput } from '@/components/common'
-import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 export default function Page() {
@@ -46,7 +45,6 @@ export default function Page() {
       </motion.div>
 
       <LoginInput />
-      <ToastContainer />
     </section>
   )
 }
