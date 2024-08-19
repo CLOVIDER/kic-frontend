@@ -98,7 +98,7 @@ export default function Page() {
               nameKo={deferredSearchInput}
             >
               <LotteryTable
-                page={page}
+                page={page - 1}
                 setPage={setPage}
                 recruitId={recruitId}
               />

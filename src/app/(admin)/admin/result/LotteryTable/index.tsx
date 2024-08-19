@@ -1,4 +1,3 @@
-import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 import {
   Table,
@@ -22,6 +21,7 @@ import {
   usePostRecruits,
 } from '@/app/(admin)/admin/result/queries/index'
 import Image from 'next/image'
+import { toast } from 'react-toastify'
 import { GetLotteriesResponse } from '../api'
 import { useLotteriesContext } from '../fetcher/ResultApplicationsFetcher'
 
@@ -52,7 +52,6 @@ export default function LotteryTable({
   const {
     lotteries: { content, totalPage },
   } = useLotteriesContext()
-  const { push } = useRouter()
   const { mutate } = usePostRecruits()
   const { mutate: postRecruit, isSuccess, isPending } = usePostLotteryRecruit()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -118,7 +117,7 @@ export default function LotteryTable({
                       className=""
                     />
                     <h3 className="text-20">
-                      정말 발표하실건가요?? <br />
+                      추첨을 시작할까요?? <br />
                       다시 되돌릴 수 없어요!
                     </h3>
                     <div className="flex flex-row justify-center gap-10 mt-40">
@@ -131,7 +130,11 @@ export default function LotteryTable({
                       <Button
                         isLoading={isPending}
                         onClick={() => {
-                          postRecruit(recruitId)
+                          postRecruit(recruitId, {
+                            onSuccess: () => {
+                              toast('추첨에 성공했어요.')
+                            },
+                          })
                           if (isSuccess) {
                             onClose()
                           }
@@ -197,8 +200,6 @@ export default function LotteryTable({
             {(item) => (
               <TableRow
                 key={item.applicationId}
-                // FIXME: href
-                onClick={() => push('/')}
                 className="h-45 cursor-pointer"
               >
                 {(columnKey) => (
