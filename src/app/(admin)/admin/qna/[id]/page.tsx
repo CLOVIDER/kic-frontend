@@ -57,12 +57,12 @@ export default function QnaDetailPage() {
             <Button
               className={cn(
                 `ml-15 w-98 h-30 text-[16px] text-[#ffffff] rounded-[16px] ${
-                  qnaData.answer ? 'bg-[#ffbb38]' : 'bg-[#7DBC72]'
+                  qnaData.isAnswerPresent ? 'bg-[#ffbb38]' : 'bg-[#7DBC72]'
                 }`,
               )}
               type="button"
             >
-              {qnaData.answer ? '답변수정' : '답변작성'}
+              {qnaData.isAnswerPresent ? '답변수정' : '답변작성'}
             </Button>
           </Link>
           <Button
