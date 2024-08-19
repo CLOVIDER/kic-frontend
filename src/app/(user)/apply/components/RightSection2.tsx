@@ -8,7 +8,7 @@ import CheckboxWithLabel from './common/CheckboxWithLabel'
 import FileUploadButton from './common/FileUploadButton'
 import { truncateFileName } from './utils'
 import { FileInfo, getFileInfoFromUrl } from '../api/getFile'
-// import SubmitModal from './SubmitModal'
+import SubmitModal from './SubmitModal'
 
 export default function RightSection2({
   onPrevious,
@@ -26,6 +26,17 @@ export default function RightSection2({
   const [isUploading, setIsUploading] = useState<Record<string, boolean>>({})
   const [items] = useState(predata as Item[])
   // const [isModalOpen, setIsModalOpen] = useState(false)
+
+  useEffect(() => {
+    // formData.fileUrls 정보를 기반으로 체크박스 상태를 업데이트
+    predata.forEach((item) => {
+      if (formData.fileUrls[item.key]) {
+        if (!selectedItems[item.id]) {
+          onCheckboxChange(item.id, true) // 파일 URL이 있으면 체크박스를 true로 설정
+        }
+      }
+    })
+  }, [formData.fileUrls, selectedItems, onCheckboxChange])
 
   useEffect(() => {
     const updateFileInfo = async () => {
@@ -69,6 +80,12 @@ export default function RightSection2({
         ...prev,
         fileUrls: { ...prev.fileUrls, [key]: url },
       }))
+
+      // 파일 업로드가 성공하면 해당 체크박스를 체크 상태로 변경
+      const matchedItem = items.find((itm) => itm.key === key)
+      if (matchedItem) {
+        onCheckboxChange(matchedItem.id, true)
+      }
     } catch (error) {
       toast.error('파일 업로드 에러 발생')
     } finally {
@@ -183,7 +200,7 @@ export default function RightSection2({
           임시저장
         </Button>
         <div className="w-[8px]" />
-        {/* <SubmitModal formData={formData} onSubmit={handleSubmit}>
+        <SubmitModal formData={formData} onSubmit={handleSubmit}>
           {(onOpen) => (
             <Button
               onClick={onOpen}
@@ -192,13 +209,13 @@ export default function RightSection2({
               제출
             </Button>
           )}
-        </SubmitModal> */}
-        <Button
+        </SubmitModal>
+        {/* <Button
           onClick={handleSubmit}
           className="ml-10 w-[98px] h-[31px] bg-[#ffb74d] font-bold text-white rounded-full text-sm"
         >
           제출
-        </Button>
+        </Button> */}
       </div>
     </div>
   )

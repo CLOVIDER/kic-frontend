@@ -24,7 +24,6 @@ export default function SubmitModal({
   return (
     <>
       {children(onOpen)}
-      <Button onClick={onOpen}>제출</Button>
       <Modal
         backdrop="opaque"
         isOpen={isOpen}
