@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { NoticeItem } from '@/components/common/notice/api'
 import { formatDate } from '@/util/formatDate2'
-import { Link } from '@nextui-org/react'
+import { Button, Link } from '@nextui-org/react'
 import DeleteModal from './DeleteModal'
 
 interface NoticeListProps {
@@ -70,22 +70,22 @@ export default function NoticeList({
               <div className="ml-20 flex flex-col justify-center h-[136px]]">
                 <div className="space-y-30">
                   <Link href={`/admin/notice/write/${notice.noticeId}`}>
-                    <button
-                      className="w-101 h-31 text-16 text-[#ffffff] rounded-16 bg-[#ffbb38]"
+                    <Button
+                      className="w-[101px] h-[31px] text-[16px] text-[#ffffff] rounded-[16px] bg-[#ffbb38]"
                       type="button"
                     >
                       수정하기
-                    </button>
+                    </Button>
                   </Link>
                   <DeleteModal id={notice.noticeId}>
                     {(onOpen) => (
-                      <button
-                        className="mt-50 bg-[#FF7E6D] w-101 h-31 text-16 text-[#ffffff] rounded-16"
+                      <Button
+                        className="mt-50 bg-[#FF7E6D] w-[101px] h-[31px] text-[16px] text-[#ffffff] rounded-[16px]"
                         type="button"
                         onClick={onOpen}
                       >
                         질문삭제
-                      </button>
+                      </Button>
                     )}
                   </DeleteModal>
                 </div>
