@@ -1,11 +1,12 @@
 'use client'
 
 import { DynamicBlockNote } from '@/components/common/BlockNote'
+import { createNotice } from '@/components/common/notice/api'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { createNotice } from '../api/api'
+import { toast } from 'react-toastify'
 
 export default function WritePage() {
   const [title, setTitle] = useState<string>('')
@@ -24,21 +25,20 @@ export default function WritePage() {
     setIsSaving(true)
     setSaveError(null)
     try {
-      const response = await createNotice(
+      await createNotice({
         title,
         content,
-        uploadedImageUrls || [], // Include image URLs in the save request
-      )
-
-      if (response.code === 200) {
-        moveBack()
-      } else {
-        setSaveError('저장 중 오류가 발생했습니다.')
-      }
+        imageUrls: uploadedImageUrls || [], // 객체로 전달
+      })
+      moveBack()
     } catch (error) {
       setSaveError('저장 중 오류가 발생했습니다.')
     } finally {
       setIsSaving(false)
+      toast('저장되었습니다.', {
+        type: 'success',
+        pauseOnHover: false,
+      })
     }
   }
 

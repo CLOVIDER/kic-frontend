@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Pagination } from '@nextui-org/react'
-import NoticeFetcher from './components/NoticeFetcher'
+import NoticeFetcher from '@/components/common/notice/NoticeFetcher'
 
 const ITEMS_PER_PAGE = 3
 

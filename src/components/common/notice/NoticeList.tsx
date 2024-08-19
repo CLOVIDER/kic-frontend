@@ -7,15 +7,22 @@ import { formatDate } from '@/util/formatDate2'
 
 interface NoticeListProps {
   paginatedNotices: NoticeItem[]
+  isAdmin?: boolean
 }
 
-export default function NoticeList({ paginatedNotices }: NoticeListProps) {
+export default function NoticeList({
+  paginatedNotices,
+  isAdmin = false,
+}: NoticeListProps) {
   const router = useRouter()
 
   const handleNoticeClick = (id: number) => {
-    router.push(`/notice/${id}`)
+    if (isAdmin) {
+      router.push(`/admin/notice/${id}`)
+    } else {
+      router.push(`/notice/${id}`)
+    }
   }
-
   if (paginatedNotices.length === 0) {
     return (
       <div className="flex items-center justify-center h-[472px] text-lg text-gray-500">
@@ -42,7 +49,7 @@ export default function NoticeList({ paginatedNotices }: NoticeListProps) {
                 {formatDate(notice.createdAt)}
               </div>
               <div className="mt-10 w-[534px] h-56 text-10">
-                {notice.content}
+                {/* {notice.content} */}
               </div>
             </div>
             {notice.noticeImageList.length > 0 && (

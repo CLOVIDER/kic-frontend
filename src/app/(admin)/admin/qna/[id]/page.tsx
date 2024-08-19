@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation'
 import cn from '@/util/cn'
 import { fetchQnaDetail, QnaItem } from '@/components/qna'
 import CancelModal from '@/components/common/qna/CancelModal'
-import QnaDetailFetcher from './components/QnaDetailFetcher'
+import { QnaDetailFetcher } from '@/components/common/qna'
 
 export default function QnaDetailPage() {
   const { id } = useParams()
@@ -36,7 +36,7 @@ export default function QnaDetailPage() {
 
   return (
     <div className="w-[1280px] h-[720px] mt-40 bg-white flex-col flex justify-between">
-      <div className="w-[787px] h-[602px] mt-39 ml-256 border-1 border-solid border-[#00000014] rounded-xl overflow-hidden shadow-md">
+      <div className="w-[787px] h-[707px] mt-39 ml-256 border-1 border-solid border-[#00000014] rounded-xl overflow-hidden shadow-md">
         <div className="ml-21 mt-22 w-[118px] h-[39px] text-32 font-inter font-bold">
           문의사항
         </div>

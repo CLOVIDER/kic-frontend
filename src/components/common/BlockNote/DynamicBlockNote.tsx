@@ -56,18 +56,20 @@ export default function DynamicBlockNote({
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <BlockNoteViewer
-        domainName={domainName}
-        setUploadedImageUrls={imageUrls}
-        setContent={(content: string) => {
-          if (setContent) {
-            setContent(content) // Answer state 업데이트
-          }
-        }}
-        enableImageUpload={enableImageUpload}
-        initialContent={initialContent}
-        data={data}
-      />
+      <div className="overflow-y-auto">
+        <BlockNoteViewer
+          domainName={domainName}
+          setUploadedImageUrls={imageUrls}
+          setContent={(content: string) => {
+            if (setContent) {
+              setContent(content) // Answer state 업데이트
+            }
+          }}
+          enableImageUpload={enableImageUpload}
+          initialContent={initialContent}
+          data={data}
+        />
+      </div>
     </Suspense>
   )
 }
