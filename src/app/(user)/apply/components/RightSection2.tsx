@@ -1,13 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
-import { RightSection2Props, Item } from '@/type/application'
+import { RightSection2Props, Item, predata } from '@/type/application'
 import { Button } from '@nextui-org/react'
-import { ApplicationPayload, uploadDocument, UploadedFile } from '../api'
+import { ApplicationPayload, uploadDocument } from '../api'
 import FormSection from './common/FormSection'
 import CheckboxWithLabel from './common/CheckboxWithLabel'
 import FileUploadButton from './common/FileUploadButton'
-import { formatFileSize, truncateFileName } from './utils'
-import { getFile } from '../api/getFile'
+import { truncateFileName } from './utils'
+import { FileInfo, getFileInfoFromUrl } from '../api/getFile'
 
 export default function RightSection2({
   onPrevious,
@@ -23,50 +23,22 @@ export default function RightSection2({
   onCheckboxChange,
 }: RightSection2Props) {
   const [isUploading, setIsUploading] = useState<Record<string, boolean>>({})
-  const [items] = useState<Item[]>([
-    {
-      id: 'isSingleParent',
-      key: 'SINGLE_PARENT',
-      name: '한부모 가정',
-      isRequired: false,
-    },
-    {
-      id: 'isDisability',
-      key: 'DISABILITY',
-      name: '장애 유무',
-      isRequired: false,
-    },
-    {
-      id: 'isDualIncome',
-      key: 'DUAL_INCOME',
-      name: '맞벌이 여부',
-      isRequired: false,
-    },
-    {
-      id: 'isMultiChildren',
-      key: 'MULTI_CHILDREN',
-      name: '부부 직원',
-      isRequired: false,
-    },
-    {
-      id: 'isSibling',
-      key: 'SIBLING',
-      name: '형제자매 유무',
-      isRequired: false,
-    },
-  ])
+  const [items] = useState(predata as Item[])
+  // const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
-    // 초기 파일 정보 업데이트
     const updateFileInfo = async () => {
-      const updatedFiles: Record<string, UploadedFile> = {}
+      const updatedFiles: Record<string, FileInfo> = {}
       for (const [key, url] of Object.entries(formData.fileUrls)) {
         if (url) {
           try {
             // eslint-disable-next-line no-await-in-loop
-            const fileInfo = await getFile(url)
+            const fileInfo = await getFileInfoFromUrl(url)
             if (fileInfo != null) {
-              updatedFiles[key] = fileInfo
+              updatedFiles[key] = {
+                name: fileInfo.name,
+                url: fileInfo.url,
+              }
             }
           } catch (error) {
             console.error(`Error fetching file info for ${key}:`, error)
@@ -78,17 +50,14 @@ export default function RightSection2({
 
     updateFileInfo()
   }, [formData.fileUrls, setUploadedFiles])
-  // RightSection2 내부
 
   const handleFileUpload = async (key: string, file: File) => {
     setIsUploading((prev) => ({ ...prev, [key]: true }))
     try {
       const url = await uploadDocument(file)
-      const fileData: UploadedFile = {
-        file,
+      const fileData: FileInfo = {
         url,
         name: file.name,
-        size: file.size,
       }
       onFileUpload(key, fileData)
       setUploadedFiles((prev) => ({
@@ -97,7 +66,7 @@ export default function RightSection2({
       }))
       setFormData((prev) => ({
         ...prev,
-        imageUrls: { ...prev.fileUrls, [key]: url },
+        fileUrls: { ...prev.fileUrls, [key]: url },
       }))
     } catch (error) {
       toast.error('파일 업로드 에러 발생')
@@ -137,7 +106,6 @@ export default function RightSection2({
       fileUrls: formData.fileUrls,
     }
 
-    // submitApplication 및 saveApplicationTemp 호출 제거
     onSubmit(data)
   }, [selectedItems, formData, uploadedFiles, items, onSubmit])
 
@@ -177,23 +145,20 @@ export default function RightSection2({
                   />
                 </div>
                 <div className="ml-10 mt-2 flex items-center justify-between h-21">
-                  {uploadedFiles[item.id] && (
+                  {uploadedFiles[item.key] && (
                     <>
                       <div className="flex-1 mr-2 overflow-hidden">
                         <span className="text-sm truncate block">
                           {truncateFileName(
-                            uploadedFiles[item.id]?.name || '',
+                            uploadedFiles[item.key]?.name || '',
                             60,
                           )}
                         </span>
                       </div>
                       <div className="flex items-center">
-                        <span className="text-sm text-gray-500 mr-2">
-                          {formatFileSize(uploadedFiles[item.id]?.size || 0)}
-                        </span>
                         <button
                           type="button"
-                          onClick={() => onDeleteFile(item.id)}
+                          onClick={() => onDeleteFile(item.key)}
                           className="text-[#ef4444] text-sm"
                         >
                           X
@@ -224,7 +189,7 @@ export default function RightSection2({
         <div className="w-[8px]" />
         <Button
           onClick={handleSubmit}
-          className="ml-10 w-[98px] h-[31px] shadow-md [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] text-[#ffffff] rounded-full text-sm"
+          className="ml-10 w-[98px] h-[31px] bg-[#ffb74d] font-bold text-white rounded-full text-sm"
         >
           제출
         </Button>

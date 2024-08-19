@@ -13,11 +13,10 @@ import {
   getApplicationData,
   editApplication,
   ApplicationPayload,
-  UploadedFile,
 } from '../api'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
-import getFile from '../api/getFile'
+import { FileInfo, getFileInfoFromUrl } from '../api/getFile'
 
 export default function ApplicationForm() {
   const [currentSection, setCurrentSection] = useState(1)
@@ -31,9 +30,9 @@ export default function ApplicationForm() {
     childrenRecruitList: [],
     fileUrls: {}, // 모든 키를 비워 초기화
   })
-  const [uploadedFiles, setUploadedFiles] = useState<
-    Record<string, UploadedFile>
-  >({})
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, FileInfo>>(
+    {},
+  )
   const [selectedLabels, setSelectedLabels] = useState<
     Record<string, Record<string, string>>
   >({})
@@ -60,13 +59,12 @@ export default function ApplicationForm() {
   const [applicationId] = useState<number | null>(null)
 
   const handleFileUpload = useCallback(
-    (id: string, fileData: UploadedFile) => {
-      // uploadedFiles 상태를 업데이트
+    (id: string, fileData: FileInfo) => {
       setUploadedFiles((prev) => ({
         ...prev,
         [id]: fileData,
       }))
-      // formData 상태도 업데이트하여 fileUrls를 설정
+
       setFormData((prev) => ({
         ...prev,
         fileUrls: {
@@ -86,35 +84,32 @@ export default function ApplicationForm() {
           getApplicationData(),
         ])
 
+        console.log('Fetched Recruit Data:', fetchedRecruitData)
+        console.log('Fetched Application Data:', applicationData)
+
         setRecruitData(fetchedRecruitData)
 
         if (applicationData) {
           const documents = applicationData.documents || []
 
-          const preloadedFiles: Record<string, UploadedFile> = {}
-          const preloadedFileUrls: Record<string, string> = {}
+          const preloadedFiles: Record<string, FileInfo> = {}
           for (const doc of documents) {
             try {
               // eslint-disable-next-line no-await-in-loop
-              const fileInfo = await getFile(doc.image)
+              const fileInfo = await getFileInfoFromUrl(doc.image)
               if (fileInfo != null) {
                 preloadedFiles[doc.documentType] = fileInfo
-                preloadedFileUrls[doc.documentType] = doc.image
               }
             } catch (fileError) {
               console.error(
                 `Error fetching file for ${doc.documentType}:`,
                 fileError,
               )
-              preloadedFileUrls[doc.documentType] = doc.image
             }
           }
 
           setUploadedFiles(preloadedFiles)
-          setFormData((prev) => ({
-            ...prev,
-            fileUrls: preloadedFileUrls,
-          }))
+          console.log()
 
           // 체크박스 상태 초기화
           setSelectedItems({

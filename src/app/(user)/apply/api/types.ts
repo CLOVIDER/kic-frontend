@@ -6,12 +6,6 @@ export interface ApplicationResponse {
 export interface FileUploadResponse {
   result: string
 }
-export interface UploadedFile {
-  file: File | Blob
-  url: string
-  name: string
-  size: number
-}
 
 export interface KindergartenInfo {
   kindergartenNm: string
