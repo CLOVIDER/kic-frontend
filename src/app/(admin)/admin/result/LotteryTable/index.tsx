@@ -54,7 +54,7 @@ export default function LotteryTable({
   } = useLotteriesContext()
   const { push } = useRouter()
   const { mutate } = usePostRecruits()
-  const { mutate: postRecruit } = usePostLotteryRecruit()
+  const { mutate: postRecruit, isSuccess, isPending } = usePostLotteryRecruit()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const renderCell = useCallback(
@@ -129,10 +129,16 @@ export default function LotteryTable({
                         돌아가기
                       </Button>
                       <Button
-                        onClick={() => postRecruit(recruitId)}
+                        isLoading={isPending}
+                        onClick={() => {
+                          postRecruit(recruitId)
+                          if (isSuccess) {
+                            onClose()
+                          }
+                        }}
                         className="w-98 h-31 shadow-md gradient-button text-[#ffffff] font-bold rounded-16 text-sm"
                       >
-                        발표하기
+                        {isPending ? '발표중이에요..' : '발표하기'}
                       </Button>
                     </div>
                   </div>
