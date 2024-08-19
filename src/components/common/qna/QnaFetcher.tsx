@@ -38,7 +38,7 @@ export default function QnaFetcher({
           qnaId: item.qnaId,
           title: item.title,
           question: item.question,
-          answer: item.answer,
+          isAnswerPresent: item.isAnswerPresent,
           isVisibility: item.isVisibility,
           createdAt: item.createdAt,
           writerName: item.writerName,

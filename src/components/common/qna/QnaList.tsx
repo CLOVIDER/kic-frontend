@@ -67,10 +67,10 @@ export default function QnaList({
               <div className="ml-24 mt-18 w-[600px] h-29 text-20">
                 <span
                   className={cn(
-                    item.answer ? 'text-[#7dbc72]' : 'text-[#ffab2d]',
+                    item.isAnswerPresent ? 'text-[#7dbc72]' : 'text-[#ffab2d]',
                   )}
                 >
-                  {item.answer ? '[답변완료]' : '[문의중]'}{' '}
+                  {item.isAnswerPresent ? '[답변완료]' : '[문의중]'}{' '}
                 </span>
                 <span className="">{item.title}</span>
                 <span className="ml-15 text-[#565656] text-12">
@@ -93,11 +93,11 @@ export default function QnaList({
                 <Link href={`/admin/qna/answer/${item.qnaId}`}>
                   <button
                     className={`w-101 h-31 text-16 text-[#ffffff] rounded-16 ${
-                      item.answer ? 'bg-[#ffbb38]' : 'bg-[#7DBC72]'
+                      item.isAnswerPresent ? 'bg-[#ffbb38]' : 'bg-[#7DBC72]'
                     }`}
                     type="button"
                   >
-                    {item.answer ? '답변수정' : '답변작성'}
+                    {item.isAnswerPresent ? '답변수정' : '답변작성'}
                   </button>
                 </Link>
                 <button
