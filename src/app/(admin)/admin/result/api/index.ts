@@ -55,3 +55,8 @@ export const getKindergartenWithRecruitId = () =>
   http.get<GetKindergartenWithRecruitIdResponse>({
     url: '/api/recruits/results',
   })
+
+export const postLotteryRecruit = (recruitId: number) =>
+  http.post({
+    url: `/api/admin/lotteries/${recruitId}`,
+  })

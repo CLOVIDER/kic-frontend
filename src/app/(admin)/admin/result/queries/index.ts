@@ -4,6 +4,7 @@ import {
   GetLotteriesRequest,
   getLotteriesResult,
   postEmailsRecruits,
+  postLotteryRecruit,
 } from '@/app/(admin)/admin/result/api/index'
 
 export const useGetLotteries = (lotteryInfo: GetLotteriesRequest) =>
@@ -30,4 +31,10 @@ export const useGetKindergartenWithRecruitId = () =>
     queryKey: ['query-result'],
     queryFn: getKindergartenWithRecruitId,
     select: ({ result }) => result,
+  })
+
+export const usePostLotteryRecruit = () =>
+  useMutation({
+    mutationKey: ['post-lottery-recruit'],
+    mutationFn: (recruitId: number) => postLotteryRecruit(recruitId),
   })

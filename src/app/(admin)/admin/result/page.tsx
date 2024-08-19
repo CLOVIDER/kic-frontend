@@ -23,6 +23,9 @@ export default function Page() {
   const [classValue, setClassValue] = useState<string>(
     kindergartens[0]?.ageClasses[0] || 0,
   )
+  const [recruitId, setRecruitId] = useState<number>(
+    kindergartens[0]?.recruitIds[0] || 0,
+  )
   const [kindergartenName, setKindergartenName] = useState<string>(
     kindergartens[0]?.kindergartenNm || '선택',
   )
@@ -56,6 +59,7 @@ export default function Page() {
                         setKindergartenName(kindergartenNm)
                         setKindergartenId(kindergartenIds[index])
                         setClassValue(ageClasses[index])
+                        setRecruitId(recruitIds[index])
                       }}
                       className="text-center text-13"
                     >
@@ -93,7 +97,11 @@ export default function Page() {
               classValue={classValue}
               nameKo={deferredSearchInput}
             >
-              <LotteryTable page={page} setPage={setPage} />
+              <LotteryTable
+                page={page}
+                setPage={setPage}
+                recruitId={recruitId}
+              />
             </LotteriesFetcher>
           </AsyncBoundaryWithQuery>
         </If>
