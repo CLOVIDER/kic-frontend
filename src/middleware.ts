@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ACCESS_TOKEN, ROLE } from '@/constants'
 
-const protectedRoutes = ['/apply', '/apply/application', '/history', 'lottery']
+const protectedRoutes = ['/apply', '/apply/application', '/history', '/lottery']
 const publicRoutes = ['/login']
 
 export function middleware(request: NextRequest) {
@@ -29,7 +29,6 @@ export function middleware(request: NextRequest) {
   if (role !== 'ADMIN' && pathname.startsWith('/admin')) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
-
   return response
 }
 
