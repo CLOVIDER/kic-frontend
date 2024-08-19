@@ -76,7 +76,12 @@ export default function BlockNoteEditor({
 
   return (
     <div className="flex justify-start w-full">
-      <BlockNoteView editor={editor} theme="light" onChange={handleChange} />
+      <BlockNoteView
+        editor={editor}
+        theme="light"
+        onChange={handleChange}
+        className="flex-grow w-full"
+      />
     </div>
   )
 }

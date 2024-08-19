@@ -23,7 +23,12 @@ export default function BlockNoteViewer({
       {/* Ensure parent takes full height */}
       <div className="overflow-y-auto w-full">
         {/* Enable scrolling */}
-        <BlockNoteView editor={editor} editable={false} theme="light" />
+        <BlockNoteView
+          editor={editor}
+          editable={false}
+          theme="light"
+          className="flex-grow w-full"
+        />
       </div>
     </div>
   )
