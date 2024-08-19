@@ -8,6 +8,7 @@ import CheckboxWithLabel from './common/CheckboxWithLabel'
 import FileUploadButton from './common/FileUploadButton'
 import { truncateFileName } from './utils'
 import { FileInfo, getFileInfoFromUrl } from '../api/getFile'
+// import SubmitModal from './SubmitModal'
 
 export default function RightSection2({
   onPrevious,
@@ -78,36 +79,29 @@ export default function RightSection2({
   const handleSubmit = useCallback(async () => {
     let validationPassed = true
 
-    for (const [key, value] of Object.entries(selectedItems)) {
-      if (value && !uploadedFiles[key]) {
-        toast.error(
-          `${items.find((item) => item.id === key)?.name}(을)를 위한 파일을 첨부해주세요`,
-          {
-            autoClose: 1000,
-            pauseOnHover: false,
-          },
-        )
+    for (const item of items) {
+      if (selectedItems[item.id] && !formData.fileUrls[item.key]) {
+        console.log('Missing file for key:', item.key)
+        toast.error(`${item.name}(을)를 위한 파일을 첨부해주세요`, {
+          autoClose: 1000,
+          pauseOnHover: false,
+        })
         validationPassed = false
       }
     }
-
     if (!validationPassed) {
       return
     }
 
     const data: Partial<ApplicationPayload> = {
-      ...Object.entries(selectedItems).reduce<Record<string, '0' | '1'>>(
-        (acc, [key, value]) => ({
-          ...acc,
-          [key]: value ? '1' : '0',
-        }),
-        {},
+      ...Object.fromEntries(
+        items.map((item) => [item.id, selectedItems[item.id] ? '1' : '0']),
       ),
       fileUrls: formData.fileUrls,
     }
 
     onSubmit(data)
-  }, [selectedItems, formData, uploadedFiles, items, onSubmit])
+  }, [selectedItems, formData, items, onSubmit])
 
   return (
     <div>
@@ -135,17 +129,19 @@ export default function RightSection2({
                       input.onchange = (e) => {
                         const file = (e.target as HTMLInputElement).files?.[0]
                         if (file) {
-                          handleFileUpload(item.id, file)
+                          handleFileUpload(item.key, file)
                         }
                       }
                       input.click()
                     }}
-                    buttonText={uploadedFiles[item.id] ? '📎 완료' : '📎 파일'}
-                    isUploading={isUploading[item.id]}
+                    buttonText={
+                      formData.fileUrls[item.key] ? '📎 완료' : '📎 파일'
+                    }
+                    isUploading={isUploading[item.key]}
                   />
                 </div>
                 <div className="ml-10 mt-2 flex items-center justify-between h-21">
-                  {uploadedFiles[item.key] && (
+                  {formData.fileUrls[item.key] && (
                     <>
                       <div className="flex-1 mr-2 overflow-hidden">
                         <span className="text-sm truncate block">
@@ -187,6 +183,16 @@ export default function RightSection2({
           임시저장
         </Button>
         <div className="w-[8px]" />
+        {/* <SubmitModal formData={formData} onSubmit={handleSubmit}>
+          {(onOpen) => (
+            <Button
+              onClick={onOpen}
+              className="ml-10 w-[98px] h-[31px] bg-[#ffb74d] font-bold text-white rounded-full text-sm"
+            >
+              제출
+            </Button>
+          )}
+        </SubmitModal> */}
         <Button
           onClick={handleSubmit}
           className="ml-10 w-[98px] h-[31px] bg-[#ffb74d] font-bold text-white rounded-full text-sm"

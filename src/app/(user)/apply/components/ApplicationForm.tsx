@@ -109,6 +109,13 @@ export default function ApplicationForm() {
           }
 
           setUploadedFiles(preloadedFiles)
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            ...applicationData,
+            fileUrls: Object.fromEntries(
+              documents.map((doc) => [doc.documentType, doc.image]),
+            ),
+          }))
           console.log()
 
           // 체크박스 상태 초기화
@@ -170,10 +177,10 @@ export default function ApplicationForm() {
         }
       } catch (error) {
         console.error('Error fetching data:', error)
-        toast.error('데이터를 불러오는 데 실패했습니다.', {
-          autoClose: 1000,
-          pauseOnHover: false,
-        })
+        // toast.error('데이터를 불러오는 데 실패했습니다.', {
+        //   autoClose: 1000,
+        //   pauseOnHover: false,
+        // })
       } finally {
         setIsLoading(false)
       }
@@ -188,10 +195,10 @@ export default function ApplicationForm() {
         const data = (await getRecruitData()) as RecruitInfo[]
         setRecruitData(data)
       } catch (error) {
-        toast.error('Error fetching recruit data', {
-          autoClose: 1000,
-          pauseOnHover: false,
-        })
+        // toast.error('Error fetching recruit data', {
+        //   autoClose: 1000,
+        //   pauseOnHover: false,
+        // })
       }
     }
     fetchRecruitData()
@@ -212,19 +219,21 @@ export default function ApplicationForm() {
 
   // 수정된 handleSubmit 함수
   const handleSubmit = async (data: Partial<ApplicationPayload>) => {
+    console.log('Before submit - formData:', formData)
+    console.log('Before submit - selectedItems:', selectedItems)
+
     const childrenRecruitList = children
       .filter((child) => child.name && Object.keys(child.classes).length > 0)
       .map((child) => ({
         childNm: child.name,
-        recruitIds: Object.values(child.classes).map(
-          (recruitId) => parseInt(recruitId, 10), // recruitId를 숫자로 변환하여 사용
+        recruitIds: Object.values(child.classes).map((recruitId) =>
+          parseInt(recruitId, 10),
         ),
       }))
 
     const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
       (acc, [key, url]) => {
         if (typeof url === 'string' && url) {
-          // url이 string인지 확인
           acc[key] = url
         }
         return acc
@@ -240,6 +249,8 @@ export default function ApplicationForm() {
       fileUrls: selectedImageUrls,
     }
 
+    console.log('Final data for submission:', finalData)
+
     try {
       if (applicationId !== null) {
         await editApplication(finalData, applicationId)
@@ -251,7 +262,6 @@ export default function ApplicationForm() {
         onClose: () => router.push('/'),
         pauseOnHover: false,
       })
-      // 성공 처리 로직
     } catch (error) {
       toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
         autoClose: 1000,
