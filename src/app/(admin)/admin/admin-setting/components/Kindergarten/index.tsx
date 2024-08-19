@@ -57,7 +57,7 @@ export default function Kindergarten() {
 
             <div className="flex flex-row px-10 my-10 text-14 text-[#666666]">
               <p className="w-260">분반 이름</p>
-              <p>모집인원</p>
+              <p className="w-full">모집 인원</p>
             </div>
             <div className="p-5">
               {mergedClasses(kIndex).map(({ ageClass, recruitCnt }) => (

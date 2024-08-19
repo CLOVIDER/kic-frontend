@@ -28,19 +28,24 @@ type UseKindergartenReturn = {
 
 export const useKindergarten = (): UseKindergartenReturn => {
   const { settingData, setSettingData } = useSettingContext()
-  const { kindergartenClassInfoList } = settingData
+  const {
+    kindergartenClassInfoList = [{ kindergartenName: '', classInfoList: [] }],
+    isCreated,
+  } = settingData
 
   const kindergartens = kindergartenClassInfoList.map((info, index) => ({
     kindergartenId: index,
     kindergartenNm: info.kindergartenName,
   }))
   const [classes, setClasses] = useState<ClassInfo[][]>(
-    kindergartenClassInfoList.map((data) =>
-      data.classInfoList.map((cls) => ({
-        ageClass: cls.ageClass,
-        recruitCnt: cls.recruitCnt,
-      })),
-    ),
+    isCreated
+      ? kindergartenClassInfoList.map((data) =>
+          data.classInfoList.map((cls) => ({
+            ageClass: cls.ageClass,
+            recruitCnt: cls.recruitCnt,
+          })),
+        )
+      : [[]],
   )
 
   const addClass = (index: number): void => {
