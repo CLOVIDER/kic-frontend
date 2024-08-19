@@ -38,7 +38,7 @@ export default function Page() {
               className="cursor-pointer w-120 h-33 bg-[#FEC46D] uppercase text-[white] flex justify-center items-center rounded-20"
             >
               <div className="flex justify-center items-center gap-10">
-                <p>ALL</p>
+                <p>{filterMAP[filter]}</p>
                 <DropdownIcon />
               </div>
             </DropdownTrigger>
@@ -46,7 +46,10 @@ export default function Page() {
             <DropdownMenu>
               {filterStatus.map((status) => (
                 <DropdownItem
-                  onClick={() => setFilter(status)}
+                  onClick={() => {
+                    setFilter(status)
+                    setPage(1)
+                  }}
                   key={status}
                   className="text-center"
                 >

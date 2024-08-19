@@ -1,6 +1,6 @@
 'use client'
 
-import { DropdownIcon, Input, Search } from '@/components'
+import { DropdownIcon, If, Input, Search } from '@/components'
 import {
   Dropdown,
   DropdownItem,
@@ -18,16 +18,13 @@ export default function Page() {
   const [page, setPage] = useState<number>(1)
   const [searchInput, setSearchInput] = useState<string>('')
   const [kindergartenId, setKindergartenId] = useState<string>(
-    kindergartens[0].kindergartenIds[0],
-  )
-  const [recruitId, setRecruitId] = useState<number>(
-    kindergartens[0].recruitIds[0],
+    kindergartens[0]?.kindergartenIds[0] || '',
   )
   const [classValue, setClassValue] = useState<string>(
-    kindergartens[0].ageClasses[0],
+    kindergartens[0]?.ageClasses[0] || 0,
   )
   const [kindergartenName, setKindergartenName] = useState<string>(
-    kindergartens[0].kindergartenNm,
+    kindergartens[0]?.kindergartenNm || '선택',
   )
   const deferredSearchInput = useDeferredValue(searchInput)
 
@@ -37,7 +34,7 @@ export default function Page() {
         <div className="flex items-center gap-18">
           <h1 className="text-20 font-bold">추첨 목록</h1>
 
-          <Dropdown>
+          <Dropdown isDisabled={kindergartens.length < 1}>
             <DropdownTrigger
               as="button"
               className="cursor-pointer w-210 h-33 bg-[#FEC46D] uppercase text-[white] flex justify-center items-center rounded-20"
@@ -54,10 +51,9 @@ export default function Page() {
                 ({ kindergartenNm, recruitIds, ageClasses, kindergartenIds }) =>
                   recruitIds.map((rId, index) => (
                     <DropdownItem
-                      key={`${kindergartenNm} ${recruitId} ${ageClasses[index]}`}
+                      key={`${kindergartenNm} ${rId} ${ageClasses[index]}`}
                       onClick={() => {
                         setKindergartenName(kindergartenNm)
-                        setRecruitId(recruitIds[index])
                         setKindergartenId(kindergartenIds[index])
                         setClassValue(ageClasses[index])
                       }}
@@ -72,6 +68,7 @@ export default function Page() {
         </div>
 
         <Input
+          disabled={kindergartens.length < 1}
           value={searchInput}
           onValueChange={setSearchInput}
           wrapperClassName="w-167 flex items-center px-14 rounded-42 border-[#FFAB2D] border-1"
@@ -82,16 +79,24 @@ export default function Page() {
       </header>
 
       <section className="w-full h-[505px] rounded-20 border-1 border-[#BDB6B6]">
-        <AsyncBoundaryWithQuery>
-          <LotteriesFetcher
-            kindergartenId={kindergartenId}
-            page={page - 1}
-            classValue={classValue}
-            nameKo={deferredSearchInput}
-          >
-            <LotteryTable page={page} setPage={setPage} />
-          </LotteriesFetcher>
-        </AsyncBoundaryWithQuery>
+        <If condition={kindergartens.length < 1}>
+          <div className="font-semibold flex justify-center items-center h-full text-24">
+            신청자 목록이 없어요..🤣
+          </div>
+        </If>
+
+        <If condition={kindergartens.length >= 1}>
+          <AsyncBoundaryWithQuery>
+            <LotteriesFetcher
+              kindergartenId={kindergartenId}
+              page={page - 1}
+              classValue={classValue}
+              nameKo={deferredSearchInput}
+            >
+              <LotteryTable page={page} setPage={setPage} />
+            </LotteriesFetcher>
+          </AsyncBoundaryWithQuery>
+        </If>
       </section>
     </section>
   )

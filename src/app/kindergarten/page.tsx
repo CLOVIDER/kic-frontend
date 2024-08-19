@@ -4,13 +4,15 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardBody, CardHeader } from '@nextui-org/react'
-import { CallIcon, ClockIcon, HomeIcon, If } from '@/components/common'
+import { Button, CallIcon, ClockIcon, HomeIcon, If } from '@/components/common'
 import Cookies from 'js-cookie'
 import { ROLE } from '@/constants'
+import { useRouter } from 'next/navigation'
 import { useKindergartensContext } from './fetcher/KindergartensFetcher'
 
 export default function Page() {
   const { kindergartens } = useKindergartensContext()
+  const { back } = useRouter()
   const isAdmin = Cookies.get(ROLE) === 'ADMIN'
 
   return (
@@ -23,12 +25,12 @@ export default function Page() {
           exit={{ y: 100 }}
           className="absolute px-40 justify-between w-full right-5 top-[-10px] flex gap-12"
         >
-          <Link
-            href="/kindergarten"
-            className="w-81 h-35 py-5 text-[#FFAB2D] bg-white border-[#FFAB2D] border-1 rounded-16 flex justify-center items-center"
+          <Button
+            onClick={back}
+            className="w-81 h-35 py-5 text-[#FFAB2D] bg-white border-[#FFAB2D] border-1 rounded-16 text-[16px] flex justify-center items-center"
           >
             돌아가기
-          </Link>
+          </Button>
 
           <If condition={isAdmin}>
             <Link
