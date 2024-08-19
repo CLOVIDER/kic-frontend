@@ -11,10 +11,12 @@ import {
 } from '@/components'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import { useRouter } from 'next/navigation'
+import { handleApplyClick } from '@/hooks/useApplyClick'
 import HomeFallback from './components/HomeFallback'
 
 export default function Home() {
-  const { push } = useRouter()
+  const router = useRouter()
+  const useApplyClick = () => handleApplyClick(router)
 
   return (
     <main className="flex flex-row bg-[#FBFBFB] h-screen">
@@ -24,14 +26,14 @@ export default function Home() {
 
       <div className="mt-40 ml-40 w-1100">
         <CompanyLogo />
-        <div className="relative pl-110 pt-150 h-600">
+        <div className="relative w-900 pl-110 pt-150 h-600">
           <AsyncBoundaryWithQuery pendingFallback={<HomeFallback />}>
             <StatusBox>
               <CompetitionRate />
               <Button
                 className="absolute z-10 left-570 top-300 w-auto px-20 h-40 bg-[#000000] !rounded-13 !text-15 text-white whitespace-nowrap"
                 rightIcon={<Right width="20" />}
-                onClick={() => push('/apply')}
+                onClick={useApplyClick}
               >
                 신청하기
               </Button>

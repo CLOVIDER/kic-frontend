@@ -14,25 +14,12 @@ import {
   Person,
   Talk,
 } from '@/components/common/Icons'
-import { getApplicationData } from '@/app/(user)/apply/api'
+import { handleApplyClick } from '@/hooks/useApplyClick'
 
 export default function Navigator() {
   const pathname = usePathname()
   const router = useRouter()
-
-  const handleApplyClick = async () => {
-    try {
-      const applicationStatus = await getApplicationData()
-
-      if (applicationStatus.id === null) {
-        router.push('/apply')
-      } else {
-        router.push(`/apply/application?isTemp=${applicationStatus.isTemp}`)
-      }
-    } catch (error) {
-      console.error('Error checking application status:', error)
-    }
-  }
+  const useApplyClick = () => handleApplyClick(router)
 
   const createRoute = (
     label: string,
@@ -53,7 +40,7 @@ export default function Navigator() {
   const routes = useMemo(() => {
     return [
       createRoute('어린이집 정보', '/kindergarten', <Home />),
-      createRoute('신청하기', '#', <Lightning />, handleApplyClick),
+      createRoute('신청하기', '#', <Lightning />, useApplyClick),
       createRoute('신청결과', '/lottery', <Graph />),
       createRoute('신청내역', '/history', <Person />),
       createRoute('공지사항', '/notice', <Boxes />),
