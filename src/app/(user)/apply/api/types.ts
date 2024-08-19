@@ -32,6 +32,7 @@ export interface RecruitInfo {
 }
 
 export interface ApplicationStatus {
+  isTemp: 'APPLIED' | 'TEMP'
   id: number
   isSingleParent: '0' | '1' // Character 타입에 맞추어 문자열로 정의
   childrenCnt: number
