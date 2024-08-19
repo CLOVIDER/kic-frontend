@@ -21,7 +21,6 @@ export default function AnswerClient() {
   const [answer, setContent] = useState<string>('')
   const [isLoading, setIsLoading] = useState(true)
   const [errorMsg, setError] = useState<string | null>(null)
-  // const [initialEditorContent] = useState<PartialBlock[] | undefined>(undefined)
   const router = useRouter()
 
   const domainName = 'qna'
@@ -29,27 +28,24 @@ export default function AnswerClient() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        toast.info(`Starting to fetch QnA detail for ID:${id}`)
+        toast.info(`불러오기 성공`)
         const response = await fetchQnaDetail(Number(id))
-        toast.info(`QnA Detail fetched successfully:${response}`)
         setQnaData(response.result)
 
         const answerResponse = await getQnaAnswer(Number(id))
-        toast.info(`QnA Answer fetched successfully:${answerResponse}`)
+
         if (answerResponse !== null) {
           setContent(answerResponse.answer)
         } else {
           toast.warn('Answer not found in the response')
           setContent('') // Set to empty string or handle as needed
         }
-
-        setIsLoading(false)
-        toast.info('Loading state set to false')
       } catch (err) {
         toast.error(`Error during fetch:${err}`)
         setError(
           err instanceof Error ? err.message : 'An unknown error occurred',
         )
+      } finally {
         setIsLoading(false)
       }
     }

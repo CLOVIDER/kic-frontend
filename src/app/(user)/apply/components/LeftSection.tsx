@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { EmployeeInfo, getEmployeeData } from '../api'
 
 export default function LeftSection() {
@@ -35,6 +36,12 @@ export default function LeftSection() {
 
   return (
     <div className="flex flex-col items-center">
+      <div className="w-full">
+        <Link href="/" className="bg-[#ffaa2c] p-3 rounded-3 text-white">
+          뒤로가기
+        </Link>
+      </div>
+
       <div className="font-bold text-[31px]">
         <span className="text-[#202020]">안녕하세요 </span>
         <span className="text-[#ffaa2c]">{nameKo}</span>
