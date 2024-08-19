@@ -31,15 +31,13 @@ export default function StatusBox({
   return (
     <div
       className={cn(
-        'w-[795px] rounded-32 bg-gradient-01 px-50 flex flex-col pt-10 pb-30 font-sans shadow-sm',
+        'w-auto whitespace-nowrap rounded-32 bg-gradient-01 px-50 flex flex-col pt-10 pb-30 font-sans shadow-sm',
         className,
       )}
     >
       {recruitStatus === '모집없음' ? (
-        <div className="flex flex-row gap-20 h-80">
-          <div className="text-35 font-medium">
-            현재 진행중인 공고가 없습니다.
-          </div>
+        <div className="flex flex-row gap-20 h-80 text-35 font-medium items-center">
+          현재 진행중인 공고가 없습니다.
         </div>
       ) : (
         <div className="flex flex-col relative pb-20 mb-20">

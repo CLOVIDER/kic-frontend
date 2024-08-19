@@ -6,7 +6,7 @@ import HistoryTable from './components/HistoryTable'
 
 export default function History() {
   return (
-    <div className="flex flex-col w-full mx-200 overflow-y-auto">
+    <div className="flex flex-col items-center w-[1000px] mx-100 overflow-y-auto">
       <section className="relative flex flex-col items-start">
         <AsyncBoundaryWithQuery>
           <StatusBox className="bg-[#FFE4A3] border border-[#A0A5A9] w-500 h-auto z-20 absolute !rounded-16 shadow-sm pt-0 pb-0" />
