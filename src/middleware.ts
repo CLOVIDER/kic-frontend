@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ACCESS_TOKEN, ROLE } from '@/constants'
 
-const protectedRoutes = ['/apply', '/apply/application']
+const protectedRoutes = ['/apply', '/apply/application', '/history', 'lottery']
 const publicRoutes = ['/login']
 
 export function middleware(request: NextRequest) {
@@ -19,15 +19,11 @@ export function middleware(request: NextRequest) {
   }
 
   if (!token && protectedRoutes.includes(pathname)) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  if (token && publicRoutes.includes(pathname)) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
+  if (publicRoutes.includes(pathname)) {
+    return response
   }
 
   if (role !== 'ADMIN' && pathname.startsWith('/admin')) {

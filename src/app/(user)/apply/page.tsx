@@ -1,4 +1,3 @@
-import { ToastContainer } from 'react-toastify'
 import LeftSection from './components/LeftSection'
 import ApplicationForm from './components/ApplicationForm'
 import 'react-toastify/dist/ReactToastify.css'
@@ -8,7 +7,6 @@ export default function Page() {
     <div className="flex flex-row justify-center gap-220 mt-150 ml-190 w-full">
       <LeftSection />
       <ApplicationForm />
-      <ToastContainer />
     </div>
   )
 }

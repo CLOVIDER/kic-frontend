@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { fetchQnas, QnaItem as ApiQnaItem } from '@/components/qna'
 import QnaList from './QnaList'
 
@@ -36,7 +36,7 @@ export default function QnaFetcher({
           qnaId: item.qnaId,
           title: item.title,
           question: item.question,
-          answer: item.answer,
+          isAnswerPresent: item.isAnswerPresent,
           isVisibility: item.isVisibility,
           createdAt: item.createdAt,
           writerName: item.writerName,
@@ -56,7 +56,9 @@ export default function QnaFetcher({
   return (
     <div>
       {error && <div>{error}</div>}
-      <QnaList paginatedNotices={qnas} />
+      <Suspense>
+        <QnaList paginatedNotices={qnas} />
+      </Suspense>
     </div>
   )
 }

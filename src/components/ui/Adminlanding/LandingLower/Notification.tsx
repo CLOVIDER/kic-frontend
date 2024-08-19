@@ -24,7 +24,7 @@ export default function Notification() {
             key={noticeId}
             className="mb-4 flex flex-row gap-10 whitespace-nowrap items-cente text-11 font-semiboldr"
           >
-            <p className="pt-2 w-14">{noticeId}</p>
+            <p className="pt-2 w-auto">{noticeId}</p>
             <h3 className="text-14 w-200 overflow-hidden text-ellipsis ">
               {title}
             </h3>

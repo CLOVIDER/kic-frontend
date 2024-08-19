@@ -64,41 +64,45 @@ export default function HistoryTable() {
   const { history } = useHistoryContext()
 
   return (
-    <div className="">
+    <div>
       <h1 className="text-20 mt-50 pl-5">▼ 지난 추첨 내역</h1>
-      <Table
-        classNames={{
-          wrapper: 'shadow-sm rounded py-30',
-          thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
-          th: 'bg-transparent h-full',
-        }}
-      >
-        <TableHeader
-          columns={columns}
-          className="flex items-center font-semibold"
+      {history && history.length > 0 ? (
+        <Table
+          classNames={{
+            wrapper: 'shadow-sm rounded py-30',
+            thead: 'h-full border-b-2 border-[#F1F1F3] h-35',
+            th: 'bg-transparent h-full',
+          }}
         >
-          {(column) => (
-            <TableColumn
-              className="text-center font-semibold text-[14px]"
-              key={column.uid}
-            >
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
+          <TableHeader
+            columns={columns}
+            className="flex items-center font-semibold"
+          >
+            {(column) => (
+              <TableColumn
+                className="text-center font-semibold text-[14px]"
+                key={column.uid}
+              >
+                {column.name}
+              </TableColumn>
+            )}
+          </TableHeader>
 
-        <TableBody items={history}>
-          {(item) => (
-            <TableRow key={item.lotteryId} className="h-45">
-              {(columnKey) => (
-                <TableCell className="text-center">
-                  {renderCell(item, columnKey)}
-                </TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+          <TableBody items={history}>
+            {(item) => (
+              <TableRow key={item.lotteryId} className="h-45">
+                {(columnKey) => (
+                  <TableCell className="text-center">
+                    {renderCell(item, columnKey)}
+                  </TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      ) : (
+        <p className="text-center mt-100">지난 신청 내역이 없습니다.</p>
+      )}
     </div>
   )
 }

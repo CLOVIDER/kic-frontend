@@ -36,13 +36,6 @@ export default function MailInput({ id }: { id: string }) {
           확인하기
         </Button>
       </form>
-
-      <div className="w-full mt-52 text-13 flex gap-4 justify-center">
-        <span className="font-semibold">메일을 못받으셨나요?</span>
-        <span className="font-bold text-[#FFAB2D] underline underline-offset-[3px]">
-          재전송하기
-        </span>
-      </div>
     </section>
   )
 }

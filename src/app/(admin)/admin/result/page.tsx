@@ -1,6 +1,6 @@
 'use client'
 
-import { DropdownIcon, Input, Search } from '@/components'
+import { DropdownIcon, If, Input, Search } from '@/components'
 import {
   Dropdown,
   DropdownItem,
@@ -9,23 +9,25 @@ import {
 } from '@nextui-org/react'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import { useDeferredValue, useState } from 'react'
-import { useKindergartensContext } from '@/app/kindergarten/fetcher/KindergartensFetcher'
 import LotteriesFetcher from './fetcher/ResultApplicationsFetcher'
 import LotteryTable from './LotteryTable'
+import { useKindergartenWthRecruitIdContext } from './fetcher/KindergartenWithRecruitIdFetcher'
 
 export default function Page() {
-  const { kindergartens } = useKindergartensContext()
+  const { kindergartens } = useKindergartenWthRecruitIdContext()
   const [page, setPage] = useState<number>(1)
   const [searchInput, setSearchInput] = useState<string>('')
-  const [kindergartenId, setKindergartenId] = useState<number>(
-    kindergartens[0].kindergartenId,
+  const [kindergartenId, setKindergartenId] = useState<string>(
+    kindergartens[0]?.kindergartenIds[0] || '',
   )
-  const [classValue, setClassValue] = useState<string>('1')
+  const [classValue, setClassValue] = useState<string>(
+    kindergartens[0]?.ageClasses[0] || 0,
+  )
+  const [recruitId, setRecruitId] = useState<number>(
+    kindergartens[0]?.recruitIds[0] || 0,
+  )
   const [kindergartenName, setKindergartenName] = useState<string>(
-    kindergartens[0].kindergartenNm,
-  )
-  const [className, setClassName] = useState<string>(
-    kindergartens[0].kindergartenClass[0].className,
+    kindergartens[0]?.kindergartenNm || '선택',
   )
   const deferredSearchInput = useDeferredValue(searchInput)
 
@@ -33,48 +35,44 @@ export default function Page() {
     <section className="w-[738px] flex flex-col gap-12">
       <header className="flex justify-between items-center">
         <div className="flex items-center gap-18">
-          <h1 className="text-20 font-bold">신청자 목록</h1>
+          <h1 className="text-20 font-bold">추첨 목록</h1>
 
-          <Dropdown>
+          <Dropdown isDisabled={kindergartens.length < 1}>
             <DropdownTrigger
               as="button"
               className="cursor-pointer w-210 h-33 bg-[#FEC46D] uppercase text-[white] flex justify-center items-center rounded-20"
             >
               <div className="flex justify-center items-center px-10">
-                {`${kindergartenName} ${className} ${classValue}세`.trim()}
+                {`${kindergartenName} ${classValue}`.trim()}
                 <p />
                 <DropdownIcon />
               </div>
             </DropdownTrigger>
 
             <DropdownMenu>
-              {kindergartens.flatMap((kindergarten) =>
-                kindergarten.kindergartenClass.map(
-                  ({
-                    className: kindergartenClassName,
-                    ageClass,
-                    ageClassString,
-                  }) => (
+              {kindergartens.flatMap(
+                ({ kindergartenNm, recruitIds, ageClasses, kindergartenIds }) =>
+                  recruitIds.map((rId, index) => (
                     <DropdownItem
-                      key={`${kindergartenClassName}`}
+                      key={`${kindergartenNm} ${rId} ${ageClasses[index]}`}
                       onClick={() => {
-                        setKindergartenName(kindergarten.kindergartenNm)
-                        setKindergartenId(kindergarten.kindergartenId)
-                        setClassValue(ageClass)
-                        setClassName(kindergartenClassName)
+                        setKindergartenName(kindergartenNm)
+                        setKindergartenId(kindergartenIds[index])
+                        setClassValue(ageClasses[index])
+                        setRecruitId(recruitIds[index])
                       }}
                       className="text-center text-13"
                     >
-                      {`${kindergarten.kindergartenNm}  ${kindergartenClassName} ${ageClassString}`}
+                      {`${kindergartenNm}  ${ageClasses[index]}`}
                     </DropdownItem>
-                  ),
-                ),
+                  )),
               )}
             </DropdownMenu>
           </Dropdown>
         </div>
 
         <Input
+          disabled={kindergartens.length < 1}
           value={searchInput}
           onValueChange={setSearchInput}
           wrapperClassName="w-167 flex items-center px-14 rounded-42 border-[#FFAB2D] border-1"
@@ -85,16 +83,28 @@ export default function Page() {
       </header>
 
       <section className="w-full h-[505px] rounded-20 border-1 border-[#BDB6B6]">
-        <AsyncBoundaryWithQuery>
-          <LotteriesFetcher
-            kindergartenId={kindergartenId}
-            page={page - 1}
-            classValue={classValue}
-            accountId={deferredSearchInput}
-          >
-            <LotteryTable page={page} setPage={setPage} />
-          </LotteriesFetcher>
-        </AsyncBoundaryWithQuery>
+        <If condition={kindergartens.length < 1}>
+          <div className="font-semibold flex justify-center items-center h-full text-24">
+            신청자 목록이 없어요..🤣
+          </div>
+        </If>
+
+        <If condition={kindergartens.length >= 1}>
+          <AsyncBoundaryWithQuery>
+            <LotteriesFetcher
+              kindergartenId={kindergartenId}
+              page={page - 1}
+              classValue={classValue}
+              nameKo={deferredSearchInput}
+            >
+              <LotteryTable
+                page={page - 1}
+                setPage={setPage}
+                recruitId={recruitId}
+              />
+            </LotteriesFetcher>
+          </AsyncBoundaryWithQuery>
+        </If>
       </section>
     </section>
   )

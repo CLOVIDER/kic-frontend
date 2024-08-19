@@ -43,7 +43,7 @@ export default function LeftSection() {
       <p className="mt-10 font-medium text-[20px] text-center text-[#202020]">
         아래 정보와 다른 부분이 있다면
         <br />
-        채널톡을 통해 관리자에게 문의해주세요.
+        관리자에게 문의해주세요.
       </p>
       <Image
         className="mt-50"

@@ -9,7 +9,5 @@ export const metadata: Metadata = {
 type LayoutProps = PropsWithChildren<unknown>
 
 export default function Layout({ children }: LayoutProps) {
-  return (
-    <main className="h-full flex justify-center items-center">{children}</main>
-  )
+  return <main className="h-full flex justify-center bg-white">{children}</main>
 }

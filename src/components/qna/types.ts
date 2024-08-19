@@ -2,7 +2,7 @@ export interface QnaItem {
   qnaId: number
   title: string
   question: string
-  answer: string | null
+  isAnswerPresent: boolean
   isVisibility: string
   writerName: string
   createdAt: string

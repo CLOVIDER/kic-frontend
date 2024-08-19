@@ -17,3 +17,9 @@ export const postEmailsVerify = ({
     url: '/api/emails/verify',
     data: { accountId, authCode },
   })
+
+export const patchPassword = (password: string) =>
+  http.patch({
+    url: `/api/employees`,
+    data: { password },
+  })
