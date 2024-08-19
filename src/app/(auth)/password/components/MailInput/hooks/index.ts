@@ -36,7 +36,8 @@ export default function useMail(id: string) {
   )
 
   const handleVerifyEmails = useCallback(() => {
-    mutate(inputRefs.current.join(''))
+    const nums = inputRefs?.current.map(({ value }) => value).join('')
+    mutate(nums)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputRefs])
 

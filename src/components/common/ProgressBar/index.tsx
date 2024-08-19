@@ -8,6 +8,8 @@ interface ProgressBarProps {
 }
 
 export default function ProgressBar({ label, value, bar }: ProgressBarProps) {
+  const displayValue = Number.isNaN(value) ? 0 : value
+
   return (
     <div className="flex items-center gap-10 h-20">
       <div className="whitespace-nowrap text-13 text-[#6D6C6C] font-semibold">
@@ -19,7 +21,7 @@ export default function ProgressBar({ label, value, bar }: ProgressBarProps) {
           style={{ width: `${value * 100}%` }}
         />
         <span className="ml-4 font-['Cairo'] font-bold text-[#6d6c6c] text-20">
-          {value.toFixed(1)}
+          {displayValue.toFixed(1)}
         </span>
       </div>
     </div>

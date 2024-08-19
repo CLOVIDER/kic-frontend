@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { EmployeeInfo, getEmployeeData } from '../api'
 
 export default function LeftSection() {
@@ -35,6 +36,12 @@ export default function LeftSection() {
 
   return (
     <div className="flex flex-col items-center">
+      <div className="w-full">
+        <Link href="/" className="bg-[#ffaa2c] p-3 rounded-3 text-white">
+          뒤로가기
+        </Link>
+      </div>
+
       <div className="font-bold text-[31px]">
         <span className="text-[#202020]">안녕하세요 </span>
         <span className="text-[#ffaa2c]">{nameKo}</span>
@@ -43,7 +50,7 @@ export default function LeftSection() {
       <p className="mt-10 font-medium text-[20px] text-center text-[#202020]">
         아래 정보와 다른 부분이 있다면
         <br />
-        채널톡을 통해 관리자에게 문의해주세요.
+        관리자에게 문의해주세요.
       </p>
       <Image
         className="mt-50"

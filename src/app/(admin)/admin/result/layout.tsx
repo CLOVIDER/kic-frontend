@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import { StrictPropsWithChildren } from '@/type'
-import KindergartensFetcher from '@/app/kindergarten/fetcher/KindergartensFetcher'
+import { KindergartenWthRecruitIdFetcher } from './fetcher/KindergartenWithRecruitIdFetcher'
 
 export const metadata: Metadata = {
   title: '관리자 랜딩페이지',
@@ -11,7 +11,9 @@ export const metadata: Metadata = {
 export default function layout({ children }: StrictPropsWithChildren) {
   return (
     <AsyncBoundaryWithQuery>
-      <KindergartensFetcher>{children}</KindergartensFetcher>
+      <KindergartenWthRecruitIdFetcher>
+        {children}
+      </KindergartenWthRecruitIdFetcher>
     </AsyncBoundaryWithQuery>
   )
 }

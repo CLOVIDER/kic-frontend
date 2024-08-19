@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Button } from '@nextui-org/react'
 import { useParams, useRouter } from 'next/navigation'
 import { fetchQnaDetail, QnaItem } from '@/components/qna'
-import QnaDetailFetcher from './components/QnaDetailFetcher'
+import QnaDetailFetcher from '@/components/common/qna/QnaDetailFetcher'
 
 export default function QnaDetailPage() {
   const { id } = useParams()

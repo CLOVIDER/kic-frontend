@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { fetchNotices, NoticeItem } from '@/components/common/notice/api'
 import NoticeList from './NoticeList'
 
@@ -45,7 +45,9 @@ export default function NoticeFetcher({
   return (
     <div>
       {error && <div>{error}</div>}
-      <NoticeList paginatedNotices={notices} />
+      <Suspense>
+        <NoticeList paginatedNotices={notices} />
+      </Suspense>
     </div>
   )
 }
