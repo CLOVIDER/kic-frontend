@@ -131,7 +131,11 @@ export default function LotteryTable({
                         isLoading={isPending}
                         onClick={() => {
                           postRecruit(recruitId, {
-                            onSuccess: () => {
+                            onSuccess: ({ message }) => {
+                              if (message === '이미 진행된 추첨입니다.') {
+                                toast('이미 진행된 추첨이에요.')
+                                return
+                              }
                               toast('추첨에 성공했어요.')
                             },
                           })
