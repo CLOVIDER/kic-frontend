@@ -20,6 +20,7 @@ import { FileInfo, getFileInfoFromUrl } from '../api/getFile'
 
 export default function ApplicationForm() {
   const [currentSection, setCurrentSection] = useState(1)
+  const [applicationId, setApplicationId] = useState<number | null>(null)
   const [formData, setFormData] = useState<ApplicationPayload>({
     isSingleParent: '0',
     childrenCnt: 0,
@@ -56,7 +57,6 @@ export default function ApplicationForm() {
     setFormData((prev) => ({ ...prev, [id]: value ? '1' : '0' }))
   }
   const [isLoading, setIsLoading] = useState(true)
-  const [applicationId] = useState<number | null>(null)
 
   const handleFileUpload = useCallback(
     (id: string, fileData: FileInfo) => {
@@ -117,6 +117,8 @@ export default function ApplicationForm() {
             ),
           }))
           console.log()
+
+          setApplicationId(applicationData.id)
 
           // 체크박스 상태 초기화
           setSelectedItems({

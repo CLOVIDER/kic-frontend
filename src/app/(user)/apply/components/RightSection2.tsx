@@ -210,12 +210,6 @@ export default function RightSection2({
             </Button>
           )}
         </SubmitModal>
-        {/* <Button
-          onClick={handleSubmit}
-          className="ml-10 w-[98px] h-[31px] bg-[#ffb74d] font-bold text-white rounded-full text-sm"
-        >
-          제출
-        </Button> */}
       </div>
     </div>
   )

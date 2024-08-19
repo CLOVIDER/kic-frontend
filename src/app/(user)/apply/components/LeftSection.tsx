@@ -2,12 +2,18 @@
 
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { Button } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 import { EmployeeInfo, getEmployeeData } from '../api'
 
 export default function LeftSection() {
   const [employeeData, setEmployeeData] = useState<EmployeeInfo | undefined>(
     undefined,
   )
+  const router = useRouter()
+  const onHome = () => {
+    router.push('/')
+  }
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -34,7 +40,7 @@ export default function LeftSection() {
   const ccStatus = isCouple ? 'O' : 'X'
 
   return (
-    <div className="flex w-500 flex-col items-center">
+    <div className="flex w-350 flex-col items-center">
       <div className="font-bold text-[31px]">
         <span className="text-[#202020]">안녕하세요 </span>
         <span className="text-[#ffaa2c]">{nameKo}</span>
@@ -62,6 +68,14 @@ export default function LeftSection() {
           <div>{formattedDate}</div>
           <div className="mt-22">{ccStatus}</div>
         </div>
+      </div>
+      <div className="mt-15">
+        <Button
+          onClick={onHome}
+          className="w-[98px] h-[31px] bg-white border border-[#fdba74] font-bold text-[#fb923c] rounded-full text-sm"
+        >
+          이전
+        </Button>
       </div>
     </div>
   )
