@@ -58,9 +58,14 @@ export default function SubmitModal({
                 {/* 추가 데이터 표시 */}
               </ModalBody>
               <ModalFooter>
-                <Button onClick={onClose}>돌아가기</Button>
                 <Button
-                  color="primary"
+                  onClick={onClose}
+                  className="mt-20 w-[98px] h-[31px] [background:linear-gradient(90deg,_rgba(255,_171,_45,_0.13),_rgba(153,_103,_27,_0.11))] border bg-[#fff] border-[#e6d5c5] font-bold text-[#fb923c] rounded-full text-sm"
+                >
+                  돌아가기
+                </Button>
+                <Button
+                  className="mt-20 ml-20 w-[98px] h-[31px] bg-[#ffb74d] font-bold text-white rounded-full text-sm"
                   onClick={() => {
                     onSubmit(formData)
                     onClose()

@@ -74,7 +74,7 @@ export default function LeftSection() {
           onClick={onHome}
           className="w-[98px] h-[31px] bg-white border border-[#fdba74] font-bold text-[#fb923c] rounded-full text-sm"
         >
-          이전
+          홈으로
         </Button>
       </div>
     </div>
