@@ -197,7 +197,11 @@ export default function RightSection2({
         </Button>
         <div className="w-[246px]" />
         <div className="w-[8px]" />
-        <SubmitModal formData={formData} onSubmit={handleSubmit}>
+        <SubmitModal
+          formData={formData}
+          uploadedFiles={uploadedFiles}
+          onSubmit={handleSubmit}
+        >
           {(onOpen) => (
             <Button
               onClick={onOpen}

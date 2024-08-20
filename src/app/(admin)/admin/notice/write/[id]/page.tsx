@@ -92,6 +92,7 @@ export default function WritePage() {
               imageUrls={setUploadedImageUrls}
               setContent={setContent}
               data={noticeData?.content}
+              enableImageUpload
             />
           )}
         </div>
