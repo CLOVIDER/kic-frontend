@@ -9,19 +9,20 @@ export type UseButtonProp = ButtonHTMLAttributes<HTMLButtonElement> & {
   ref?: ReactRef<HTMLButtonElement>
   leftIcon?: ReactNode
   rightIcon?: ReactNode
+  isLoading?: boolean
 }
 
 export function useButton(props: UseButtonProp) {
-  const { ref, onClick, disabled, className, ...otherProps } = props
+  const { ref, onClick, disabled, isLoading, className, ...otherProps } = props
   const domRef = useDOMRef(ref)
 
   const handleClick = useCallback(
     (e: MouseEvent<HTMLButtonElement>) => {
-      if (!disabled) {
+      if (!disabled || !isLoading) {
         onClick?.(e)
       }
     },
-    [disabled, onClick],
+    [disabled, onClick, isLoading],
   )
 
   const getButtonProps = useCallback(

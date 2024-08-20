@@ -41,6 +41,7 @@ export default function Page() {
     setNewAgeClass,
     classes,
     setClasses,
+    isPending,
   } = useCreate()
 
   return (
@@ -61,6 +62,7 @@ export default function Page() {
           </Link>
 
           <Button
+            isLoading={isPending}
             onClick={handleSubmit}
             className="w-81 h-35 py-5 text-white bg-white [background:linear-gradient(90deg,_#ffbb38,_#ffe39f)] rounded-16 flex justify-center items-center"
           >

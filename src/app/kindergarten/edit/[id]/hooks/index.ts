@@ -17,7 +17,7 @@ export default function useEdit(id: number) {
     kindergartenCapacity,
     kindergartenTime,
     kindergartenClass,
-  } = kindergartens[Number(id) - 1]
+  } = kindergartens.find(({ kindergartenId: kId }) => kId === Number(id))!
 
   const [name, setName] = useState<string>(kindergartenNm)
   const [addr, setAddr] = useState<string>(kindergartenAddr)

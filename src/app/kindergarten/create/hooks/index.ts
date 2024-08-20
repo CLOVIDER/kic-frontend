@@ -1,13 +1,14 @@
+import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { toast } from 'react-toastify'
-import { useRouter } from 'next/navigation'
 import {
   usePostKindergartenDetails,
   usePostImage,
 } from '../../edit/[id]/api/queries'
 
 export default function useCreate() {
-  const { mutate } = usePostKindergartenDetails()
+  const { mutate, isPending } = usePostKindergartenDetails()
+  const { push } = useRouter()
 
   const [name, setName] = useState<string>('')
   const [addr, setAddr] = useState<string>('')
@@ -26,7 +27,6 @@ export default function useCreate() {
     }>
   >([])
   const { mutateAsync: postImage } = usePostImage('kindergarten')
-  const { push } = useRouter()
 
   const handleImages = useCallback(
     async (newFile: File) => {
@@ -51,7 +51,11 @@ export default function useCreate() {
 
   const handleSubmit = useCallback(() => {
     if (!addr || !info || !name || !phone || !scale || !capacity || !time) {
-      alert('모든 값을 입력해주세요')
+      toast('모든 값을 입력해주세요.')
+      return
+    }
+    if (images.length < 1) {
+      toast('이미지를 추가해주세요.')
       return
     }
 
@@ -124,5 +128,6 @@ export default function useCreate() {
     setNewAgeClass,
     classes,
     setClasses,
+    isPending,
   }
 }
