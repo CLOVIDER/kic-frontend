@@ -23,7 +23,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
     kindergartenCapacity,
     kindergartenTime,
     kindergartenClass,
-  } = kindergartens[Number(id) - 1]
+  } = kindergartens.find(({ kindergartenId: kId }) => kId === Number(id))!
 
   return (
     <>

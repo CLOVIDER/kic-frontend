@@ -15,7 +15,7 @@ export const patchKindergartensDetails = (details: PatchKindergartensDetail) =>
 export const postKindergartensDetails = (
   details: Omit<PatchKindergartensDetail, 'kindergartenId'>,
 ) =>
-  http.post({
+  http.post<{ kindergartenId: number }>({
     url: '/api/admin/kindergartens',
     data: details,
   })
