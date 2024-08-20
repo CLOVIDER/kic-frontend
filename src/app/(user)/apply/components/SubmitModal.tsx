@@ -8,7 +8,8 @@ import {
   ModalHeader,
 } from '@nextui-org/react'
 import { ReactNode } from 'react'
-import { ApplicationPayload, RecruitInfo } from '../api'
+import { predata } from '@/type/application'
+import { ApplicationPayload } from '../api'
 import { FileInfo } from '../api/getFile'
 
 export default function SubmitModal({
@@ -16,28 +17,15 @@ export default function SubmitModal({
   uploadedFiles,
   onSubmit,
   children,
-  recruitData,
+  selectedLabels,
 }: {
   formData: ApplicationPayload
   uploadedFiles: Record<string, FileInfo>
   onSubmit: (data: Partial<ApplicationPayload>) => void
   children: (onOpen: () => void) => ReactNode
-  recruitData: RecruitInfo[]
+  selectedLabels: Record<string, Record<string, string>>
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const getKindergartenAndClass = (recruitId: number) => {
-    const kindergarten = recruitData.find((k) =>
-      k.recruitIds.includes(recruitId),
-    )
-    if (kindergarten) {
-      const classIndex = kindergarten.recruitIds.indexOf(recruitId)
-      return {
-        kindergartenName: kindergarten.kindergartenNm,
-        className: kindergarten.ageClasses[classIndex],
-      }
-    }
-    return { kindergartenName: '알 수 없음', className: '알 수 없음' }
-  }
 
   return (
     <>
@@ -65,43 +53,43 @@ export default function SubmitModal({
               <ModalBody>
                 <div>
                   <h2>아이 정보:</h2>
-                  {formData.childrenRecruitList &&
-                  formData.childrenRecruitList.length > 0 ? (
-                    formData.childrenRecruitList.map((child, index) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <div key={index}>
-                        <p>아이 이름: {child.childNm}</p>
-                        <p>신청한 어린이집 및 반:</p>
-                        <ul>
-                          {child.recruitIds && child.recruitIds.length > 0 ? (
-                            child.recruitIds.map((recruitId) => {
-                              const { kindergartenName, className } =
-                                getKindergartenAndClass(recruitId)
-                              return (
-                                <li key={recruitId}>
-                                  {kindergartenName}: {className}
-                                </li>
-                              )
-                            })
-                          ) : (
-                            <li>신청한 어린이집 없음</li>
-                          )}
-                        </ul>
-                      </div>
-                    ))
-                  ) : (
-                    <p>아이 정보 없음</p>
-                  )}
-                </div>
-                <div>
-                  <h2>첨부 파일:</h2>
-                  {Object.keys(uploadedFiles).map((key) => (
-                    <div key={key}>
+                  {formData.childrenRecruitList.map((child, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div key={index}>
+                      <p>아이 이름: {child.childNm}</p>
                       <p>
-                        {key}: {uploadedFiles[key]?.name || 'No file uploaded'}
+                        신청한 어린이집 및 반:{' '}
+                        {Object.entries(
+                          selectedLabels[child.childNm] || {},
+                        ).map(([kindergarten, className], idx) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <span key={idx}>
+                            {kindergarten} - {className}
+                            {idx <
+                            Object.keys(selectedLabels[child.childNm]).length -
+                              1
+                              ? ', '
+                              : ''}
+                          </span>
+                        ))}
                       </p>
                     </div>
                   ))}
+                </div>
+                <div>
+                  <h2>첨부 파일:</h2>
+                  {Object.keys(uploadedFiles).map((key) => {
+                    const itemName =
+                      predata.find((item) => item.key === key)?.name || key
+                    return (
+                      <div key={key}>
+                        <p>
+                          {itemName}:{' '}
+                          {uploadedFiles[key]?.name || 'No file uploaded'}
+                        </p>
+                      </div>
+                    )
+                  })}
                 </div>
                 <div>
                   <h2>선택한 항목:</h2>

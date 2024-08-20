@@ -2,12 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { RightSection2Props, Item, predata } from '@/type/application'
 import { Button } from '@nextui-org/react'
-import {
-  ApplicationPayload,
-  uploadDocument,
-  KindergartenInfo,
-  getRecruitInfo,
-} from '../api'
+import { ApplicationPayload, uploadDocument } from '../api'
 import FormSection from './common/FormSection'
 import CheckboxWithLabel from './common/CheckboxWithLabel'
 import FileUploadButton from './common/FileUploadButton'
@@ -26,28 +21,20 @@ export default function RightSection2({
   onDeleteFile,
   selectedItems,
   onCheckboxChange,
+  selectedLabels, // 추가된 부분
 }: RightSection2Props) {
   const [isUploading, setIsUploading] = useState<Record<string, boolean>>({})
   const [items] = useState(predata as Item[])
-  const [recruitData, setRecruitData] = useState<KindergartenInfo[]>([])
 
   useEffect(() => {
-    const fetchRecruitData = async () => {
-      try {
-        const response = await getRecruitInfo()
-        if (response.result) {
-          setRecruitData(response.result.result)
-        } else {
-          console.error('Recruit data is undefined')
-          toast.error('어린이집 정보를 불러오는데 실패했습니다.')
+    predata.forEach((item) => {
+      if (formData.fileUrls[item.key]) {
+        if (!selectedItems[item.id]) {
+          onCheckboxChange(item.id, true)
         }
-      } catch (error) {
-        console.error('Error fetching recruit data:', error)
-        toast.error('어린이집 정보를 불러오는데 실패했습니다.')
       }
-    }
-    fetchRecruitData()
-  }, [])
+    })
+  }, [formData.fileUrls, selectedItems, onCheckboxChange])
 
   useEffect(() => {
     const updateFileInfo = async () => {
@@ -210,7 +197,7 @@ export default function RightSection2({
           formData={formData}
           uploadedFiles={uploadedFiles}
           onSubmit={handleSubmit}
-          recruitData={recruitData}
+          selectedLabels={selectedLabels} // 추가된 부분
         >
           {(onOpen) => (
             <Button
