@@ -37,6 +37,7 @@ export default function QnaFetcher({
         const fetchedQnas = response.result.content.map((item: ApiQnaItem) => ({
           qnaId: item.qnaId,
           title: item.title,
+          answer: item.answer,
           question: item.question,
           isAnswerPresent: item.isAnswerPresent,
           isVisibility: item.isVisibility,
