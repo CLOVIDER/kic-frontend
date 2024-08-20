@@ -5,7 +5,6 @@ import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { notices as dummyNotices } from '@/components/data/Notice'
 import Pagination from '@/components/common/Pagination'
-import { Button } from '@nextui-org/react'
 
 const ITEMS_PER_PAGE = 3
 
@@ -45,19 +44,12 @@ export default function AdminNoticeList() {
   }
 
   return (
-    <div className="h-full flex flex-col justify-center items-center">
-      <div className="w-[695px] h-[575px] flex flex-col items-start  rounded-xl">
-        <div className="flex flex-row h-39 justify-end items-center">
-          <p className="text-32 font-inter font-bold whitespace-nowrap">
+    <div className="absolute w-[1280px] h-[720px] bg-white flex-col flex justify-between">
+      <div className="w-[695px] h-[575px] mt-62 ml-292 rounded-xl overflow-hidden">
+        <div className="flex w-[742px] h-39">
+          <div className="w-[118px] h-39 text-32 font-inter font-bold">
             공지사항
-          </p>
-          <Button
-            type="button"
-            className="ml-540 mt-5 w-45 h-40 text-[30px] font-bold bg-[#FFE4A3] text-[#ffffff] rounded flex items-center justify-center"
-            onClick={() => router.push('/admin/notice/write')}
-          >
-            +
-          </Button>
+          </div>
         </div>
         <div className="mt-11 w-[695px] h-155">
           {paginatedNotices.map((notice) => (
@@ -103,6 +95,13 @@ export default function AdminNoticeList() {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+      <button
+        type="button"
+        className="absolute w-51 h-47 text-28 font-bold bg-[#FFE4A3] text-[#ffffff] rounded flex items-center justify-center z-50 top-[650px] left-[1100px]"
+        onClick={() => router.push('/admin/notice/write')}
+      >
+        +
+      </button>
     </div>
   )
 }

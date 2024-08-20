@@ -17,7 +17,7 @@ export default function CompetitionRate({ className }: { className?: string }) {
       )}
     >
       <div className="text-red-500 font-bold mb-4 flex items-center text-[#EA7465]">
-        <span className="mr-4">▼ </span>현재 경쟁률
+        <span className="mr-4">▼ </span> 실시간 경쟁률
       </div>
       <div className="ml-20 mt-10">
         {kindergartenClassList!.map(
