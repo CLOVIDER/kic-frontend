@@ -43,7 +43,7 @@ export default function WritePage() {
   }
 
   return (
-    <div className="absolute w-[1280px] h-[720px] flex justify-between">
+    <div className="w-[1280px] h-[720px] flex justify-between">
       <div className="w-[787px] h-[602px] mt-39 ml-256 border-1 border-solid border-[#00000014] rounded-xl overflow-hidden shadow-md">
         <div className="mt-22 ml-36 text-32 font-inter font-bold h-39">
           공지사항 작성

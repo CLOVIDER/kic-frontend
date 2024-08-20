@@ -40,6 +40,7 @@ export default function QnaFetcher({
           isVisibility: item.isVisibility,
           createdAt: item.createdAt,
           writerName: item.writerName,
+          answer: item.answer,
         }))
 
         setQnas(fetchedQnas)

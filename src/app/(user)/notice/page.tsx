@@ -16,12 +16,12 @@ export default function Page() {
   }
 
   return (
-    <div className="absolute w-[1280px] h-[720px] bg-white flex-col flex justify-between">
-      <div className="w-[695px] h-[575px] mt-62 ml-292 rounded-xl overflow-hidden">
+    <div className="h-full flex flex-col justify-center items-center">
+      <div className="w-[695px] h-[575px] flex flex-col items-start  rounded-xl">
         <div className="flex w-[742px] h-39">
-          <div className="w-118 h-39 text-32 font-inter font-bold">
+          <p className="text-32 font-inter font-bold whitespace-nowrap">
             공지사항
-          </div>
+          </p>
         </div>
         <NoticeFetcher
           currentPage={currentPage}
