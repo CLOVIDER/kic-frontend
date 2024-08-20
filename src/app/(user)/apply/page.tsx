@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useHomePage } from '@/app/(home)/components/api/queries'
 import { useRouter } from 'next/navigation'
 import LeftSection from './components/LeftSection'
@@ -9,14 +9,17 @@ import ApplicationForm from './components/ApplicationForm'
 export default function Page() {
   const router = useRouter()
   const { data } = useHomePage()
-
+  const [hasCheckedStatus, setHasCheckedStatus] = useState(false)
   useEffect(() => {
-    console.log(data)
-    if (data.recruitStatus === '모집없음') {
-      alert('신청기간이 아닙니다.')
-      router.push('/')
+    if (data?.recruitStatus && !hasCheckedStatus) {
+      console.log(data)
+      if (data.recruitStatus === '모집없음') {
+        alert('신청기간이 아닙니다.')
+        router.push('/')
+      }
+      setHasCheckedStatus(true)
     }
-  }, [data, router])
+  }, [data, hasCheckedStatus, router])
 
   if (data?.recruitStatus === '모집없음') {
     return null

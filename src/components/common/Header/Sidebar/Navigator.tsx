@@ -15,7 +15,7 @@ import {
   Person,
   Talk,
 } from '@/components/common/Icons'
-import { handleApplyClick } from '@/hooks/useApplyClick'
+import { useHandleApplyClick as handleApplyClick } from '@/hooks/useApplyClick'
 
 export default function Navigator() {
   const pathname = usePathname()
