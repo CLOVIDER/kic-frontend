@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import { RightSection1Props, Child, DropdownOption } from '@/type/application'
+import { toast } from 'react-toastify'
 import FormSection from './common/FormSection'
 import ChildInput from './common/ChildInput'
 import DropdownSelect from './common/DropdownSelect'
@@ -60,6 +61,17 @@ export default function RightSection1({
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault()
+      const isAllNamesFilled = children.every(
+        (child) => child.name.trim() !== '',
+      )
+
+      if (!isAllNamesFilled) {
+        toast.error('모든 아이의 이름을 입력해주세요.', {
+          autoClose: 1000,
+          pauseOnHover: false,
+        })
+        return
+      }
       const data: Partial<ApplicationPayload> = {
         childrenRecruitList: children.map((child) => ({
           childNm: child.name,

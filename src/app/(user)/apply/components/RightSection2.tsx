@@ -87,7 +87,10 @@ export default function RightSection2({
         onCheckboxChange(matchedItem.id, true)
       }
     } catch (error) {
-      toast.error('파일 업로드 에러 발생')
+      toast.error('파일 업로드 에러 발생', {
+        autoClose: 1000,
+        pauseOnHover: false,
+      })
     } finally {
       setIsUploading((prev) => ({ ...prev, [key]: false }))
     }
