@@ -1,52 +1,43 @@
 'use client'
 
 import { Suspense, useEffect, useState } from 'react'
-import { fetchQnas, QnaItem as ApiQnaItem } from '@/components/qna'
-import QnaList from './QnaList'
+import { fetchNotices, NoticeItem } from '@/components/common/notice/api'
+import NoticeList from './NoticeList'
 
-interface QnaFetcherProps {
+interface NoticeFetcherProps {
   currentPage: number
   itemsPerPage: number
   onPageChange: (page: number) => void
   totalPages: number
   setTotalPages: (pages: number) => void
   keyword: string
+  isAdmin?: boolean
 }
 
-export default function QnaFetcher({
+export default function NoticeFetcher({
   currentPage,
   itemsPerPage,
   setTotalPages,
   keyword,
-}: QnaFetcherProps) {
-  const [qnas, setQnas] = useState<ApiQnaItem[]>([])
+  isAdmin = false,
+}: NoticeFetcherProps) {
+  const [notices, setNotices] = useState<NoticeItem[]>([])
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchQnas(
+        const response = await fetchNotices(
           currentPage - 1,
           itemsPerPage,
-          'TITLE',
           keyword,
         )
 
-        const fetchedQnas = response.result.content.map((item: ApiQnaItem) => ({
-          qnaId: item.qnaId,
-          title: item.title,
-          question: item.question,
-          isAnswerPresent: item.isAnswerPresent,
-          isVisibility: item.isVisibility,
-          createdAt: item.createdAt,
-          writerName: item.writerName,
-        }))
-
-        setQnas(fetchedQnas)
+        setNotices(response.result.content)
         setTotalPages(response.result.totalPage)
         setError(null)
       } catch (fetchError) {
-        setError('Failed to fetch QnA data')
+        setError('Failed to fetch Notice data')
       }
     }
 
@@ -57,7 +48,7 @@ export default function QnaFetcher({
     <div>
       {error && <div>{error}</div>}
       <Suspense>
-        <QnaList paginatedNotices={qnas} />
+        <NoticeList paginatedNotices={notices} isAdmin={isAdmin} />
       </Suspense>
     </div>
   )

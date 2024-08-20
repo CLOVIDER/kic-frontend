@@ -1,6 +1,6 @@
 import cn from '@/util/cn'
 import { QnaItem } from '@/components/qna'
-import BlockNoteViewer from '@/components/common/BlockNote/BlockNoteView'
+import { BlockNoteViewer } from '@/components/common/BlockNote'
 
 interface QnaDetailFetcherProps {
   qnaData: QnaItem
@@ -18,8 +18,8 @@ export default function QnaDetailFetcher({
   if (!qnaData) return <div>문의사항을 찾을 수 없습니다.</div>
 
   return (
-    <div>
-      <div className="ml-20 mt-6 w-[745px] flex flex-row items-center justify-start py-0 px-5 box-border gap-2.5 text-left text-base text-dimgray font-noto-sans">
+    <div className="ml-22 mt-11 w-[746px]">
+      <div className="w-full flex flex-row items-center justify-start py-0 px-5 box-border gap-2.5 text-left text-base text-dimgray font-noto-sans">
         <div className="text-16 w-30 h-24 font-bold">제목</div>
         <div className="ml-4 w-220 h-24 text-16 text-black flex items-center shrink-0">
           {qnaData.title}
@@ -39,11 +39,23 @@ export default function QnaDetailFetcher({
           {qnaData.isVisibility === '0' ? '비공개' : '공개'}
         </div>
       </div>
-      <div className="ml-16 mt-4 w-[712px] relative max-w-full border-solid border-[#D5D1D1] border-[0.3px] overflow-hidden" />
-      <div className="ml-20 mt-5 px-5">
-        <div className="font-bold mb-2">내용</div>
+      <div className="mt-4 w-full border-solid border-[#D5D1D1] border-[0.3px]" />
+      <div
+        className={`mt-5 px-5 ${qnaData.isAnswerPresent ? 'h-230' : 'h-523'}`}
+      >
+        <div className="font-bold mb-2">질문</div>
         <BlockNoteViewer data={qnaData.question} />
       </div>
+
+      {qnaData.isAnswerPresent && (
+        <>
+          <div className="mt-30 w-full border-solid border-[#D5D1D1] border-[0.3px] overflow-y-auto" />
+          <div className="mt-15 px-5 h-250">
+            <div className="font-bold mb-2">답변</div>
+            <BlockNoteViewer data={qnaData.answer} />
+          </div>
+        </>
+      )}
     </div>
   )
 }

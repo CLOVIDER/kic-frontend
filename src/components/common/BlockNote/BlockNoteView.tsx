@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/mantine'
 import '@blocknote/core/style.css' // Import BlockNote's styles
@@ -18,18 +18,18 @@ export default function BlockNoteViewer({
     initialContent: blocks, // provide the parsed blocks as initial content
   })
 
-  useEffect(() => {
-    if (editor) {
-      const domElement = document.querySelector('.blocknote-editor')
-      if (domElement) {
-        domElement.setAttribute('contenteditable', 'false')
-      }
-    }
-  }, [editor])
-
   return (
-    <div className="flex justify-start w-full pointer-events-none">
-      <BlockNoteView editor={editor} theme="light" />
+    <div className="flex justify-start w-full h-full">
+      {/* Ensure parent takes full height */}
+      <div className="overflow-y-auto w-full">
+        {/* Enable scrolling */}
+        <BlockNoteView
+          editor={editor}
+          editable={false}
+          theme="light"
+          className="flex-grow w-full"
+        />
+      </div>
     </div>
   )
 }

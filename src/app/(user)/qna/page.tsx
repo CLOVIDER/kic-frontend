@@ -80,8 +80,7 @@ export default function Page() {
       </div>
       <Link href="/qna/write">
         <Button
-          className="absolute w-[51px] h-[47px] text-[28px] font-bold bg-[#FFE4A3] text-[#ffffff] rounded flex items-center justify-center z-50"
-          style={{ top: '647px', left: '1199px' }}
+          className="absolute mr-235 bottom-4 right-4 w-[51px] h-[47px] text-[28px] font-bold bg-[#FFE4A3] text-[#ffffff] rounded flex items-center justify-center z-50"
           type="button"
         >
           +

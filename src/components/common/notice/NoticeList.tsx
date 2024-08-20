@@ -4,18 +4,27 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { NoticeItem } from '@/components/common/notice/api'
 import { formatDate } from '@/util/formatDate2'
+import { Button, Link } from '@nextui-org/react'
+import DeleteModal from './DeleteModal'
 
 interface NoticeListProps {
   paginatedNotices: NoticeItem[]
+  isAdmin?: boolean
 }
 
-export default function NoticeList({ paginatedNotices }: NoticeListProps) {
+export default function NoticeList({
+  paginatedNotices,
+  isAdmin = false,
+}: NoticeListProps) {
   const router = useRouter()
 
   const handleNoticeClick = (id: number) => {
-    router.push(`/notice/${id}`)
+    if (isAdmin) {
+      router.push(`/admin/notice/${id}`)
+    } else {
+      router.push(`/notice/${id}`)
+    }
   }
-
   if (paginatedNotices.length === 0) {
     return (
       <div className="flex items-center justify-center h-[472px] text-lg text-gray-500">
@@ -42,7 +51,7 @@ export default function NoticeList({ paginatedNotices }: NoticeListProps) {
                 {formatDate(notice.createdAt)}
               </div>
               <div className="mt-10 w-[534px] h-56 text-10">
-                {notice.content}
+                {/* {notice.content} */}
               </div>
             </div>
             {notice.noticeImageList.length > 0 && (
@@ -55,6 +64,31 @@ export default function NoticeList({ paginatedNotices }: NoticeListProps) {
                   height={150}
                   priority
                 />
+              </div>
+            )}
+            {isAdmin && (
+              <div className="ml-20 flex flex-col justify-center h-[136px]]">
+                <div className="space-y-30">
+                  <Link href={`/admin/notice/write/${notice.noticeId}`}>
+                    <Button
+                      className="w-[101px] h-[31px] text-[16px] text-[#ffffff] rounded-[16px] bg-[#ffbb38]"
+                      type="button"
+                    >
+                      수정하기
+                    </Button>
+                  </Link>
+                  <DeleteModal id={notice.noticeId}>
+                    {(onOpen) => (
+                      <Button
+                        className="mt-50 bg-[#FF7E6D] w-[101px] h-[31px] text-[16px] text-[#ffffff] rounded-[16px]"
+                        type="button"
+                        onClick={onOpen}
+                      >
+                        질문삭제
+                      </Button>
+                    )}
+                  </DeleteModal>
+                </div>
               </div>
             )}
           </div>

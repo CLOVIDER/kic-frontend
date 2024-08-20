@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import DynamicBlockNoteEditor from '@/components/common/BlockNote/DynamicBlockNoteEditor'
+import { DynamicBlockNote } from '@/components/common/BlockNote'
 import { createQna } from '@/components/qna/api'
 import { PartialBlock } from '@blocknote/core'
 import TitleInput from './components/TitleInput'
@@ -83,14 +83,13 @@ export default function Page() {
           />
         </div>
         <div className="mt-[17px] ml-21 w-[746px] h-[435px] flex-grow overflow-y-auto border-1 border-solid border-[#00000014] rounded-xl shadow-md">
-          <DynamicBlockNoteEditor
+          <DynamicBlockNote
             domainName={domainName}
             imageUrls={setImageUrls}
             setContent={(content) => {
               setContent(content)
               sessionStorage.setItem('editorContent', content) // 내용이 변경될 때마다 세션 스토리지에 저장
             }}
-            // initialContent={initialEditorContent}
           />
         </div>
         <SaveButtons handleSave={handleSave} moveBack={moveBack} />

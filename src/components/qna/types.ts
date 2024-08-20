@@ -29,13 +29,6 @@ export interface QnaAnswerResponse {
   answer: string
 }
 
-export interface DeleteQnaResponse {
-  isSuccess: boolean
-  code: string
-  message: string
-  result: string
-}
-
 export interface UpdateQnaAnswerResponse {
   isSuccess: boolean
   code: string

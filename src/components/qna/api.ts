@@ -1,5 +1,6 @@
 import { http } from '@/api'
 import { BaseResponse } from '@/api/types'
+import { useMutation } from '@tanstack/react-query'
 
 import { toast } from 'react-toastify'
 import {
@@ -7,7 +8,6 @@ import {
   QnaItem,
   QnaResponse,
   CreateQnaResponse,
-  DeleteQnaResponse,
   UpdateQnaAnswerResponse,
 } from './types'
 
@@ -96,14 +96,15 @@ export const getQnaAnswer = async (
   }
 }
 
-export const deleteQna = async (qnaId: number): Promise<DeleteQnaResponse> => {
-  try {
-    const response = await http.delete<DeleteQnaResponse>({
-      url: `/api/qnas/${qnaId}`,
-      params: { qnaId },
-    })
-    return response.result
-  } catch (error) {
-    throw new Error(`Failed to delete Q&A: ${error}`)
-  }
+export const deleteQna = (qnaId: number) =>
+  http.delete<string>({
+    url: `/api/qnas/${qnaId}`,
+  })
+
+export const useDeleteQna = () => {
+  return useMutation({
+    mutationKey: ['delete'],
+    mutationFn: (qnaId: number) => deleteQna(qnaId),
+    onSuccess: () => {},
+  })
 }

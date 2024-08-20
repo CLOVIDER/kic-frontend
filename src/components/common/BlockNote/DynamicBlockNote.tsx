@@ -9,26 +9,29 @@ function LoadingSpinner() {
   )
 }
 
-const BlockNoteEditor = dynamic(() => import('./BlockNoteEditor'), {
+// BlockNoteViewer를 동적으로 로드
+const BlockNoteViewer = dynamic(() => import('./BlockNoteEditor'), {
   ssr: false,
   loading: () => <LoadingSpinner />,
 })
 
-interface DynamicBlockNoteEditorProps {
-  domainName: string
+interface DynamicBlockNoteViewerProps {
+  domainName?: string
   imageUrls?: (urls: string[]) => void
-  setContent: (content: string) => void
+  setContent?: (content: string) => void
   enableImageUpload?: boolean
   initialContent?: string
+  data?: string
 }
 
-export default function DynamicBlockNoteEditor({
+export default function DynamicBlockNote({
   domainName,
   imageUrls,
   setContent,
-  enableImageUpload = true,
+  enableImageUpload = false,
   initialContent,
-}: DynamicBlockNoteEditorProps) {
+  data,
+}: DynamicBlockNoteViewerProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
 
@@ -43,7 +46,7 @@ export default function DynamicBlockNoteEditor({
   }, [isLoading])
 
   useEffect(() => {
-    // BlockNoteEditor가 로드되면 isLoading을 false로 설정
+    // BlockNoteViewer가 로드되면 isLoading을 false로 설정
     setIsLoading(false)
   }, [])
 
@@ -53,13 +56,20 @@ export default function DynamicBlockNoteEditor({
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <BlockNoteEditor
-        domainName={domainName}
-        setUploadedImageUrls={imageUrls}
-        setContent={setContent}
-        enableImageUpload={enableImageUpload}
-        initialContent={initialContent}
-      />
+      <div className="overflow-y-auto">
+        <BlockNoteViewer
+          domainName={domainName}
+          setUploadedImageUrls={imageUrls}
+          setContent={(content: string) => {
+            if (setContent) {
+              setContent(content) // Answer state 업데이트
+            }
+          }}
+          enableImageUpload={enableImageUpload}
+          initialContent={initialContent}
+          data={data}
+        />
+      </div>
     </Suspense>
   )
 }
