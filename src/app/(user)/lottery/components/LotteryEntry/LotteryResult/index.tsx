@@ -32,7 +32,7 @@ export default function LotteryResult() {
             <DropdownMenu>
               <DropdownItem
                 key={lotteryId}
-                className='className="border-1 p-16 border-[#F90] rounded-16 w-221 h-56 bg-white text-20 text-[#F90]'
+                className="border-1 p-16 border-[#F90] rounded-16 w-221 h-56 bg-white text-20 text-[#F90]"
                 onClick={() => push(`/lottery/${lotteryId}`)}
               >
                 {className}

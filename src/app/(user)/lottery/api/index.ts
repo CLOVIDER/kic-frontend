@@ -14,7 +14,7 @@ export type GetLotteriesDetailResponse = {
     result: 'WIN' | 'WAIT' | 'LOSE'
     kindergartenNm: string
     waitingNum: string
-    endDate: number
+    endDate: string
   }
 }
 

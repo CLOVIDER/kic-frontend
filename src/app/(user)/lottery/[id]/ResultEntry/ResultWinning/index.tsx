@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { Button } from '@nextui-org/react'
 import { useLotteryDetailContext } from '@/app/(user)/lottery/fetcher/ResultFetcher'
+import { formatDate } from '@/util/formatDate2'
 import ResultCard from '../ResultCard'
 import { useDeleteLottery, usePatchRegisterLottery } from '../../../queries'
 
@@ -21,7 +22,7 @@ export default function ResultWinning({ id }: { id: number }) {
       </ResultCard.SubTitle>
 
       <ResultCard.Description className="mt-23 text-center">
-        등록기한 : ~ {endDate}까지
+        등록기한 : ~ {formatDate(endDate)}까지
         <br />
         등록기한까지 등록하지 않으시면 당첨 취소 처리됩니다.
       </ResultCard.Description>
