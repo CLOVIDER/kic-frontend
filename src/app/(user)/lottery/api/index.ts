@@ -14,7 +14,7 @@ export type GetLotteriesDetailResponse = {
     result: 'WIN' | 'WAIT' | 'LOSE'
     kindergartenNm: string
     waitingNum: string
-    endDate: number
+    endDate: string
   }
 }
 
@@ -38,5 +38,5 @@ export const deleteLottery = (lotteryId: number) =>
 
 export const patchRegistry = (lotteryId: number) =>
   http.patch({
-    url: `/api/update/registry/${lotteryId}`,
+    url: `/api/lotteries/${lotteryId}/registry`,
   })
