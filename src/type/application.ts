@@ -65,7 +65,6 @@ export interface RightSection2Props {
   onDeleteFile: (id: string) => void
   selectedItems: Record<string, boolean>
   onCheckboxChange: (id: string, value: boolean) => void
-  selectedLabels: Record<string, Record<string, string>>
 }
 
 export interface ApplicationFormProps {

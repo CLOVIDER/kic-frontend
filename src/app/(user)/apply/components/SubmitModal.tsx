@@ -8,7 +8,7 @@ import {
   ModalHeader,
 } from '@nextui-org/react'
 import { ReactNode } from 'react'
-import { ApplicationPayload } from '../api'
+import { ApplicationPayload, RecruitInfo } from '../api'
 import { FileInfo } from '../api/getFile'
 
 export default function SubmitModal({
@@ -16,15 +16,28 @@ export default function SubmitModal({
   uploadedFiles,
   onSubmit,
   children,
-  selectedLabels,
+  recruitData,
 }: {
   formData: ApplicationPayload
   uploadedFiles: Record<string, FileInfo>
   onSubmit: (data: Partial<ApplicationPayload>) => void
   children: (onOpen: () => void) => ReactNode
-  selectedLabels: Record<string, Record<string, string>>
+  recruitData: RecruitInfo[]
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const getKindergartenAndClass = (recruitId: number) => {
+    const kindergarten = recruitData.find((k) =>
+      k.recruitIds.includes(recruitId),
+    )
+    if (kindergarten) {
+      const classIndex = kindergarten.recruitIds.indexOf(recruitId)
+      return {
+        kindergartenName: kindergarten.kindergartenNm,
+        className: kindergarten.ageClasses[classIndex],
+      }
+    }
+    return { kindergartenName: '알 수 없음', className: '알 수 없음' }
+  }
 
   return (
     <>
@@ -56,22 +69,18 @@ export default function SubmitModal({
                     // eslint-disable-next-line react/no-array-index-key
                     <div key={index}>
                       <p>아이 이름: {child.childNm}</p>
-                      <p>
-                        신청한 어린이집 및 반:{' '}
-                        {Object.entries(
-                          selectedLabels[child.childNm] || {},
-                        ).map(([kindergarten, className], idx) => (
-                          // eslint-disable-next-line react/no-array-index-key
-                          <span key={idx}>
-                            {kindergarten} - {className}
-                            {idx <
-                            Object.keys(selectedLabels[child.childNm]).length -
-                              1
-                              ? ', '
-                              : ''}
-                          </span>
-                        ))}
-                      </p>
+                      <p>신청한 어린이집 및 반:</p>
+                      <ul>
+                        {child.recruitIds.map((recruitId) => {
+                          const { kindergartenName, className } =
+                            getKindergartenAndClass(recruitId)
+                          return (
+                            <li key={recruitId}>
+                              {kindergartenName}: {className}
+                            </li>
+                          )
+                        })}
+                      </ul>
                     </div>
                   ))}
                 </div>

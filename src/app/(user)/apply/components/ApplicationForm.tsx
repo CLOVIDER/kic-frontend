@@ -433,7 +433,6 @@ export default function ApplicationForm() {
               setFormData={setFormData}
               selectedItems={selectedItems}
               onCheckboxChange={handleCheckboxChange}
-              selectedLabels={selectedLabels}
             />
           )}
         </motion.div>

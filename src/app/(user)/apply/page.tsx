@@ -11,6 +11,7 @@ export default function Page() {
   const { data } = useHomePage()
 
   useEffect(() => {
+    console.log(data)
     if (data.recruitStatus === '모집없음') {
       alert('신청기간이 아닙니다.')
       router.push('/')
