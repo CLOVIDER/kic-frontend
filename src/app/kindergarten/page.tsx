@@ -46,13 +46,13 @@ export default function Page() {
           style={{ scrollbarWidth: 'none' }}
           className="flex gap-58 w-[1000px] p-30 overflow-x-scroll min-h-520"
         >
-          <If condition={kindergartens.length >= 1}>
+          <If condition={kindergartens.length < 1}>
             <div className="w-full h-500 flex justify-center items-center text-32 font-semibold">
               어린이집이 없어요...🥲
             </div>
           </If>
 
-          <If condition={kindergartens.length < 1}>
+          <If condition={kindergartens.length >= 1}>
             {kindergartens.map(
               ({
                 kindergartenId,
