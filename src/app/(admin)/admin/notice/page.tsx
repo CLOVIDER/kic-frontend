@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Pagination } from '@nextui-org/react'
+import { Button, Pagination } from '@nextui-org/react'
 import NoticeFetcher from '@/components/common/notice/NoticeFetcher'
 import { useRouter } from 'next/navigation'
 
@@ -18,12 +18,19 @@ export default function Page() {
   }
 
   return (
-    <div className="absolute w-[1280px] h-[720px] bg-white flex-col flex justify-between">
-      <div className="w-[695px] h-[575px] mt-62 ml-292 rounded-xl overflow-hidden">
-        <div className="flex w-[742px] h-39">
-          <div className="w-118 h-39 text-32 font-inter font-bold">
+    <div className="w-[1280px] h-[720px] bg-white flex flex-col justify-center items-center">
+      <div className="w-[695px] h-[575px] flex flex-col items-start  rounded-xl">
+        <div className="flex flex-row h-39 justify-end items-center">
+          <p className="text-32 font-inter font-bold whitespace-nowrap">
             공지사항
-          </div>
+          </p>
+          <Button
+            type="button"
+            className="ml-540 mt-5 w-45 h-40 text-[30px] font-bold bg-[#FFE4A3] text-[#ffffff] rounded flex items-center justify-center"
+            onClick={() => router.push('/admin/notice/write')}
+          >
+            +
+          </Button>
         </div>
         <NoticeFetcher
           currentPage={currentPage}
@@ -54,13 +61,6 @@ export default function Page() {
           }}
         />
       </div>
-      <button
-        type="button"
-        className="absolute mr-235 bottom-4 right-4 w-[51px] h-[47px] text-[28px] font-bold bg-[#FFE4A3] text-[#ffffff] rounded flex items-center justify-center z-50"
-        onClick={() => router.push('/admin/notice/write')}
-      >
-        +
-      </button>
     </div>
   )
 }
