@@ -1,6 +1,5 @@
 import LeftSection from './components/LeftSection'
 import ApplicationForm from './components/ApplicationForm'
-import 'react-toastify/dist/ReactToastify.css'
 
 export default function Page() {
   return (
