@@ -45,7 +45,7 @@ export default function Page() {
           style={{ scrollbarWidth: 'none' }}
           className="flex gap-58 w-[1000px] p-30 overflow-x-scroll"
         >
-          {kindergartens.map(
+          {kindergartens?.map(
             ({
               kindergartenId,
               kindergartenAddr,

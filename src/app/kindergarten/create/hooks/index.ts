@@ -1,4 +1,6 @@
 import { useCallback, useState } from 'react'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 import {
   usePostKindergartenDetails,
   usePostImage,
@@ -24,6 +26,7 @@ export default function useCreate() {
     }>
   >([])
   const { mutateAsync: postImage } = usePostImage('kindergarten')
+  const { push } = useRouter()
 
   const handleImages = useCallback(
     async (newFile: File) => {
@@ -52,20 +55,34 @@ export default function useCreate() {
       return
     }
 
-    mutate({
-      kindergartenAddr: addr,
-      kindergartenImageUrls: images,
-      kindergartenInfo: info,
-      kindergartenNm: name,
-      kindergartenNo: phone,
-      kindergartenScale: scale,
-      kindergartenCapacity: capacity,
-      kindergartenTime: time,
-      kindergartenClass: [
-        ...classes,
-        { className: newClassName, ageClass: newAgeClass },
-      ],
-    })
+    mutate(
+      {
+        kindergartenAddr: addr,
+        kindergartenImageUrls: images,
+        kindergartenInfo: info,
+        kindergartenNm: name,
+        kindergartenNo: phone,
+        kindergartenScale: scale,
+        kindergartenCapacity: capacity,
+        kindergartenTime: time,
+        kindergartenClass: [
+          ...classes,
+          { className: newClassName, ageClass: newAgeClass },
+        ],
+      },
+      {
+        onSuccess: () => {
+          toast.success('저장되었습니다!', {
+            autoClose: 1000,
+            onClose: () => push('/admin'),
+            pauseOnHover: false,
+          })
+        },
+        onError: () => {
+          toast.error('잠시 후 다시 시도해주세요.')
+        },
+      },
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     addr,
