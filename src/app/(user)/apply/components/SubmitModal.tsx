@@ -8,23 +8,23 @@ import {
   ModalHeader,
 } from '@nextui-org/react'
 import { ReactNode } from 'react'
-import { ApplicationPayload, getFileInfoFromUrl } from '../api'
+import { ApplicationPayload } from '../api'
+import { FileInfo } from '../api/getFile'
 
 export default function SubmitModal({
   formData,
+  uploadedFiles,
   onSubmit,
   children,
+  selectedLabels,
 }: {
   formData: ApplicationPayload
+  uploadedFiles: Record<string, FileInfo>
   onSubmit: (data: Partial<ApplicationPayload>) => void
   children: (onOpen: () => void) => ReactNode
+  selectedLabels: Record<string, Record<string, string>>
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const { name } = getFileInfoFromUrl(
-    Object.values(formData.fileUrls).join(', '),
-  )
-  // console.log(formData.fileUrls)
-  // console.log(name)
 
   return (
     <>
@@ -50,15 +50,60 @@ export default function SubmitModal({
                 <h1>신청서 확인</h1>
               </ModalHeader>
               <ModalBody>
-                {/* 데이터를 UI에 맞게 표시 */}
                 <div>
-                  이름:{' '}
-                  {formData.childrenRecruitList
-                    .map((child) => child.childNm)
-                    .join(', ')}
+                  <h2>아이 정보:</h2>
+                  {formData.childrenRecruitList.map((child, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div key={index}>
+                      <p>아이 이름: {child.childNm}</p>
+                      <p>
+                        신청한 어린이집 및 반:{' '}
+                        {Object.entries(
+                          selectedLabels[child.childNm] || {},
+                        ).map(([kindergarten, className], idx) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <span key={idx}>
+                            {kindergarten} - {className}
+                            {idx <
+                            Object.keys(selectedLabels[child.childNm]).length -
+                              1
+                              ? ', '
+                              : ''}
+                          </span>
+                        ))}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-                <div>파일 : {name}</div>
-                {/* 추가 데이터 표시 */}
+                <div>
+                  <h2>첨부 파일:</h2>
+                  {Object.keys(uploadedFiles).map((key) => (
+                    <div key={key}>
+                      <p>
+                        {key}: {uploadedFiles[key]?.name || 'No file uploaded'}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <h2>선택한 항목:</h2>
+                  <p>
+                    한부모: {formData.isSingleParent === '1' ? '예' : '아니요'}
+                  </p>
+                  <p>
+                    장애인: {formData.isDisability === '1' ? '예' : '아니요'}
+                  </p>
+                  <p>
+                    맞벌이: {formData.isDualIncome === '1' ? '예' : '아니요'}
+                  </p>
+                  <p>
+                    직장부부:{' '}
+                    {formData.isEmployeeCouple === '1' ? '예' : '아니요'}
+                  </p>
+                  <p>
+                    형제자매: {formData.isSibling === '1' ? '예' : '아니요'}
+                  </p>
+                </div>
               </ModalBody>
               <ModalFooter>
                 <Button

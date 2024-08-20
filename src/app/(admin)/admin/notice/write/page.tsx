@@ -63,6 +63,7 @@ export default function WritePage() {
             domainName={domainName}
             imageUrls={setUploadedImageUrls}
             setContent={setContent}
+            enableImageUpload
           />
         </div>
         <div className="flex mt-8 ml-[556px] w-211 h-31">
