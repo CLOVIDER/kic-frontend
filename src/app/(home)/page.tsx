@@ -11,12 +11,12 @@ import {
 } from '@/components'
 import { AsyncBoundaryWithQuery } from '@/react-utils'
 import { useRouter } from 'next/navigation'
-import { handleApplyClick } from '@/hooks/useApplyClick'
+import { useHandleApplyClick } from '@/hooks/useApplyClick'
 import HomeFallback from './components/HomeFallback'
 
 export default function Home() {
   const router = useRouter()
-  const useApplyClick = () => handleApplyClick(router)
+  const useApplyClick = () => useHandleApplyClick(router)
 
   return (
     <main className="flex flex-row bg-[#FBFBFB] h-screen">
