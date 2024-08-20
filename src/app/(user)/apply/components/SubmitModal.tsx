@@ -8,7 +8,6 @@ import {
   ModalHeader,
 } from '@nextui-org/react'
 import { ReactNode } from 'react'
-import { predata } from '@/type/application'
 import { ApplicationPayload } from '../api'
 import { FileInfo } from '../api/getFile'
 
@@ -17,11 +16,13 @@ export default function SubmitModal({
   uploadedFiles,
   onSubmit,
   children,
+  selectedLabels,
 }: {
   formData: ApplicationPayload
   uploadedFiles: Record<string, FileInfo>
   onSubmit: (data: Partial<ApplicationPayload>) => void
   children: (onOpen: () => void) => ReactNode
+  selectedLabels: Record<string, Record<string, string>>
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
@@ -55,23 +56,34 @@ export default function SubmitModal({
                     // eslint-disable-next-line react/no-array-index-key
                     <div key={index}>
                       <p>아이 이름: {child.childNm}</p>
-                      <p>신청한 반: {child.recruitIds.join(', ')}</p>
+                      <p>
+                        신청한 어린이집 및 반:{' '}
+                        {Object.entries(
+                          selectedLabels[child.childNm] || {},
+                        ).map(([kindergarten, className], idx) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <span key={idx}>
+                            {kindergarten} - {className}
+                            {idx <
+                            Object.keys(selectedLabels[child.childNm]).length -
+                              1
+                              ? ', '
+                              : ''}
+                          </span>
+                        ))}
+                      </p>
                     </div>
                   ))}
                 </div>
                 <div>
                   <h2>첨부 파일:</h2>
-                  {Object.keys(uploadedFiles).map((key) => {
-                    const predataItem = predata.find((item) => item.key === key)
-                    return (
-                      <div key={key}>
-                        <p>
-                          {predataItem?.name || key}:
-                          {uploadedFiles[key]?.name || 'No file uploaded'}
-                        </p>
-                      </div>
-                    )
-                  })}
+                  {Object.keys(uploadedFiles).map((key) => (
+                    <div key={key}>
+                      <p>
+                        {key}: {uploadedFiles[key]?.name || 'No file uploaded'}
+                      </p>
+                    </div>
+                  ))}
                 </div>
                 <div>
                   <h2>선택한 항목:</h2>

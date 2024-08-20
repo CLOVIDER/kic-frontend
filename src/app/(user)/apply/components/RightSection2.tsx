@@ -13,7 +13,6 @@ import SubmitModal from './SubmitModal'
 export default function RightSection2({
   onPrevious,
   onSubmit,
-  // onTempSave,
   formData,
   uploadedFiles,
   setFormData,
@@ -22,17 +21,16 @@ export default function RightSection2({
   onDeleteFile,
   selectedItems,
   onCheckboxChange,
+  selectedLabels, // 추가된 부분
 }: RightSection2Props) {
   const [isUploading, setIsUploading] = useState<Record<string, boolean>>({})
   const [items] = useState(predata as Item[])
-  // const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
-    // formData.fileUrls 정보를 기반으로 체크박스 상태를 업데이트
     predata.forEach((item) => {
       if (formData.fileUrls[item.key]) {
         if (!selectedItems[item.id]) {
-          onCheckboxChange(item.id, true) // 파일 URL이 있으면 체크박스를 true로 설정
+          onCheckboxChange(item.id, true)
         }
       }
     })
@@ -81,7 +79,6 @@ export default function RightSection2({
         fileUrls: { ...prev.fileUrls, [key]: url },
       }))
 
-      // 파일 업로드가 성공하면 해당 체크박스를 체크 상태로 변경
       const matchedItem = items.find((itm) => itm.key === key)
       if (matchedItem) {
         onCheckboxChange(matchedItem.id, true)
@@ -101,7 +98,6 @@ export default function RightSection2({
 
     for (const item of items) {
       if (selectedItems[item.id] && !formData.fileUrls[item.key]) {
-        console.log('Missing file for key:', item.key)
         toast.error(`${item.name}(을)를 위한 파일을 첨부해주세요`, {
           autoClose: 1000,
           pauseOnHover: false,
@@ -201,6 +197,7 @@ export default function RightSection2({
           formData={formData}
           uploadedFiles={uploadedFiles}
           onSubmit={handleSubmit}
+          selectedLabels={selectedLabels} // 추가된 부분
         >
           {(onOpen) => (
             <Button
