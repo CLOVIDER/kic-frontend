@@ -1,8 +1,8 @@
 import { http } from '@/api'
 import { BaseResponse } from '@/api/types'
-import { ApplicationPayload } from '@/type/application'
 import { toast } from 'react-toastify'
 import {
+  ApplicationPayload,
   ApplicationResponse,
   EmployeeInfo,
   FileUploadResponse,
@@ -100,13 +100,19 @@ export async function getRecruitData(): Promise<RecruitInfo[]> {
 }
 
 export async function getApplicationData(): Promise<ApplicationStatus> {
-  try {
-    const response = await http.get<ApplicationStatus>({
-      url: '/api/applications',
-    })
-    return response.result
-  } catch (error) {
-    console.error('Error fetching application data:', error)
-    throw error
-  }
+  const response = await http.get<ApplicationStatus>({
+    url: '/api/applications',
+  })
+
+  return response.result
+}
+
+export function editApplication(
+  data: ApplicationPayload,
+  applicationId: number,
+): Promise<BaseResponse<ApplicationResponse>> {
+  return http.patch<ApplicationResponse>({
+    url: `/api/applications/${applicationId}`,
+    data,
+  })
 }
