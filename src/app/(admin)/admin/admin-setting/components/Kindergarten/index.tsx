@@ -22,7 +22,7 @@ export default function Kindergarten() {
 
   const mergedClasses = (kIndex: number) =>
     defaultClasses.map((defaultClass) => {
-      const existingClass = classes[kIndex].find(
+      const existingClass = classes[kIndex]?.find(
         (cls) => cls.ageClass === defaultClass.ageClass,
       )
       return existingClass || defaultClass
