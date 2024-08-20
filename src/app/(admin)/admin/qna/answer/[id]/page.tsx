@@ -1,6 +1,6 @@
 'use client'
 
-import DynamicBlockNoteEditor from '@/components/common/BlockNote/DynamicBlockNoteEditor'
+import DynamicBlockNote from '@/components/common/BlockNote/DynamicBlockNote'
 import { useParams, useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
@@ -13,7 +13,8 @@ import {
 } from '@/components/qna'
 // import { PartialBlock } from '@blocknote/core'
 import { toast } from 'react-toastify'
-import QnaDetailFetcher from '@/app/(user)/qna/[id]/components/QnaDetailFetcher'
+import { PartialBlock } from '@blocknote/core'
+import { QnaDetailFetcher } from '@/components/common/qna'
 
 export default function AnswerClient() {
   const { id } = useParams()
@@ -21,9 +22,27 @@ export default function AnswerClient() {
   const [answer, setContent] = useState<string>('')
   const [isLoading, setIsLoading] = useState(true)
   const [errorMsg, setError] = useState<string | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [initialEditorContent, setInitialEditorContent] = useState<
+    PartialBlock[] | undefined
+  >(undefined)
   const router = useRouter()
 
   const domainName = 'qna'
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 세션 스토리지에서 내용을 불러옵니다.
+    const savedContent = sessionStorage.getItem('editorContent')
+    if (savedContent) {
+      setInitialEditorContent(JSON.parse(savedContent))
+      setContent(savedContent)
+    }
+
+    // 컴포넌트가 언마운트될 때 세션 스토리지를 초기화합니다.
+    return () => {
+      sessionStorage.removeItem('editorContent')
+    }
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,14 +102,13 @@ export default function AnswerClient() {
             />
           </div>
           <div className="mt-6 w-[746px] h-324 rounded-20 shadow-md border-[rgba(0,0,0,0.08)] border-1 border-solid box-border overflow-hidden">
-            <DynamicBlockNoteEditor
+            <DynamicBlockNote
+              initialContent={answer}
               domainName={domainName}
               setContent={(content) => {
                 setContent(content)
                 sessionStorage.setItem('editorContent', content) // 내용이 변경될 때마다 세션 스토리지에 저장
               }}
-              enableImageUpload={false}
-              initialContent={answer !== '' ? answer : undefined}
             />
           </div>
         </div>

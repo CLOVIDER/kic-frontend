@@ -11,6 +11,7 @@ interface NoticeFetcherProps {
   totalPages: number
   setTotalPages: (pages: number) => void
   keyword: string
+  isAdmin?: boolean
 }
 
 export default function NoticeFetcher({
@@ -18,6 +19,7 @@ export default function NoticeFetcher({
   itemsPerPage,
   setTotalPages,
   keyword,
+  isAdmin = false,
 }: NoticeFetcherProps) {
   const [notices, setNotices] = useState<NoticeItem[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -46,7 +48,7 @@ export default function NoticeFetcher({
     <div>
       {error && <div>{error}</div>}
       <Suspense>
-        <NoticeList paginatedNotices={notices} />
+        <NoticeList paginatedNotices={notices} isAdmin={isAdmin} />
       </Suspense>
     </div>
   )

@@ -6,7 +6,8 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import cn from '@/util/cn'
 import { fetchQnaDetail, QnaItem } from '@/components/qna'
-import QnaDetailFetcher from './components/QnaDetailFetcher'
+import CancelModal from '@/components/common/qna/CancelModal'
+import { QnaDetailFetcher } from '@/components/common/qna'
 
 export default function QnaDetailPage() {
   const { id } = useParams()
@@ -35,7 +36,7 @@ export default function QnaDetailPage() {
 
   return (
     <div className="w-[1280px] h-[720px] mt-40 bg-white flex-col flex justify-between">
-      <div className="w-[787px] h-[602px] mt-39 ml-256 border-1 border-solid border-[#00000014] rounded-xl overflow-hidden shadow-md">
+      <div className="w-[787px] h-[707px] mt-39 ml-256 border-1 border-solid border-[#00000014] rounded-xl overflow-hidden shadow-md">
         <div className="ml-21 mt-22 w-[118px] h-[39px] text-32 font-inter font-bold">
           문의사항
         </div>
@@ -65,12 +66,17 @@ export default function QnaDetailPage() {
               {qnaData.isAnswerPresent ? '답변수정' : '답변작성'}
             </Button>
           </Link>
-          <Button
-            className="ml-15 w-98 h-30 rounded-[16px] bg-[#FF7E6D] text-[#ffffff] text-[16px]"
-            type="button"
-          >
-            삭제
-          </Button>
+          <CancelModal id={qnaData.qnaId}>
+            {(onOpen) => (
+              <Button
+                className="ml-15 w-98 h-30 rounded-[16px] bg-[#FF7E6D] text-[#ffffff] text-[16px]"
+                type="button"
+                onClick={onOpen}
+              >
+                삭제
+              </Button>
+            )}
+          </CancelModal>
         </div>
       </div>
     </div>

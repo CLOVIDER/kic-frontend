@@ -1,5 +1,6 @@
 import { http } from '@/api'
 import { BaseResponse } from '@/api/types'
+import { useMutation } from '@tanstack/react-query'
 
 export interface NoticeImage {
   noticeImageId: number
@@ -28,7 +29,7 @@ interface NoticeResponse {
 
 export const fetchNotices = async (
   page: number = 0,
-  size: number = 10,
+  size: number = 3,
   keyword?: string,
 ): Promise<BaseResponse<NoticeResponse>> => {
   try {
@@ -55,13 +56,13 @@ export const fetchNoticeDetail = async (
   }
 }
 
-interface CreateNoticeData {
+interface NoticeData {
   title: string
   content: string
   imageUrls: string[]
 }
 
-export const createNotice = async (data: CreateNoticeData): Promise<void> => {
+export const createNotice = async (data: NoticeData): Promise<void> => {
   try {
     await http.post({
       url: '/api/admin/notices',
@@ -71,4 +72,32 @@ export const createNotice = async (data: CreateNoticeData): Promise<void> => {
     console.error('Error creating notice:', error)
     throw error
   }
+}
+
+export const editNotice = async (
+  data: NoticeData,
+  id: number,
+): Promise<void> => {
+  try {
+    await http.patch({
+      url: `/api/admin/notices/${id}`,
+      data,
+    })
+  } catch (error) {
+    console.error('Error creating notice:', error)
+    throw error
+  }
+}
+
+export const deleteNotice = (noticeId: number) =>
+  http.delete<string>({
+    url: `/api/notice/${noticeId}`,
+  })
+
+export const useDeleteNotice = () => {
+  return useMutation({
+    mutationKey: ['delete'],
+    mutationFn: (noticeId: number) => deleteNotice(noticeId),
+    onSuccess: () => {},
+  })
 }
