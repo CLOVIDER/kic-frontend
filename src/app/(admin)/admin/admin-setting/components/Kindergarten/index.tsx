@@ -8,6 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components'
+import Link from 'next/link'
 import Title from '../Title'
 import { useKindergarten } from './useKindergarten'
 import '../setting.css'
@@ -36,7 +37,11 @@ export default function Kindergarten() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Setting width={30} height={20} />
+              <Link href="/kindergarten">
+                <div className="cursor-pointer">
+                  <Setting width={30} height={20} />
+                </div>
+              </Link>
             </TooltipTrigger>
             <TooltipContent className="text-9 border-[#a6a5a5] py-0">
               어린이집 수정 페이지로 이동합니다.
