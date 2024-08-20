@@ -1,27 +1,26 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import { Child, DropdownOption, DropdownOptions } from '@/type/application'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
-import {
-  ApplicationPayload,
-  Child,
-  DropdownOption,
-  DropdownOptions,
-  DocumentType,
-} from '@/type/application'
 import {
   saveApplicationTemp,
   submitApplication,
   RecruitInfo,
   getRecruitData,
+  getApplicationData,
+  editApplication,
+  ApplicationPayload,
 } from '../api'
 import RightSection1 from './RightSection1'
 import RightSection2 from './RightSection2'
+import { FileInfo, getFileInfoFromUrl } from '../api/getFile'
 
 export default function ApplicationForm() {
   const [currentSection, setCurrentSection] = useState(1)
+  const [applicationId, setApplicationId] = useState<number | null>(null)
   const [formData, setFormData] = useState<ApplicationPayload>({
     isSingleParent: '0',
     childrenCnt: 0,
@@ -30,25 +29,22 @@ export default function ApplicationForm() {
     isEmployeeCouple: '0',
     isSibling: '0',
     childrenRecruitList: [],
-    fileUrls: {
-      [DocumentType.RESIDENT_REGISTER]: '',
-      [DocumentType.SINGLE_PARENT]: '',
-      [DocumentType.DISABILITY]: '',
-      [DocumentType.DUAL_INCOME]: '',
-      [DocumentType.EMPLOYEE_COUPLE]: '',
-      [DocumentType.SIBLING]: '',
-    },
+    fileUrls: {}, // 모든 키를 비워 초기화
   })
-  const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({})
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, FileInfo>>(
+    {},
+  )
   const [selectedLabels, setSelectedLabels] = useState<
     Record<string, Record<string, string>>
   >({})
+
+  const router = useRouter()
   const [children, setChildren] = useState<Child[]>([
     { id: 1, name: '', classes: {} },
   ])
+
   const [recruitData, setRecruitData] = useState<RecruitInfo[]>([])
   const [selectedItems, setSelectedItems] = useState<Record<string, boolean>>({
-    resident: true,
     isSingleParent: false,
     isDisability: false,
     isDualIncome: false,
@@ -56,30 +52,159 @@ export default function ApplicationForm() {
     isSibling: false,
   })
 
-  const router = useRouter()
+  const handleCheckboxChange = (id: string, value: boolean) => {
+    setSelectedItems((prev) => ({ ...prev, [id]: value }))
+    setFormData((prev) => ({ ...prev, [id]: value ? '1' : '0' }))
+  }
+  const [isLoading, setIsLoading] = useState(true)
+
+  const handleFileUpload = useCallback(
+    (id: string, fileData: FileInfo) => {
+      setUploadedFiles((prev) => ({
+        ...prev,
+        [id]: fileData,
+      }))
+
+      setFormData((prev) => ({
+        ...prev,
+        fileUrls: {
+          ...prev.fileUrls,
+          [id]: fileData.url,
+        },
+      }))
+    },
+    [setUploadedFiles, setFormData],
+  )
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [fetchedRecruitData, applicationData] = await Promise.all([
+          getRecruitData(),
+          getApplicationData(),
+        ])
+
+        console.log('Fetched Recruit Data:', fetchedRecruitData)
+        console.log('Fetched Application Data:', applicationData)
+
+        setRecruitData(fetchedRecruitData)
+
+        if (applicationData) {
+          const documents = applicationData.documents || []
+
+          const preloadedFiles: Record<string, FileInfo> = {}
+          for (const doc of documents) {
+            try {
+              // eslint-disable-next-line no-await-in-loop
+              const fileInfo = await getFileInfoFromUrl(doc.image)
+              if (fileInfo != null) {
+                preloadedFiles[doc.documentType] = fileInfo
+              }
+            } catch (fileError) {
+              console.error(
+                `Error fetching file for ${doc.documentType}:`,
+                fileError,
+              )
+            }
+          }
+
+          setUploadedFiles(preloadedFiles)
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            ...applicationData,
+            fileUrls: Object.fromEntries(
+              documents.map((doc) => [doc.documentType, doc.image]),
+            ),
+          }))
+          console.log()
+
+          setApplicationId(applicationData.id)
+
+          // 체크박스 상태 초기화
+          setSelectedItems({
+            isSingleParent: applicationData.isSingleParent === '1',
+            isDisability: applicationData.isDisability === '1',
+            isDualIncome: applicationData.isDualIncome === '1',
+            isEmployeeCouple: applicationData.isEmployeeCouple === '1',
+            isSibling: applicationData.isSibling === '1',
+          })
+
+          // Process children and selected labels
+          const updatedChildren = applicationData.childrenRecruitList.map(
+            (child, index) => {
+              const classes = child.recruitIds.reduce(
+                (acc, recruitId) => {
+                  const kindergarten = fetchedRecruitData.find((k) =>
+                    k.recruitIds.includes(recruitId),
+                  )?.kindergartenNm
+                  if (kindergarten) {
+                    acc[kindergarten] = recruitId.toString()
+                  }
+                  return acc
+                },
+                {} as Record<string, string>,
+              )
+              return {
+                id: index + 1,
+                name: child.childNm,
+                classes,
+              }
+            },
+          )
+          setChildren(updatedChildren)
+
+          // Update selectedLabels state
+          const newSelectedLabels = updatedChildren.reduce(
+            (acc, child) => {
+              Object.keys(child.classes).forEach((kindergarten) => {
+                const recruitId = child.classes[kindergarten]
+                const recruitDataItem = fetchedRecruitData.find(
+                  (r) => r.kindergartenNm === kindergarten,
+                )
+                const label = recruitDataItem?.ageClasses.find(
+                  (_, idx) => recruitDataItem.recruitIds[idx] === +recruitId,
+                )
+                if (label) {
+                  if (!acc[child.id.toString()]) {
+                    acc[child.id.toString()] = {}
+                  }
+                  acc[child.id.toString()][kindergarten] = label
+                }
+              })
+              return acc
+            },
+            {} as Record<string, Record<string, string>>,
+          )
+          setSelectedLabels(newSelectedLabels)
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error)
+        // toast.error('데이터를 불러오는 데 실패했습니다.', {
+        //   autoClose: 1000,
+        //   pauseOnHover: false,
+        // })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   useEffect(() => {
     const fetchRecruitData = async () => {
       try {
-        const data = await getRecruitData()
+        const data = (await getRecruitData()) as RecruitInfo[]
         setRecruitData(data)
       } catch (error) {
-        toast.error('Error fetching recruit data', {
-          autoClose: 1000,
-          pauseOnHover: false,
-        })
+        // toast.error('Error fetching recruit data', {
+        //   autoClose: 1000,
+        //   pauseOnHover: false,
+        // })
       }
     }
     fetchRecruitData()
   }, [])
-
-  const handleCheckboxChange = (id: string, value: boolean) => {
-    setSelectedItems((prev) => ({ ...prev, [id]: value }))
-    setFormData((prev) => ({
-      ...prev,
-      [id]: value ? '1' : '0',
-    }))
-  }
 
   const handleNext = (
     data: Partial<ApplicationPayload>,
@@ -94,7 +219,11 @@ export default function ApplicationForm() {
     setCurrentSection(1)
   }
 
+  // 수정된 handleSubmit 함수
   const handleSubmit = async (data: Partial<ApplicationPayload>) => {
+    console.log('Before submit - formData:', formData)
+    console.log('Before submit - selectedItems:', selectedItems)
+
     const childrenRecruitList = children
       .filter((child) => child.name && Object.keys(child.classes).length > 0)
       .map((child) => ({
@@ -107,7 +236,6 @@ export default function ApplicationForm() {
     const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
       (acc, [key, url]) => {
         if (typeof url === 'string' && url) {
-          // url이 string인지 확인
           acc[key] = url
         }
         return acc
@@ -123,8 +251,14 @@ export default function ApplicationForm() {
       fileUrls: selectedImageUrls,
     }
 
+    console.log('Final data for submission:', finalData)
+
     try {
-      await submitApplication(finalData)
+      if (applicationId !== null) {
+        await editApplication(finalData, applicationId)
+      } else {
+        await submitApplication(finalData)
+      }
       toast.info('제출되었습니다!', {
         autoClose: 500,
         onClose: () => router.push('/'),
@@ -138,13 +272,14 @@ export default function ApplicationForm() {
     }
   }
 
+  // 수정된 handleTempSave 함수
   const handleTempSave = async () => {
     const childrenRecruitList = children
       .filter((child) => child.name && Object.keys(child.classes).length > 0)
       .map((child) => ({
         childNm: child.name,
-        recruitIds: Object.values(child.classes).map((recruitId) =>
-          parseInt(recruitId, 10),
+        recruitIds: Object.values(child.classes).map(
+          (recruitId) => parseInt(recruitId, 10), // recruitId를 숫자로 변환하여 사용
         ),
       }))
 
@@ -181,52 +316,22 @@ export default function ApplicationForm() {
     }
   }
 
-  const handleFileUpload = (id: DocumentType, file: File) => {
-    setUploadedFiles((prev) => ({ ...prev, [id]: file }))
-    setFormData((prev) => ({
-      ...prev,
-      fileUrls: { ...prev.fileUrls, [id]: file },
-    }))
-  }
-
-  const handleDeleteFile = (id: DocumentType) => {
-    setUploadedFiles((prev) => {
-      const newFiles = { ...prev }
-      delete newFiles[id]
-      return newFiles
-    })
-    setFormData((prev) => {
-      const newFileUrls = { ...prev.fileUrls }
-      delete newFileUrls[id]
-      return { ...prev, fileUrls: newFileUrls }
-    })
-  }
-
-  const handleDropdownSelect = (
-    childId: number,
-    kindergarten: string,
-    option: DropdownOption,
-  ) => {
-    setChildren((prevChildren) =>
-      prevChildren.map((child) => {
-        if (child.id === childId) {
-          return {
-            ...child,
-            classes: { ...child.classes, [kindergarten]: option.key },
-          }
-        }
-        return child
-      }),
-    )
-
-    setSelectedLabels((prev) => ({
-      ...prev,
-      [childId.toString()]: {
-        ...prev[childId.toString()],
-        [kindergarten]: option.label,
-      },
-    }))
-  }
+  const handleDeleteFile = useCallback(
+    (id: string) => {
+      setUploadedFiles((prev) => {
+        const newFiles = { ...prev }
+        delete newFiles[id]
+        return newFiles
+      })
+      // FormData에서도 삭제
+      setFormData((prev) => {
+        const newImageUrls = { ...prev.fileUrls }
+        delete newImageUrls[id]
+        return { ...prev, fileUrls: newImageUrls }
+      })
+    },
+    [setUploadedFiles, setFormData],
+  )
 
   const pageVariants = {
     initial: (direction: number) => ({
@@ -259,8 +364,38 @@ export default function ApplicationForm() {
     {},
   )
 
+  const handleDropdownSelect = (
+    childId: number,
+    kindergarten: string,
+    option: DropdownOption,
+  ) => {
+    setChildren((prevChildren) =>
+      prevChildren.map((child) => {
+        if (child.id === childId) {
+          return {
+            ...child,
+            classes: { ...child.classes, [kindergarten]: option.key }, // recruitId 저장
+          }
+        }
+        return child
+      }),
+    )
+
+    setSelectedLabels((prev) => ({
+      ...prev,
+      [childId.toString()]: {
+        ...prev[childId.toString()],
+        [kindergarten]: option.label,
+      },
+    }))
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
   return (
-    <div className="overflow-y-auto w-500 h-[600px] pb-100">
+    <div className="w-500 h-[550px] pb-100">
       <AnimatePresence mode="wait" custom={currentSection === 1 ? 1 : -1}>
         <motion.div
           key={currentSection}

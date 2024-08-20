@@ -1,3 +1,6 @@
+import { ApplicationPayload } from '@/app/(user)/apply/api'
+import { FileInfo } from '@/app/(user)/apply/api/getFile'
+
 export interface DropdownOption {
   key: string
   label: string
@@ -7,22 +10,6 @@ export interface DropdownOptions {
   [kindergartenName: string]: DropdownOption[]
 }
 
-export interface ApplicationPayload {
-  isSingleParent: string
-  childrenCnt: number
-  isDisability: string
-  isDualIncome: string
-  isEmployeeCouple: string
-  isSibling: string
-  childrenRecruitList: {
-    childNm: string
-    recruitIds: number[]
-  }[]
-  fileUrls: {
-    [key: string]: File | string
-  }
-}
-
 export interface Child {
   id: number
   name: string
@@ -30,24 +17,6 @@ export interface Child {
     [kindergarten: string]: string
   }
   recruitId?: number
-}
-
-export enum DocumentType {
-  RESIDENT_REGISTER = 'RESIDENT_REGISTER',
-  SINGLE_PARENT = 'SINGLE_PARENT',
-  DISABILITY = 'DISABILITY',
-  DUAL_INCOME = 'DUAL_INCOME',
-  EMPLOYEE_COUPLE = 'EMPLOYEE_COUPLE',
-  SIBLING = 'SIBLING',
-}
-
-export const documentTypeMap: Record<string, DocumentType> = {
-  resident: DocumentType.RESIDENT_REGISTER,
-  isSingleParent: DocumentType.SINGLE_PARENT,
-  isDisability: DocumentType.DISABILITY,
-  isDualIncome: DocumentType.DUAL_INCOME,
-  isEmployeeCouple: DocumentType.EMPLOYEE_COUPLE,
-  isSibling: DocumentType.SIBLING,
 }
 
 export interface FormData {
@@ -88,10 +57,12 @@ export interface RightSection2Props {
   onTempSave: () => Promise<void>
   formData: ApplicationPayload
   setFormData: React.Dispatch<React.SetStateAction<ApplicationPayload>>
-  uploadedFiles: Record<string, File>
-  setUploadedFiles: React.Dispatch<React.SetStateAction<Record<string, File>>>
-  onFileUpload: (id: DocumentType, file: File) => void
-  onDeleteFile: (id: DocumentType) => void
+  uploadedFiles: Record<string, FileInfo>
+  setUploadedFiles: React.Dispatch<
+    React.SetStateAction<Record<string, FileInfo>>
+  >
+  onFileUpload: (id: string, fileData: FileInfo) => void
+  onDeleteFile: (id: string) => void
   selectedItems: Record<string, boolean>
   onCheckboxChange: (id: string, value: boolean) => void
 }
@@ -104,12 +75,8 @@ export interface ApplicationFormProps {
 export interface Item {
   id: string
   name: string
+  key: string
   isRequired: boolean
-}
-
-export interface UploadedFile {
-  file: File
-  name: string
 }
 
 export interface RecruitInfo {
@@ -124,3 +91,42 @@ export interface DropdownSelectProps {
   onSelect: (option: DropdownOption) => void
   placeholder: string
 }
+
+export const predata = [
+  {
+    id: 'isResidentRegister',
+    key: 'RESIDENT_REGISTER',
+    name: '주민등록등본',
+    isRequired: true,
+  },
+  {
+    id: 'isSingleParent',
+    key: 'SINGLE_PARENT',
+    name: '한부모 가정',
+    isRequired: false,
+  },
+  {
+    id: 'isDisability',
+    key: 'DISABILITY',
+    name: '장애 유무',
+    isRequired: false,
+  },
+  {
+    id: 'isDualIncome',
+    key: 'DUAL_INCOME',
+    name: '맞벌이 여부',
+    isRequired: false,
+  },
+  {
+    id: 'isMultiChild',
+    key: 'MULTI_CHILD',
+    name: '다자녀 가구',
+    isRequired: false,
+  },
+  {
+    id: 'isSibling',
+    key: 'SIBLING',
+    name: '형제/자매 유무',
+    isRequired: false,
+  },
+]

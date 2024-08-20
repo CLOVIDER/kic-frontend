@@ -91,7 +91,7 @@ export const editNotice = async (
 
 export const deleteNotice = (noticeId: number) =>
   http.delete<string>({
-    url: `/api/notice/${noticeId}`,
+    url: `/api/admin/notices/${noticeId}`,
   })
 
 export const useDeleteNotice = () => {
