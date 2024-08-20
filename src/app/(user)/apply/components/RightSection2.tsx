@@ -13,7 +13,7 @@ import SubmitModal from './SubmitModal'
 export default function RightSection2({
   onPrevious,
   onSubmit,
-  onTempSave,
+  // onTempSave,
   formData,
   uploadedFiles,
   setFormData,
@@ -195,13 +195,7 @@ export default function RightSection2({
         >
           이전
         </Button>
-        <div className="w-[148px]" />
-        <Button
-          onClick={onTempSave}
-          className="w-[98px] h-[31px] [background:linear-gradient(90deg,_rgba(255,_171,_45,_0.13),_rgba(153,_103,_27,_0.11))] border bg-[#fff] border-[#e6d5c5] font-bold text-[#fb923c] rounded-full text-sm"
-        >
-          임시저장
-        </Button>
+        <div className="w-[246px]" />
         <div className="w-[8px]" />
         <SubmitModal formData={formData} onSubmit={handleSubmit}>
           {(onOpen) => (

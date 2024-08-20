@@ -54,7 +54,7 @@ export interface RightSection1Props {
 export interface RightSection2Props {
   onPrevious: () => void
   onSubmit: (data: Partial<ApplicationPayload>) => Promise<void>
-  onTempSave: () => Promise<void>
+  // onTempSave: () => Promise<void>
   formData: ApplicationPayload
   setFormData: React.Dispatch<React.SetStateAction<ApplicationPayload>>
   uploadedFiles: Record<string, FileInfo>

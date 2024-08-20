@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 import {
-  saveApplicationTemp,
+  // saveApplicationTemp,
   submitApplication,
   RecruitInfo,
   getRecruitData,
@@ -84,8 +84,8 @@ export default function ApplicationForm() {
           getApplicationData(),
         ])
 
-        console.log('Fetched Recruit Data:', fetchedRecruitData)
-        console.log('Fetched Application Data:', applicationData)
+        // console.log('Fetched Recruit Data:', fetchedRecruitData)
+        // console.log('Fetched Application Data:', applicationData)
 
         setRecruitData(fetchedRecruitData)
 
@@ -273,48 +273,48 @@ export default function ApplicationForm() {
   }
 
   // 수정된 handleTempSave 함수
-  const handleTempSave = async () => {
-    const childrenRecruitList = children
-      .filter((child) => child.name && Object.keys(child.classes).length > 0)
-      .map((child) => ({
-        childNm: child.name,
-        recruitIds: Object.values(child.classes).map(
-          (recruitId) => parseInt(recruitId, 10), // recruitId를 숫자로 변환하여 사용
-        ),
-      }))
+  // const handleTempSave = async () => {
+  //   const childrenRecruitList = children
+  //     .filter((child) => child.name && Object.keys(child.classes).length > 0)
+  //     .map((child) => ({
+  //       childNm: child.name,
+  //       recruitIds: Object.values(child.classes).map(
+  //         (recruitId) => parseInt(recruitId, 10), // recruitId를 숫자로 변환하여 사용
+  //       ),
+  //     }))
 
-    const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
-      (acc, [key, url]) => {
-        if (typeof url === 'string' && url) {
-          // url이 string인지 확인
-          acc[key] = url
-        }
-        return acc
-      },
-      {} as Record<string, string>,
-    )
+  //   const selectedImageUrls = Object.entries(formData.fileUrls).reduce(
+  //     (acc, [key, url]) => {
+  //       if (typeof url === 'string' && url) {
+  //         // url이 string인지 확인
+  //         acc[key] = url
+  //       }
+  //       return acc
+  //     },
+  //     {} as Record<string, string>,
+  //   )
 
-    const finalData: ApplicationPayload = {
-      ...formData,
-      childrenRecruitList,
-      childrenCnt: childrenRecruitList.length,
-      fileUrls: selectedImageUrls,
-    }
+  //   const finalData: ApplicationPayload = {
+  //     ...formData,
+  //     childrenRecruitList,
+  //     childrenCnt: childrenRecruitList.length,
+  //     fileUrls: selectedImageUrls,
+  //   }
 
-    try {
-      await saveApplicationTemp(finalData)
-      toast.info('임시저장 되었습니다!', {
-        autoClose: 500,
-        onClose: () => router.push('/'),
-        pauseOnHover: false,
-      })
-    } catch (error) {
-      toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
-        autoClose: 1000,
-        pauseOnHover: false,
-      })
-    }
-  }
+  //   try {
+  //     await saveApplicationTemp(finalData)
+  //     toast.info('임시저장 되었습니다!', {
+  //       autoClose: 500,
+  //       onClose: () => router.push('/'),
+  //       pauseOnHover: false,
+  //     })
+  //   } catch (error) {
+  //     toast.error('알수없는 오류가 발생하였습니다. 다시 시도해주세요', {
+  //       autoClose: 1000,
+  //       pauseOnHover: false,
+  //     })
+  //   }
+  // }
 
   const handleDeleteFile = useCallback(
     (id: string) => {
@@ -424,7 +424,7 @@ export default function ApplicationForm() {
             <RightSection2
               onPrevious={handlePrevious}
               onSubmit={handleSubmit}
-              onTempSave={handleTempSave}
+              // onTempSave={handleTempSave}
               uploadedFiles={uploadedFiles}
               setUploadedFiles={setUploadedFiles}
               onFileUpload={handleFileUpload}

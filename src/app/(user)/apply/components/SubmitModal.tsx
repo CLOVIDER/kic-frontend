@@ -8,7 +8,7 @@ import {
   ModalHeader,
 } from '@nextui-org/react'
 import { ReactNode } from 'react'
-import { ApplicationPayload } from '../api'
+import { ApplicationPayload, getFileInfoFromUrl } from '../api'
 
 export default function SubmitModal({
   formData,
@@ -20,6 +20,11 @@ export default function SubmitModal({
   children: (onOpen: () => void) => ReactNode
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { name } = getFileInfoFromUrl(
+    Object.values(formData.fileUrls).join(', '),
+  )
+  // console.log(formData.fileUrls)
+  // console.log(name)
 
   return (
     <>
@@ -52,9 +57,7 @@ export default function SubmitModal({
                     .map((child) => child.childNm)
                     .join(', ')}
                 </div>
-                <div>
-                  파일 URLS: {Object.values(formData.fileUrls).join(', ')}
-                </div>
+                <div>파일 : {name}</div>
                 {/* 추가 데이터 표시 */}
               </ModalBody>
               <ModalFooter>
