@@ -38,5 +38,5 @@ export const deleteLottery = (lotteryId: number) =>
 
 export const patchRegistry = (lotteryId: number) =>
   http.patch({
-    url: `/api/update/registry/${lotteryId}`,
+    url: `/api/lotteries/${lotteryId}/registry`,
   })
