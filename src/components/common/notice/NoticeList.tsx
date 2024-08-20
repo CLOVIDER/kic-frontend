@@ -84,7 +84,7 @@ export default function NoticeList({
                         type="button"
                         onClick={onOpen}
                       >
-                        질문삭제
+                        공지삭제
                       </Button>
                     )}
                   </DeleteModal>
