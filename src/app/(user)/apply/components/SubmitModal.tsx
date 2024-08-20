@@ -65,24 +65,33 @@ export default function SubmitModal({
               <ModalBody>
                 <div>
                   <h2>아이 정보:</h2>
-                  {formData.childrenRecruitList.map((child, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <div key={index}>
-                      <p>아이 이름: {child.childNm}</p>
-                      <p>신청한 어린이집 및 반:</p>
-                      <ul>
-                        {child.recruitIds.map((recruitId) => {
-                          const { kindergartenName, className } =
-                            getKindergartenAndClass(recruitId)
-                          return (
-                            <li key={recruitId}>
-                              {kindergartenName}: {className}
-                            </li>
-                          )
-                        })}
-                      </ul>
-                    </div>
-                  ))}
+                  {formData.childrenRecruitList &&
+                  formData.childrenRecruitList.length > 0 ? (
+                    formData.childrenRecruitList.map((child, index) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <div key={index}>
+                        <p>아이 이름: {child.childNm}</p>
+                        <p>신청한 어린이집 및 반:</p>
+                        <ul>
+                          {child.recruitIds && child.recruitIds.length > 0 ? (
+                            child.recruitIds.map((recruitId) => {
+                              const { kindergartenName, className } =
+                                getKindergartenAndClass(recruitId)
+                              return (
+                                <li key={recruitId}>
+                                  {kindergartenName}: {className}
+                                </li>
+                              )
+                            })
+                          ) : (
+                            <li>신청한 어린이집 없음</li>
+                          )}
+                        </ul>
+                      </div>
+                    ))
+                  ) : (
+                    <p>아이 정보 없음</p>
+                  )}
                 </div>
                 <div>
                   <h2>첨부 파일:</h2>
